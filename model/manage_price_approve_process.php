@@ -38,7 +38,6 @@ if ($_POST["action"] === 'GET_DATA') {
 if ($_POST["action"] === 'SEARCH') {
 
     if ($_POST["product_id"] !== '') {
-
         $product_id = $_POST["product_id"];
         $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $product_id . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
