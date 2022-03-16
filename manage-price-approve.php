@@ -55,20 +55,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <thead>
                                                 <tr>
                                                     <th>เลขที่เอกสาร</th>
-                                                    <th>ชื่อผู้ซื้อ</th>
+                                                    <th>ชื่อลูกค้า</th>
                                                     <th>วันที่</th>
-                                                    <th>สถานะ</th>
-                                                    <th>Action</th>
+                                                    <th>สถานะการอนุมัติ</th>
+                                                    <th>สถานะการแก้ไข</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
                                                     <th>เลขที่เอกสาร</th>
-                                                    <th>ชื่อผู้ซื้อ</th>
+                                                    <th>ชื่อลูกค้า</th>
                                                     <th>วันที่</th>
-                                                    <th>สถานะ</th>
-                                                    <th>Action</th>
+                                                    <th>สถานะการอนุมัติ</th>
+                                                    <th>สถานะการแก้ไข</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
