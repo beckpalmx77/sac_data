@@ -22,6 +22,8 @@ if (strlen($_SESSION['alogin']) == "") {
                 <div class="container-fluid" id="container-wrapper">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
+                        <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
+                        <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page']?>">Home</a></li>
                             <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
@@ -53,20 +55,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <thead>
                                                 <tr>
                                                     <th>เลขที่เอกสาร</th>
-                                                    <th>วันที่เอกสาร</th>
-                                                    <th>ชื่อลูกค้า</th>
-                                                    <th>สถานะการอนุมัติ</th>
-                                                    <th>สถานะการแก้ไข</th>
+                                                    <th>ชื่อผู้ซื้อ</th>
+                                                    <th>วันที่</th>
+                                                    <th>สถานะ</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
                                                     <th>เลขที่เอกสาร</th>
-                                                    <th>วันที่เอกสาร</th>
-                                                    <th>ชื่อลูกค้า</th>
-                                                    <th>สถานะการอนุมัติ</th>
-                                                    <th>สถานะการแก้ไข</th>
+                                                    <th>ชื่อผู้ซื้อ</th>
+                                                    <th>วันที่</th>
+                                                    <th>สถานะ</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
@@ -86,131 +88,79 @@ if (strlen($_SESSION['alogin']) == "") {
                                                         </button>
                                                     </div>
                                                     <form method="post" id="recordForm">
+                                                        <input type="hidden" id="KeyAddData" name="KeyAddData" value="">
                                                         <div class="modal-body">
                                                             <div class="modal-body">
 
                                                                 <div class="form-group row">
-                                                                    <div class="col-sm-4">
-                                                                        <label for="product_id" class="control-label">รหัสสินค้า/วัสดุ</label>
-                                                                        <input type="product_id" class="form-control"
-                                                                               id="product_id" name="product_id"
-                                                                               required="required"
-                                                                               placeholder="รหัสสินค้า/วัสดุ">
-                                                                    </div>
-
-                                                                    <div class="col-sm-8">
-                                                                        <label for="name_t"
-                                                                               class="control-label">ชื่อสินค้า/วัสดุ</label>
+                                                                    <div class="col-sm-6">
+                                                                        <label for="doc_no"
+                                                                               class="control-label">เลขที่เอกสาร</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="name_t"
-                                                                               name="name_t"
-                                                                               required="required"
-                                                                               placeholder="ชื่อสินค้า/วัสดุ">
+                                                                               id="doc_no"
+                                                                               name="doc_no"
+                                                                               readonly="true"
+                                                                               placeholder="สร้างอัตโนมัติ">
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                    <input type="hidden" class="form-control"
-                                                                           id="pgroup_id"
-                                                                           name="pgroup_id">
-                                                                    <div class="col-sm-10">
-                                                                        <label for="quantity"
-                                                                               class="control-label">กลุ่มสินค้า</label>
+                                                                    <div class="col-sm-6">
+                                                                        <label for="doc_date"
+                                                                               class="control-label">วันที่เอกสาร</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="pgroup_name"
-                                                                               name="pgroup_name"
-                                                                               required="required"
-                                                                               placeholder="กลุ่มสินค้า">
+                                                                               id="doc_date"
+                                                                               name="doc_date"
+                                                                               readonly="true"
+                                                                               placeholder="วันที่เอกสาร">
                                                                     </div>
 
-                                                                    <div class="col-sm-2">
-                                                                        <label for="quantity"
-                                                                               class="control-label">เลือก</label>
-
-                                                                        <a data-toggle="modal" href="#Search-PG-Modal"
-                                                                           class="btn btn-primary">
-                                                                            Click <i class="fa fa-search"
-                                                                                     aria-hidden="true"></i>
-                                                                        </a>
-                                                                    </div>
                                                                 </div>
 
                                                                 <div class="form-group row">
                                                                     <input type="hidden" class="form-control"
-                                                                           id="brand_id"
-                                                                           name="brand_id">
-                                                                    <div class="col-sm-10">
-                                                                        <label for="brand_name"
-                                                                               class="control-label">ชื่อยี่ห้อ</label>
+                                                                           id="customer_id"
+                                                                           name="customer_id">
+                                                                    <div class="col-sm-12">
+                                                                        <label for="f_name"
+                                                                               class="control-label">ชื่อลูกค้า</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="brand_name"
-                                                                               name="brand_name"
-                                                                               required="required"
-                                                                               placeholder="ชื่อยี่ห้อ">
-                                                                    </div>
-
-                                                                    <div class="col-sm-2">
-                                                                        <label for="quantity"
-                                                                               class="control-label">เลือก</label>
-
-                                                                        <a data-toggle="modal"
-                                                                           href="#Search-Brand-Modal"
-                                                                           class="btn btn-primary">
-                                                                            Click <i class="fa fa-search"
-                                                                                     aria-hidden="true"></i>
-                                                                        </a>
+                                                                               id="f_name"
+                                                                               name="f_name"
+                                                                               readonly="true"
+                                                                               placeholder="ชื่อลูกค้า">
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="form-group row">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="quantity"
-                                                                               class="control-label">ยอดคงเหลือ</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="quantity"
-                                                                               name="quantity"
-                                                                               required="required"
-                                                                               placeholder="ยอดคงเหลือ">
-                                                                    </div>
-                                                                    <input type="hidden" class="form-control"
-                                                                           id="unit_id"
-                                                                           name="unit_id">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="quantity"
-                                                                               class="control-label">หน่วยนับ</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="unit_name"
-                                                                               name="unit_name"
-                                                                               required="required"
-                                                                               placeholder="หน่วยนับ">
-                                                                    </div>
-
-                                                                    <div class="col-sm-2">
-                                                                        <label for="quantity"
-                                                                               class="control-label">เลือก</label>
-
-                                                                        <a data-toggle="modal" href="#SearchUnitModal"
-                                                                           class="btn btn-primary">
-                                                                            Click <i class="fa fa-search"
-                                                                                     aria-hidden="true"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
+                                                                <table cellpadding="0" cellspacing="0" border="0"
+                                                                       class="display"
+                                                                       id="TableOrderDetailList"
+                                                                       width="100%">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>สินค้า</th>
+                                                                        <th>จำนวน</th>
+                                                                        <th>หน่วยนับ</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                </table>
 
                                                                 <div class="form-group">
                                                                     <label for="status"
                                                                            class="control-label">Status</label>
                                                                     <select id="status" name="status"
-                                                                            class="form-control" data-live-search="true"
+                                                                            class="form-control"
+                                                                            data-live-search="true"
                                                                             title="Please select">
                                                                         <option>Active</option>
                                                                         <option>Inactive</option>
                                                                     </select>
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <input type="hidden" name="id" id="id"/>
-                                                            <input type="hidden" name="action" id="action" value=""/>
+                                                            <input type="hidden" name="action" id="action"
+                                                                   value=""/>
                                                             <span class="icon-input-btn">
                                                                 <i class="fa fa-check"></i>
                                                             <input type="submit" name="save" id="save"
@@ -227,7 +177,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </div>
                                         </div>
 
-                                        <div class="modal fade" id="Search-PG-Modal">
+
+                                        <div class="modal fade" id="SearchCusModal">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -244,100 +195,19 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <table cellpadding="0" cellspacing="0" border="0"
                                                                    class="display"
-                                                                   id="TablePGList"
+                                                                   id="TableCustomerList"
                                                                    width="100%">
-                                                                <thead>
+                                                                <thead class="thead-light">
                                                                 <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>กลุ่มสินค้า</th>
+                                                                    <th>รหัสลูกค้า</th>
+                                                                    <th>ชื่อลูกค้า</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tfoot>
                                                                 <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>กลุ่มสินค้า</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </tfoot>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal fade" id="Search-Brand-Modal">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Modal title</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="container"></div>
-                                                    <div class="modal-body">
-
-                                                        <div class="modal-body">
-
-                                                            <table cellpadding="0" cellspacing="0" border="0"
-                                                                   class="display"
-                                                                   id="TableBrandList"
-                                                                   width="100%">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>กลุ่มสินค้า</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tfoot>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>กลุ่มสินค้า</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </tfoot>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="modal fade" id="SearchUnitModal">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Modal title</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="container"></div>
-                                                    <div class="modal-body">
-
-                                                        <div class="modal-body">
-
-                                                            <table cellpadding="0" cellspacing="0" border="0"
-                                                                   class="display"
-                                                                   id="TableUnitList"
-                                                                   width="100%">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>หน่วยนับ</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tfoot>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>หน่วยนับ</th>
+                                                                    <th>รหัสลูกค้า</th>
+                                                                    <th>ชื่อลูกค้า</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </tfoot>
@@ -374,10 +244,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/myadmin.min.js"></script>
 
-
-    <script src="js/modal/show_pgroup_modal.js"></script>
-    <script src="js/modal/show_brand_modal.js"></script>
-    <script src="js/modal/show_unit_modal.js"></script>
+    <script src="js/modal/show_customer_modal.js"></script>
 
     <!-- Page level plugins -->
 
@@ -390,6 +257,13 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/datatables/v11/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="vendor/datatables/v11/jquery.dataTables.min.css"/>
     <link rel="stylesheet" href="vendor/datatables/v11/buttons.dataTables.min.css"/>
+
+    <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
+    <script src="vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
+    <!--link href="vendor/date-picker-1.9/css/date_picker_style.css" rel="stylesheet"/-->
+    <link href="vendor/date-picker-1.9/css/bootstrap-datepicker.css" rel="stylesheet"/>
+
+    <script src="js/popup.js"></script>
 
     <style>
 
@@ -412,22 +286,33 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
+            $('#doc_date').datepicker({
+                format: "yyyy-mm-dd",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
             $(".icon-input-btn").each(function () {
                 let btnFont = $(this).find(".btn").css("font-size");
                 let btnColor = $(this).find(".btn").css("color");
-                $(this).find(".fa").css({'font-size': btnFont, 'color': btn
-                    Color});
+                $(this).find(".fa").css({'font-size': btnFont, 'color': btnColor});
             });
         });
     </script>
 
     <script>
 
-        $("#product_id").blur(function () {
+        $("#doc_no").blur(function () {
             let method = $('#action').val();
             if (method === "ADD") {
-                let product_id = $('#product_id').val();
-                let formData = {action: "SEARCH", product_id: product_id};
+                let doc_no = $('#doc_no').val();
+                let customer_id = $('#doc_no').val();
+                let formData = {action: "SEARCH", doc_no: doc_no, customer_id: customer_id};
                 $.ajax({
                     url: 'model/manage_price_approve_process.php',
                     method: "POST",
@@ -445,8 +330,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_PRODUCT", sub_action: "GET_MASTER"};
+            let formData = {action: "GET_ORDER", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
+                'columnDefs': [{"orderSequence": ["desc", "asc"]}],
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
                     search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
@@ -468,10 +354,9 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'product_id'},
-                    {data: 'name_t'},
-                    {data: 'quantity', className: 'text-right'},
-                    {data: 'unit_name'},
+                    {data: 'doc_no'},
+                    {data: 'f_name'},
+                    {data: 'doc_date'},
                     {data: 'status'},
                     {data: 'update'},
                     {data: 'delete'}
@@ -501,83 +386,11 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-        $(document).ready(function () {
-            $("#btnAdd").click(function () {
-                $('#recordModal').modal('show');
-                $('#id').val("");
-                $('#product_id').val("");
-                $('#name_t').val("");
-                $('#quantity').val("");
-                $('#pgroup_id').val("");
-                $('#pgroup_name').val("");
-                $('#brand_id').val("");
-                $('#brand_name').val("");
-                $('#quantity').val("");
-                $('#unit_id').val("");
-                $('#unit_name').val("");
-                $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
-                $('#action').val('ADD');
-                $('#save').val('Save');
-            });
-        });
-    </script>
-
-    <script>
-
-        $("#TableRecordList").on('click', '.update', function () {
-            let id = $(this).attr("id");
-            //alert(id);
-            let formData = {action: "GET_DATA", id: id};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_price_approve_process.php',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    let len = response.length;
-                    for (let i = 0; i < len; i++) {
-                        let id = response[i].id;
-                        let product_id = response[i].product_id;
-                        let name_t = response[i].name_t;
-                        let quantity = response[i].quantity;
-                        let pgroup_id = response[i].pgroup_id;
-                        let pgroup_name = response[i].pgroup_name;
-                        let brand_id = response[i].brand_id;
-                        let brand_name = response[i].brand_name;
-                        let unit_id = response[i].unit_id;
-                        let unit_name = response[i].unit_name;
-                        let status = response[i].status;
-
-                        $('#recordModal').modal('show');
-                        $('#id').val(id);
-                        $('#product_id').val(product_id);
-                        $('#name_t').val(name_t);
-                        $('#quantity').val(quantity);
-                        $('#pgroup_id').val(pgroup_id);
-                        $('#pgroup_name').val(pgroup_name);
-                        $('#brand_id').val(brand_id);
-                        $('#brand_name').val(brand_name);
-                        $('#unit_id').val(unit_id);
-                        $('#unit_name').val(unit_name);
-                        $('#status').val(status);
-                        $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
-                        $('#action').val('UPDATE');
-                        $('#save').val('Save');
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        });
-
-    </script>
-
-    <script>
 
         $("#TableRecordList").on('click', '.delete', function () {
             let id = $(this).attr("id");
             let formData = {action: "GET_DATA", id: id};
+            let table_name = "v_order_detail";
             $.ajax({
                 type: "POST",
                 url: 'model/manage_price_approve_process.php',
@@ -587,28 +400,21 @@ if (strlen($_SESSION['alogin']) == "") {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let product_id = response[i].product_id;
-                        let name_t = response[i].name_t;
-                        let quantity = response[i].quantity;
-                        let pgroup_id = response[i].pgroup_id;
-                        let pgroup_name = response[i].pgroup_name;
-                        let brand_id = response[i].brand_id;
-                        let brand_name = response[i].brand_name;
-                        let unit_id = response[i].unit_id;
-                        let unit_name = response[i].unit_name;
+                        let doc_no = response[i].doc_no;
+                        let doc_date = response[i].doc_date;
+                        let customer_id = response[i].customer_id;
+                        let f_name = response[i].f_name;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
+
+                        Load_Data_Detail(doc_no, table_name);
+
                         $('#id').val(id);
-                        $('#product_id').val(product_id);
-                        $('#name_t').val(name_t);
-                        $('#quantity').val(quantity);
-                        $('#pgroup_id').val(pgroup_id);
-                        $('#pgroup_name').val(pgroup_name);
-                        $('#brand_id').val(brand_id);
-                        $('#brand_name').val(brand_name);
-                        $('#unit_id').val(unit_id);
-                        $('#unit_name').val(unit_name);
+                        $('#doc_no').val(doc_no);
+                        $('#doc_date').val(doc_date);
+                        $('#customer_id').val(customer_id);
+                        $('#f_name').val(f_name);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
                         $('#action').val('DELETE');
@@ -623,8 +429,104 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </script>
 
+    <script>
+
+        $("#btnAdd").click(function () {
+            let main_menu = document.getElementById("main_menu").value;
+            let sub_menu = document.getElementById("sub_menu").value;
+            let url = "manage_order_data.php?title=รายการขายสินค้า (Product Order)"
+                + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
+                + '&action=ADD';
+            OpenPopupCenter(url, "", "");
+        });
+
+    </script>
+
+    <script>
+        $("#TableRecordList").on('click', '.update', function () {
+
+            let id = $(this).attr("id");
+            let main_menu = document.getElementById("main_menu").value;
+            let sub_menu = document.getElementById("sub_menu").value;
+            //alert(id);
+            let formData = {action: "GET_DATA", id: id};
+            $.ajax({
+                type: "POST",
+                url: 'model/manage_price_approve_process.php',
+                dataType: "json",
+                data: formData,
+                success: function (response) {
+                    let len = response.length;
+                    for (let i = 0; i < len; i++) {
+                        let doc_no = response[i].doc_no;
+                        let doc_date = response[i].doc_date;
+                        let customer_id = response[i].customer_id;
+                        let f_name = response[i].f_name;
+                        let url = "manage_order_data.php?title=รายการขายสินค้า (Product Order)"
+                            + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
+                            + '&doc_no=' + doc_no + '&doc_date=' + doc_date
+                            + '&customer_id=' + customer_id
+                            + '&f_name=' + f_name
+                            + '&action=UPDATE';
+                        OpenPopupCenter(url, "", "");
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        function Load_Data_Detail(doc_no, table_name) {
+
+            $('#TableOrderDetailList').DataTable().clear().destroy();
+
+            let formData = {
+                action: "GET_ORDER_DETAIL",
+                sub_action: "GET_MASTER",
+                doc_no: doc_no,
+                table_name: table_name
+            };
+            let dataRecords = $('#TableOrderDetailList').DataTable({
+                "paging": false,
+                "ordering": false,
+                'info': false,
+                "searching": false,
+                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                'language': {
+                    search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
+                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    infoEmpty: 'ไม่มีข้อมูล',
+                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
+                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    paginate: {
+                        previous: 'ก่อนหน้า',
+                        last: 'สุดท้าย',
+                        next: 'ต่อไป'
+                    }
+                },
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': 'model/manage_order_detail_process.php',
+                    'data': formData
+                },
+                'columns': [
+                    {data: 'line_no'},
+                    {data: 'product_name'},
+                    {data: 'quantity'},
+                    {data: 'unit_name'}
+                ]
+            });
+        }
+    </script>
 
     </body>
     </html>
 
 <?php } ?>
+
+

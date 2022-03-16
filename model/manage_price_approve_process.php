@@ -1,33 +1,26 @@
 <?php
 session_start();
 error_reporting(0);
-
+date_default_timezone_set("Asia/Bangkok");
 include('../config/connect_db.php');
 include('../config/lang.php');
-include('../util/reorder_record.php');
-
+include('../util/record_util.php');
 
 if ($_POST["action"] === 'GET_DATA') {
 
     $id = $_POST["id"];
 
     $return_arr = array();
-
-    $sql_get = "SELECT * FROM vims_product WHERE id = " . $id;
+    $sql_get = "SELECT * FROM v_order_master WHERE id = " . $id;
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($results as $result) {
         $return_arr[] = array("id" => $result['id'],
-            "product_id" => $result['product_id'],
-            "name_t" => $result['name_t'],
-            "quantity" => $result['quantity'],
-            "pgroup_id" => $result['pgroup_id'],
-            "pgroup_name" => $result['pgroup_name'],
-            "brand_id" => $result['brand_id'],
-            "brand_name" => $result['brand_name'],
-            "unit_id" => $result['unit_id'],
-            "unit_name" => $result['unit_name'],
+            "doc_no" => $result['doc_no'],
+            "doc_date" => $result['doc_date'],
+            "customer_id" => $result['customer_id'],
+            "f_name" => $result['f_name'],
             "status" => $result['status']);
     }
 
@@ -37,9 +30,10 @@ if ($_POST["action"] === 'GET_DATA') {
 
 if ($_POST["action"] === 'SEARCH') {
 
-    if ($_POST["product_id"] !== '') {
-        $product_id = $_POST["product_id"];
-        $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $product_id . "'";
+    if ($_POST["doc_no"] !== '') {
+
+        $doc_no = $_POST["doc_no"];
+        $sql_find = "SELECT * FROM ims_order_master WHERE doc_no = '" . $doc_no . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             echo 2;
@@ -50,78 +44,70 @@ if ($_POST["action"] === 'SEARCH') {
 }
 
 if ($_POST["action"] === 'ADD') {
-
-    if ($_POST["product_id"] != '') {
-
-        $product_id = $_POST["product_id"];
-        $name_t = $_POST["name_t"];
-        $quantity = $_POST["quantity"];
+    if ($_POST["customer_id"] !== '') {
+        $table = "ims_order_master";
+        $KeyAddData = $_POST["KeyAddData"];
+        $doc_year = substr($_POST["doc_date"], 0, 4);
+        $field = "doc_runno";
+        $doc_type = "-ORD-";
+        $doc_runno = LAST_ID_YEAR($conn, $table, $field, $doc_year);
+        $doc_no = $doc_year . $doc_type . sprintf('%06s', $doc_runno);
+        $customer_id = $_POST["customer_id"];
+        $doc_date = $_POST["doc_date"];
         $status = $_POST["status"];
-        $pgroup_id = $_POST["pgroup_id"];
-        $brand_id = $_POST["brand_id"];
-        $unit_id = $_POST["unit_id"];
-        $picture = "product-001.png";
-        $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $product_id . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
+        $sql_find = "SELECT * FROM " . $table . " WHERE doc_no = '" . $doc_no . "'";
+        $stmt = $conn->query($sql_find);
+        $nRows = $stmt->rowCount();
+
         if ($nRows > 0) {
             echo $dup;
         } else {
-            $sql = "INSERT INTO ims_product(product_id,name_t,quantity,pgroup_id,brand_id,unit_id,picture,status)
-            VALUES (:product_id,:name_t,:quantity,:pgroup_id,:brand_id,:unit_id,:picture,:status)";
+            $sql = "INSERT INTO " . $table . " (doc_no,customer_id,doc_date,doc_year,doc_runno,KeyAddData,status)
+                    VALUES (:doc_no,:customer_id,:doc_date,:doc_year,:doc_runno,:KeyAddData,:status)";
             $query = $conn->prepare($sql);
-            $query->bindParam(':product_id', $product_id, PDO::PARAM_STR);
-            $query->bindParam(':name_t', $name_t, PDO::PARAM_STR);
-            $query->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-            $query->bindParam(':pgroup_id', $pgroup_id, PDO::PARAM_STR);
-            $query->bindParam(':brand_id', $brand_id, PDO::PARAM_STR);
-            $query->bindParam(':unit_id', $unit_id, PDO::PARAM_STR);
-            $query->bindParam(':picture', $picture, PDO::PARAM_STR);
+            $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
+            $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
+            $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
+            $query->bindParam(':doc_year', $doc_year, PDO::PARAM_STR);
+            $query->bindParam(':doc_runno', $doc_runno, PDO::PARAM_STR);
+            $query->bindParam(':KeyAddData', $KeyAddData, PDO::PARAM_STR);
             $query->bindParam(':status', $status, PDO::PARAM_STR);
             $query->execute();
-
             $lastInsertId = $conn->lastInsertId();
             if ($lastInsertId) {
                 echo $save_success;
             } else {
                 echo $error;
             }
-
         }
-
     }
 }
 
 
 if ($_POST["action"] === 'UPDATE') {
 
-    if ($_POST["product_id"] != '') {
+    if ($_POST["doc_no"] != '') {
 
         $id = $_POST["id"];
-        $product_id = $_POST["product_id"];
-        $name_t = $_POST["name_t"];
-        $quantity = $_POST["quantity"];
+        $doc_no = $_POST["doc_no"];
+        $customer_id = $_POST["customer_id"];
         $status = $_POST["status"];
-        $pgroup_id = $_POST["pgroup_id"];
-        $brand_id = $_POST["brand_id"];
-        $unit_id = $_POST["unit_id"];
-        $picture = "product-001.png";
-        $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $product_id . "'";
+        $update_date = date('Y-m-d H:i:s');
+        $sql_find = "SELECT * FROM ims_order_master WHERE doc_no = '" . $doc_no . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
-            $sql_update = "UPDATE ims_product SET name_t=:name_t,quantity=:quantity,status=:status
-            ,pgroup_id=:pgroup_id,brand_id=:brand_id,unit_id=:unit_id,picture=:picture
-            WHERE id = :id";
+            $sql_update = "UPDATE ims_order_master SET customer_id=:customer_id,status=:status            
+            ,update_date=:update_date WHERE doc_no = :doc_no";
             $query = $conn->prepare($sql_update);
-            $query->bindParam(':name_t', $name_t, PDO::PARAM_STR);
-            $query->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-            $query->bindParam(':pgroup_id', $pgroup_id, PDO::PARAM_STR);
-            $query->bindParam(':brand_id', $brand_id, PDO::PARAM_STR);
-            $query->bindParam(':unit_id', $unit_id, PDO::PARAM_STR);
-            $query->bindParam(':picture', $picture, PDO::PARAM_STR);
+            $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
             $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->bindParam(':id', $id, PDO::PARAM_STR);
-            $query->execute();
-            echo $save_success;
+            $query->bindParam(':update_date', $update_date, PDO::PARAM_STR);
+            $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
+            if($query->execute()){
+                echo $save_success;
+            }else{
+                echo $error;
+            }
         }
 
     }
@@ -131,14 +117,13 @@ if ($_POST["action"] === 'DELETE') {
 
     $id = $_POST["id"];
 
-    $sql_find = "SELECT * FROM ims_product WHERE id = " . $id;
+    $sql_find = "SELECT * FROM ims_order_master WHERE id = " . $id;
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
         try {
-            $sql = "DELETE FROM ims_product WHERE id = " . $id;
+            $sql = "DELETE FROM ims_order_master WHERE id = " . $id;
             $query = $conn->prepare($sql);
             $query->execute();
-            Reorder_Record($conn, "ims_product");
             echo $del_success;
         } catch (Exception $e) {
             echo 'Message: ' . $e->getMessage();
@@ -146,9 +131,9 @@ if ($_POST["action"] === 'DELETE') {
     }
 }
 
-if ($_POST["action"] === 'GET_PRODUCT') {
+if ($_POST["action"] === 'GET_ORDER') {
 
-## Read value
+    ## Read value
     $draw = $_POST['draw'];
     $row = $_POST['start'];
     $rowperpage = $_POST['length']; // Rows display per page
@@ -157,37 +142,40 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
     $searchValue = $_POST['search']['value']; // Search value
 
+    if ($columnName === 'doc_no') {
+        $columnSortOrder = "desc";
+    }
+
     $searchArray = array();
 
 ## Search
     $searchQuery = " ";
     if ($searchValue != '') {
-        $searchQuery = " AND (product_id LIKE :product_id or 
-        name_t LIKE :name_t OR
-        name_e LIKE :name_e OR         
-        status LIKE :status ) ";
+        $searchQuery = " AND (doc_no LIKE :doc_no or
+        f_name LIKE :f_name ) ";
         $searchArray = array(
-            'product_id' => "%$searchValue%",
-            'name_t' => "%$searchValue%",
-            'name_e' => "%$searchValue%",
-            'status' => "%$searchValue%"
+            'doc_no' => "%$searchValue%",
+            'f_name' => "%$searchValue%",
         );
     }
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product ");
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_order_master ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_product WHERE 1 " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_order_master WHERE 1 " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-    $stmt = $conn->prepare("SELECT * FROM vims_product WHERE 1 " . $searchQuery
+    $query_str = "SELECT * FROM v_order_master WHERE 1 " . $searchQuery
+        . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
+
+    $stmt = $conn->prepare("SELECT * FROM v_order_master WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
 // Bind values
@@ -202,30 +190,27 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     $data = array();
 
     foreach ($empRecords as $row) {
+
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
-                "product_id" => $row['product_id'],
-                "name_t" => $row['name_t'],
-                "name_e" => $row['name_e'],
-                "quantity" => $row['quantity'],
-                "unit_id" => $row['unit_id'],
-                "unit_name" => $row['unit_name'],
+                "doc_no" => $row['doc_no'],
+                "customer_id" => $row['customer_id'],
+                "f_name" => $row['f_name'],
+                "doc_date" => $row['doc_date'],
+                "status" => $row['status'] === 'Active' ? "<div class='text-success'>" . $row['status'] . "</div>" : "<div class='text-muted'> " . $row['status'] . "</div>",
                 "update" => "<button type='button' name='update' id='" . $row['id'] . "' class='btn btn-info btn-xs update' data-toggle='tooltip' title='Update'>Update</button>",
-                "delete" => "<button type='button' name='delete' id='" . $row['id'] . "' class='btn btn-danger btn-xs delete' data-toggle='tooltip' title='Delete'>Delete</button>",
-                "picture" => "<img src = '" . $row['picture'] . "'  width='32' height='32' title='" . $row['name_t'] . "'>",
-                "status" => $row['status'] === 'Active' ? "<div class='text-success'>" . $row['status'] . "</div>" : "<div class='text-muted'> " . $row['status'] . "</div>"
+                "delete" => "<button type='button' name='delete' id='" . $row['id'] . "' class='btn btn-danger btn-xs delete' data-toggle='tooltip' title='Delete'>Delete</button>"
             );
         } else {
             $data[] = array(
                 "id" => $row['id'],
-                "product_id" => $row['product_id'],
-                "name_t" => $row['name_t'],
-                "unit_id" => $row['unit_id'],
-                "unit_name" => $row['unit_name'],
-                "select" => "<button type='button' name='select' id='" . $row['product_id'] . "@" . $row['name_t'] . "@" . $row['unit_id'] . "@" . $row['unit_name'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
+                "doc_no" => $row['doc_no'],
+                "customer_id" => $row['customer_id'],
+                "select" => "<button type='button' name='select' id='" . $row['doc_no'] . "@" . $row['customer_id'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",
             );
         }
+
     }
 
 ## Response Return Value
@@ -237,5 +222,6 @@ if ($_POST["action"] === 'GET_PRODUCT') {
     );
 
     echo json_encode($response);
+
 
 }
