@@ -52,23 +52,21 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <table id='TableRecordList' class='display dataTable'>
                                                 <thead>
                                                 <tr>
-                                                    <th>รหัสสินค้า/วัสดุ</th>
-                                                    <th>ชื่อสินค้า/วัสดุ</th>
-                                                    <th>ยอดคงเหลือ</th>
-                                                    <th>หน่วยนับ</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>เลขที่เอกสาร</th>
+                                                    <th>วันที่เอกสาร</th>
+                                                    <th>ชื่อลูกค้า</th>
+                                                    <th>สถานะการอนุมัติ</th>
+                                                    <th>สถานะการแก้ไข</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
-                                                    <th>รหัสสินค้า/วัสดุ</th>
-                                                    <th>ชื่อสินค้า/วัสดุ</th>
-                                                    <th>ยอดคงเหลือ</th>
-                                                    <th>หน่วยนับ</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th>เลขที่เอกสาร</th>
+                                                    <th>วันที่เอกสาร</th>
+                                                    <th>ชื่อลูกค้า</th>
+                                                    <th>สถานะการอนุมัติ</th>
+                                                    <th>สถานะการแก้ไข</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
@@ -417,7 +415,8 @@ if (strlen($_SESSION['alogin']) == "") {
             $(".icon-input-btn").each(function () {
                 let btnFont = $(this).find(".btn").css("font-size");
                 let btnColor = $(this).find(".btn").css("color");
-                $(this).find(".fa").css({'font-size': btnFont, 'color': btnColor});
+                $(this).find(".fa").css({'font-size': btnFont, 'color': btn
+                    Color});
             });
         });
     </script>
