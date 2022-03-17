@@ -33,6 +33,7 @@ if ($query->rowCount() == 1) {
             $_SESSION['account_type'] = $result->account_type;
             $_SESSION['user_picture'] = $result->picture;
             $_SESSION['lang'] = $result->lang;
+            $_SESSION['permission_price'] = $result->permission_price;
             $_SESSION['dashboard_page'] = $result->dashboard_page . ".php";
             $_SESSION['system_name'] = $system_name;
 

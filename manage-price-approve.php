@@ -42,12 +42,12 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         <div class="col-md-12 col-md-offset-2">
                                             <label for="name_t"
-                                                   class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
+                                                   class="control-label"><b>รายการ <?php echo urldecode($_GET['s']) ?></b></label>
 
-                                            <button type='button' name='btnAdd' id='btnAdd'
+                                            <!--button type='button' name='btnAdd' id='btnAdd'
                                                     class='btn btn-primary btn-xs'>Add
                                                 <i class="fa fa-plus"></i>
-                                            </button>
+                                            </button-->
                                         </div>
 
                                         <div class="col-md-12 col-md-offset-2">
@@ -57,8 +57,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <th>เลขที่เอกสาร</th>
                                                     <th>ชื่อลูกค้า</th>
                                                     <th>วันที่</th>
+                                                    <th>สถานะขออนุมัติราคาขาย</th>
                                                     <th>สถานะการอนุมัติ</th>
-                                                    <th>สถานะการแก้ไข</th>
+                                                    <th>สถานะการแก้ไขราคาขาย</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
@@ -67,8 +68,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <th>เลขที่เอกสาร</th>
                                                     <th>ชื่อลูกค้า</th>
                                                     <th>วันที่</th>
+                                                    <th>สถานะขออนุมัติราคาขาย</th>
                                                     <th>สถานะการอนุมัติ</th>
-                                                    <th>สถานะการแก้ไข</th>
+                                                    <th>สถานะการแก้ไขราคาขาย</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
@@ -116,8 +118,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                 <div class="form-group row">
                                                                     <input type="hidden" class="form-control"
-                                                                           id="customer_id"
-                                                                           name="customer_id">
+                                                                           id="customer_name"
+                                                                           name="customer_name">
                                                                     <div class="col-sm-12">
                                                                         <label for="f_name"
                                                                                class="control-label">ชื่อลูกค้า</label>
@@ -311,8 +313,8 @@ if (strlen($_SESSION['alogin']) == "") {
             let method = $('#action').val();
             if (method === "ADD") {
                 let doc_no = $('#doc_no').val();
-                let customer_id = $('#doc_no').val();
-                let formData = {action: "SEARCH", doc_no: doc_no, customer_id: customer_id};
+                let customer_name = $('#doc_no').val();
+                let formData = {action: "SEARCH", doc_no: doc_no, customer_name: customer_name};
                 $.ajax({
                     url: 'model/manage_price_approve_process.php',
                     method: "POST",
@@ -355,11 +357,12 @@ if (strlen($_SESSION['alogin']) == "") {
                 },
                 'columns': [
                     {data: 'doc_no'},
-                    {data: 'f_name'},
+                    {data: 'customer_name'},
                     {data: 'doc_date'},
-                    {data: 'status'},
-                    {data: 'update'},
-                    {data: 'delete'}
+                    {data: 'request_status'},
+                    {data: 'approve_status'},
+                    {data: 'edit_price_status'},
+                    {data: 'update'}
                 ]
             });
 
@@ -402,7 +405,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         let id = response[i].id;
                         let doc_no = response[i].doc_no;
                         let doc_date = response[i].doc_date;
-                        let customer_id = response[i].customer_id;
+                        let customer_name = response[i].customer_name;
                         let f_name = response[i].f_name;
                         let status = response[i].status;
 
@@ -413,7 +416,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#id').val(id);
                         $('#doc_no').val(doc_no);
                         $('#doc_date').val(doc_date);
-                        $('#customer_id').val(customer_id);
+                        $('#customer_name').val(customer_name);
                         $('#f_name').val(f_name);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
@@ -460,13 +463,20 @@ if (strlen($_SESSION['alogin']) == "") {
                     for (let i = 0; i < len; i++) {
                         let doc_no = response[i].doc_no;
                         let doc_date = response[i].doc_date;
-                        let customer_id = response[i].customer_id;
-                        let f_name = response[i].f_name;
-                        let url = "manage_order_data.php?title=รายการขายสินค้า (Product Order)"
+                        let customer_name = response[i].customer_name;
+                        let remark = response[i].remark;
+                        let request_status = response[i].request_status;
+                        let approve_status = response[i].approve_status;
+                        let edit_price_status = response[i].edit_price_status;
+                        let url = "manage_price_approve_data.php?title=รายการ ขออนุมัติราคาขาย (Request Approve Price)"
                             + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
-                            + '&doc_no=' + doc_no + '&doc_date=' + doc_date
-                            + '&customer_id=' + customer_id
-                            + '&f_name=' + f_name
+                            + '&doc_no=' + doc_no
+                            + '&doc_date=' + doc_date
+                            + '&customer_name=' + customer_name
+                            + '&remark=' + remark
+                            + '&request_status=' + request_status
+                            + '&approve_status=' + approve_status
+                            + '&edit_price_status=' + edit_price_status
                             + '&action=UPDATE';
                         OpenPopupCenter(url, "", "");
                     }

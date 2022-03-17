@@ -43,10 +43,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="modal-body">
                                                     <div class="form-group row">
                                                         <div class="col-sm-2">
-                                                            <label for="doc_no"
+                                                            <label for="doc_no_detail"
                                                                    class="control-label">เลขที่เอกสาร</label>
                                                             <input type="text" class="form-control"
-                                                                   id="doc_no" name="doc_no"
+                                                                   id="doc_no_detail" name="doc_no_detail"
                                                                    readonly="true"
                                                                    placeholder="เลขที่เอกสาร">
                                                         </div>
@@ -69,30 +69,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                id="customer_id"
                                                                name="customer_id">
                                                         <div class="col-sm-6">
-                                                            <label for="f_name"
+                                                            <label for="customer_name"
                                                                    class="control-label">ชื่อลูกค้า</label>
                                                             <input type="text" class="form-control"
-                                                                   id="f_name"
-                                                                   name="f_name"
+                                                                   id="customer_name"
+                                                                   name="customer_name"
                                                                    required="required"
                                                                    placeholder="ชื่อลูกค้า">
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <label for="CusModal"
-                                                                   class="control-label"> เลือกชื่อลูกค้า </label>
-                                                            <a data-toggle="modal" href="#SearchCusModal"
-                                                               class="btn btn-primary">
-                                                                Click <i class="fa fa-search"
-                                                                         aria-hidden="true"></i>
-                                                            </a>
-
-                                                        </div>
                                                     </div>
 
-                                                    <button type='button' name='btnAdd' id='btnAdd'
-                                                            class='btn btn-primary btn-xs'>Add เพิ่มรายการสินค้า
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
 
                                                     <table cellpadding="0" cellspacing="0" border="0"
                                                            class="display"
@@ -100,29 +86,64 @@ if (strlen($_SESSION['alogin']) == "") {
                                                            width="100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
-                                                            <th>สินค้า</th>
-                                                            <th>จำนวน</th>
-                                                            <th>หน่วยนับ</th>
-                                                            <th>ราคา/หน่วย</th>
-                                                            <th>รวมราคา</th>
-                                                            <th>Action</th>
+                                                            <th>รายการที่</th>
+                                                            <th>รหัสสินค้า</th>
+                                                            <th>ชื่อสินค้า</th>
+                                                            <th>ราคาขายปกติ</th>
+                                                            <th>ราคาที่ต้องการขาย</th>
                                                             <th>Action</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
 
+                                                    <br>
+                                                    <br>
+
+                                                    <?php if ($_SESSION['permission_price'] === "REQUESTER" || $_SESSION['permission_price'] === "ADMIN") { ?>
+                                                        <div class="form-group">
+                                                            <label for="request_status"
+                                                                   class="control-label">ขออนุมัติราคาขาย</label>
+                                                            <select id="request_status" name="request_status"
+                                                                    class="form-control"
+                                                                    data-live-search="true"
+                                                                    title="Please select">
+                                                                <option>N ขายราคาปกติ</option>
+                                                                <option>Y ขออนุมัติราคาขาย</option>
+                                                            </select>
+                                                        </div>
+                                                    <?php } else { ?> <input type="hidden" name="request_status"
+                                                                             id="request_status"/> <?php } ?>
+
+                                                    <?php if ($_SESSION['permission_price'] === "APPROVER" || $_SESSION['permission_price'] === "ADMIN") { ?>
+                                                        <div class="form-group">
+                                                            <label for="approve_status"
+                                                                   class="control-label">อนุมัติราคาขาย</label>
+                                                            <select id="approve_status" name="approve_status"
+                                                                    class="form-control"
+                                                                    data-live-search="true"
+                                                                    title="Please select">
+                                                                <option>N ขายราคาปกติ</option>
+                                                                <option>Y อนุมัติ</option>
+                                                            </select>
+                                                        </div>
+                                                    <?php } else { ?> <input type="hidden" name="approve_status"
+                                                                             id="approve_status"/> <?php } ?>
+
+                                                    <?php if ($_SESSION['permission_price'] === "EDITOR" || $_SESSION['permission_price'] === "ADMIN") { ?>
                                                     <div class="form-group">
-                                                        <label for="status"
-                                                               class="control-label">Status</label>
-                                                        <select id="status" name="status"
+                                                        <label for="edit_price_status"
+                                                               class="control-label">แก้ไขราคาขาย</label>
+                                                        <select id="edit_price_status" name="edit_price_status"
                                                                 class="form-control"
                                                                 data-live-search="true"
                                                                 title="Please select">
-                                                            <option>Active</option>
-                                                            <option>Inactive</option>
+                                                            <option>N ขายราคาปกติ</option>
+                                                            <option>Y แก้ไขราคาแล้ว</option>
                                                         </select>
                                                     </div>
+                                                    <?php } else { ?> <input type="hidden" name="edit_price_status"
+                                                                             id="edit_price_status"/> <?php } ?>
+
 
                                                 </div>
                                             </div>
@@ -176,6 +197,29 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                 <div class="form-group row">
                                                                     <div class="col-sm-5">
+                                                                        <label for="doc_no"
+                                                                               class="control-label">เลขที่เอกสาร</label>
+                                                                        <input type="line_no"
+                                                                               class="form-control"
+                                                                               id="doc_no" name="doc_no"
+                                                                               required="required"
+                                                                               readonly="true"
+                                                                               placeholder="เลขที่เอกสาร">
+                                                                    </div>
+                                                                    <div class="col-sm-5">
+                                                                        <label for="line_no"
+                                                                               class="control-label">รายการที่</label>
+                                                                        <input type="line_no"
+                                                                               class="form-control"
+                                                                               id="line_no" name="line_no"
+                                                                               required="required"
+                                                                               readonly="true"
+                                                                               placeholder="รายการที่">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-5">
                                                                         <label for="product_id"
                                                                                class="control-label">รหัสสินค้า/วัสดุ</label>
                                                                         <input type="product_id"
@@ -190,69 +234,33 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <label for="name_t"
                                                                                class="control-label">ชื่อสินค้า/วัสดุ</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="name_t"
-                                                                               name="name_t"
+                                                                               id="product_name"
+                                                                               name="product_name"
                                                                                required="required"
                                                                                readonly="true"
                                                                                placeholder="ชื่อสินค้า/วัสดุ">
                                                                     </div>
 
-                                                                    <div class="col-sm-2">
-                                                                        <label for="quantity"
-                                                                               class="control-label">เลือก</label>
-
-                                                                        <a data-toggle="modal"
-                                                                           href="#SearchProductModal"
-                                                                           class="btn btn-primary">
-                                                                            Click <i class="fa fa-search"
-                                                                                     aria-hidden="true"></i>
-                                                                        </a>
-                                                                    </div>
                                                                 </div>
 
                                                                 <div class="form-group row">
                                                                     <div class="col-sm-5">
-                                                                        <label for="quantity"
-                                                                               class="control-label">จำนวน</label>
+                                                                        <label for="price_normal"
+                                                                               class="control-label">ราคาขายปกติ</label>
                                                                         <input type="number" class="form-control"
-                                                                               id="quantity"
-                                                                               name="quantity"
-                                                                               required="required"
-                                                                               placeholder="จำนวน">
-                                                                    </div>
-                                                                    <input type="hidden" class="form-control"
-                                                                           id="unit_id"
-                                                                           name="unit_id">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="unit_name"
-                                                                               class="control-label">หน่วยนับ</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="unit_name"
-                                                                               name="unit_name"
-                                                                               required="required"
-                                                                               readonly="true"
-                                                                               placeholder="หน่วยนับ">
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="form-group row">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="price"
-                                                                               class="control-label">ราคา/หน่วย</label>
-                                                                        <input type="number" class="form-control"
-                                                                               id="price"
+                                                                               id="price_normal"
                                                                                name="price"
-                                                                               required="required"
-                                                                               placeholder="ราคา/หน่วย">
+                                                                               readonly="true"
+                                                                               placeholder="ราคาขายปกติ">
                                                                     </div>
                                                                     <div class="col-sm-5">
-                                                                        <label for="total_price"
-                                                                               class="control-label">ราคารวม</label>
+                                                                        <label for="price_special"
+                                                                               class="control-label">ราคาที่ต้องการขาย</label>
                                                                         <input type="number" class="form-control"
-                                                                               id="total_price"
-                                                                               name="total_price"
+                                                                               id="price_special"
+                                                                               name="price_special"
                                                                                required="required"
-                                                                               placeholder="ราคารวม">
+                                                                               placeholder="ราคาที่ต้องการขาย">
                                                                     </div>
                                                                 </div>
 
@@ -514,14 +522,17 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#save_status').val("add");
             }
 
-            if (queryString["doc_no"] != null && queryString["f_name"] != null) {
+            if (queryString["doc_no"] != null && queryString["customer_name"] != null) {
 
-                $('#doc_no').val(queryString["doc_no"]);
+                $('#doc_no_detail').val(queryString["doc_no"]);
                 $('#doc_date').val(queryString["doc_date"]);
-                $('#customer_id').val(queryString["customer_id"]);
-                $('#f_name').val(queryString["f_name"]);
+                $('#customer_name').val(queryString["customer_name"]);
+                $('#request_status').val(queryString["request_status"]);
+                $('#approve_status').val(queryString["approve_status"]);
+                $('#edit_price_status').val(queryString["edit_price_status"]);
 
-                Load_Data_Detail(queryString["doc_no"], "v_order_detail");
+
+                Load_Data_Detail(queryString["doc_no"], "v_ims_price_approve_detail");
             }
         });
     </script>
@@ -530,7 +541,7 @@ if (strlen($_SESSION['alogin']) == "") {
         function Load_Data_Detail(doc_no, table_name) {
 
             let formData = {
-                action: "GET_ORDER_DETAIL",
+                action: "GET_PRICE_DETAIL",
                 sub_action: "GET_MASTER",
                 doc_no: doc_no,
                 table_name: table_name
@@ -557,18 +568,16 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_order_detail_process.php',
+                    'url': 'model/manage_price_approve_detail_process.php',
                     'data': formData
                 },
                 'columns': [
                     {data: 'line_no'},
+                    {data: 'product_id'},
                     {data: 'product_name'},
-                    {data: 'quantity', className: "text-right"},
-                    {data: 'unit_name'},
-                    {data: 'price', className: "text-right"},
-                    {data: 'total_price', className: "text-right"},
-                    {data: 'update'},
-                    {data: 'delete'}
+                    {data: 'price_normal', className: "text-right"},
+                    {data: 'price_special', className: "text-right"},
+                    {data: 'update'}
                 ]
             });
         }
@@ -577,7 +586,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $(document).ready(function () {
             $("#btnAdd").click(function () {
-                if ($('#doc_date').val() == '' || $('#f_name').val() == '') {
+                if ($('#doc_date').val() == '' || $('#customer_name').val() == '') {
                     alertify.error("กรุณาป้อนวันที่ / ชื่อลูกค้า ");
                 } else {
                     $('#recordModal').modal('show');
@@ -605,45 +614,37 @@ if (strlen($_SESSION['alogin']) == "") {
 
             let rec_id = $(this).attr("id");
 
-            if ($('#KeyAddData').val() !== '') {
-                doc_no = $('#KeyAddData').val();
-                table_name = "v_order_detail_temp";
-            } else {
-                doc_no = $('#doc_no').val();
-                table_name = "v_order_detail";
-            }
+            doc_no = $('#doc_no').val();
+            table_name = "v_ims_price_approve_detail";
 
             let formData = {action: "GET_DATA", id: rec_id, doc_no: doc_no, table_name: table_name};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_order_detail_process.php',
+                url: 'model/manage_price_approve_detail_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
-                        let product_id = response[i].product_id;
                         let id = response[i].id;
-                        let name_t = response[i].name_t;
+                        let line_no = response[i].line_no;
+                        let doc_no = response[i].doc_no;
                         let doc_date = response[i].doc_date;
-                        let quantity = response[i].quantity;
-                        let price = response[i].price;
-                        let total_price = response[i].total_price;
-                        let unit_id = response[i].unit_id;
-                        let unit_name = response[i].unit_name;
+                        let product_id = response[i].product_id;
+                        let product_name = response[i].product_name;
+                        let price_normal = response[i].price_normal;
+                        let price_special = response[i].price_special;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
+                        $('#line_no').val(line_no);
                         $('#detail_id').val(rec_id);
                         $('#doc_no_detail').val(doc_no);
                         $('#doc_date_detail').val(doc_date);
                         $('#product_id').val(product_id);
-                        $('#name_t').val(name_t);
-                        $('#quantity').val(quantity);
-                        $('#price').val(price);
-                        $('#total_price').val(total_price);
-                        $('#unit_id').val(unit_id);
-                        $('#unit_name').val(unit_name);
+                        $('#product_name').val(product_name);
+                        $('#price_normal').val(price_normal);
+                        $('#price_special').val(price_special);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action_detail').val('UPDATE');
                         $('#save').val('Save');
@@ -665,16 +666,16 @@ if (strlen($_SESSION['alogin']) == "") {
 
             if ($('#KeyAddData').val() !== '') {
                 doc_no = $('#KeyAddData').val();
-                table_name = "v_order_detail_temp";
+                table_name = "v_ims_price_approve_detail_temp";
             } else {
                 doc_no = $('#doc_no').val();
-                table_name = "v_order_detail";
+                table_name = "v_ims_price_approve_detail";
             }
 
             let formData = {action: "GET_DATA", id: rec_id, doc_no: doc_no, table_name: table_name};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_order_detail_process.php',
+                url: 'model/manage_price_approve_detail_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
@@ -716,23 +717,21 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $(document).ready(function () {
             $("#btnSave").click(function () {
-                if ($('#doc_date').val() == '' || $('#f_name').val() == '') {
+
+                if ($('#doc_date').val() == '' || $('#customer_name').val() == '') {
                     alertify.error("กรุณาป้อนวันที่ / ชื่อลูกค้า ");
                 } else {
                     let formData = $('#MainrecordForm').serialize();
                     $.ajax({
-                        url: 'model/manage_order_process.php',
+                        url: 'model/manage_price_approve_process.php',
                         method: "POST",
                         data: formData,
                         success: function (data) {
 
-                            if ($('#KeyAddData').val() !== '') {
-                                let KeyAddData = $('#KeyAddData').val();
-                                Save_Detail(KeyAddData);
-                            }
                             alertify.success(data);
                             window.opener.location.reload();
                             $('#save_status').val("save");
+
                         }
                     })
 
@@ -747,7 +746,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
             let formData = {action: "SAVE_DETAIL", KeyAddData: KeyAddData};
             $.ajax({
-                url: 'model/manage_order_detail_process.php',
+                url: 'model/manage_price_approve_detail_process.php',
                 method: "POST",
                 data: formData,
                 success: function (data) {
@@ -769,7 +768,7 @@ if (strlen($_SESSION['alogin']) == "") {
             let doc_no_detail = $('#doc_no_detail').val();
             let formData = $(this).serialize();
             $.ajax({
-                url: 'model/manage_order_detail_process.php',
+                url: 'model/manage_price_approve_detail_process.php',
                 method: "POST",
                 data: formData,
                 success: function (data) {
@@ -778,12 +777,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     $('#recordModal').modal('hide');
 
                     $('#TableOrderDetailList').DataTable().clear().destroy();
-
-                    if (KeyAddData !== '') {
-                        Load_Data_Detail(KeyAddData, "v_order_detail_temp");
-                    } else {
-                        Load_Data_Detail(doc_no_detail, "v_order_detail");
-                    }
+                    Load_Data_Detail(doc_no_detail, "v_ims_price_approve_detail");
                 }
             })
 

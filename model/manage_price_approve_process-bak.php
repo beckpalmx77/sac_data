@@ -20,10 +20,8 @@ if ($_POST["action"] === 'GET_DATA') {
             "doc_no" => $result['doc_no'],
             "doc_date" => $result['doc_date'],
             "customer_name" => $result['customer_name'],
-            "remark" => $result['remark'],
-            "request_status" => $result['request_status'],
-            "approve_status" => $result['approve_status'],
-            "edit_price_status" => $result['edit_price_status']);
+            "f_name" => $result['f_name'],
+            "status" => $result['status']);
     }
 
     echo json_encode($return_arr);
@@ -46,15 +44,15 @@ if ($_POST["action"] === 'SEARCH') {
 }
 
 if ($_POST["action"] === 'ADD') {
-    if ($_POST["supplier_id"] !== '') {
+    if ($_POST["customer_name"] !== '') {
         $table = "ims_price_approve_header";
         $KeyAddData = $_POST["KeyAddData"];
         $doc_year = substr($_POST["doc_date"], 0, 4);
         $field = "doc_runno";
-        $doc_type = "-PRH-";
+        $doc_type = "-BK-";
         $doc_runno = LAST_ID_YEAR($conn, $table, $field, $doc_year);
         $doc_no = $doc_year . $doc_type . sprintf('%06s', $doc_runno);
-        $supplier_id = $_POST["supplier_id"];
+        $customer_name = $_POST["customer_name"];
         $doc_date = $_POST["doc_date"];
         $status = $_POST["status"];
         $sql_find = "SELECT * FROM " . $table . " WHERE doc_no = '" . $doc_no . "'";
@@ -64,11 +62,11 @@ if ($_POST["action"] === 'ADD') {
         if ($nRows > 0) {
             echo $dup;
         } else {
-            $sql = "INSERT INTO " . $table . " (doc_no,supplier_id,doc_date,doc_year,doc_runno,KeyAddData,status)
-                    VALUES (:doc_no,:supplier_id,:doc_date,:doc_year,:doc_runno,:KeyAddData,:status)";
+            $sql = "INSERT INTO " . $table . " (doc_no,customer_name,doc_date,doc_year,doc_runno,KeyAddData,status)
+                    VALUES (:doc_no,:customer_name,:doc_date,:doc_year,:doc_runno,:KeyAddData,:status)";
             $query = $conn->prepare($sql);
             $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
-            $query->bindParam(':supplier_id', $supplier_id, PDO::PARAM_STR);
+            $query->bindParam(':customer_name', $customer_name, PDO::PARAM_STR);
             $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
             $query->bindParam(':doc_year', $doc_year, PDO::PARAM_STR);
             $query->bindParam(':doc_runno', $doc_runno, PDO::PARAM_STR);
@@ -88,40 +86,32 @@ if ($_POST["action"] === 'ADD') {
 
 if ($_POST["action"] === 'UPDATE') {
 
-    if ($_POST["doc_no_detail"] != '') {
+    if ($_POST["doc_no"] != '') {
 
-        $doc_no = $_POST["doc_no_detail"];
-        $request_status = $_POST["request_status"];
-        $approve_status = $_POST["approve_status"];
-        $edit_price_status = $_POST["edit_price_status"];
+        $id = $_POST["id"];
+        $doc_no = $_POST["doc_no"];
+        $customer_name = $_POST["customer_name"];
+        $status = $_POST["status"];
         $update_date = date('Y-m-d H:i:s');
         $sql_find = "SELECT * FROM ims_price_approve_header WHERE doc_no = '" . $doc_no . "'";
-
-        $qry = $doc_no . "|" . $request_status . "|" . $approve_status . "|" . $edit_price_status . "|" . $update_date . " | " . $_SESSION['permission_price'];
-
-        $myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $qry);
-        fclose($myfile);
-
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
-            $sql_update = "UPDATE ims_price_approve_header SET request_status=:request_status,approve_status=:approve_status            
-            ,edit_price_status=:edit_price_status WHERE doc_no = :doc_no";
+            $sql_update = "UPDATE ims_price_approve_header SET customer_name=:customer_name,status=:status            
+            ,update_date=:update_date WHERE doc_no = :doc_no";
             $query = $conn->prepare($sql_update);
-            $query->bindParam(':request_status', $request_status, PDO::PARAM_STR);
-            $query->bindParam(':approve_status', $approve_status, PDO::PARAM_STR);
-            $query->bindParam(':edit_price_status', $edit_price_status, PDO::PARAM_STR);
+            $query->bindParam(':customer_name', $customer_name, PDO::PARAM_STR);
+            $query->bindParam(':status', $status, PDO::PARAM_STR);
+            $query->bindParam(':update_date', $update_date, PDO::PARAM_STR);
             $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
-            if ($query->execute()) {
+            if($query->execute()){
                 echo $save_success;
-            } else {
+            }else{
                 echo $error;
             }
         }
 
     }
 }
-
 
 if ($_POST["action"] === 'DELETE') {
 
@@ -152,6 +142,10 @@ if ($_POST["action"] === 'GET_PRICE') {
     $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
     $searchValue = $_POST['search']['value']; // Search value
 
+    //$myfile = fopen("cnt_all_price_file.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, "First Step");
+    //fclose($myfile);
+
     if ($columnName === 'doc_no') {
         $columnSortOrder = "desc";
     }
@@ -162,7 +156,7 @@ if ($_POST["action"] === 'GET_PRICE') {
     $searchQuery = " ";
     if ($searchValue != '') {
         $searchQuery = " AND (doc_no LIKE :doc_no or
-        customer_name LIKE :customer_name ) ";
+        customer_name :customer_name ) ";
         $searchArray = array(
             'doc_no' => "%$searchValue%",
             'customer_name' => "%$searchValue%",
@@ -170,13 +164,27 @@ if ($_POST["action"] === 'GET_PRICE') {
     }
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_price_approve_header ");
+
+    $query_count_all = "SELECT COUNT(*) AS allcount FROM ims_price_approve_header ";
+
+    $stmt = $conn->prepare($query_count_all);
+
+    //$myfile = fopen("cnt_all_price_file.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $query_count_all);
+    //fclose($myfile);
+
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_price_approve_header WHERE 1 " . $searchQuery);
+    $query_count_str = "SELECT COUNT(*) AS allcount FROM ims_price_approve_header WHERE 1 " . $searchQuery;
+
+    //$myfile = fopen("cnt_price_file.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $query_count_str);
+    //fclose($myfile);
+
+    $stmt = $conn->prepare($query_count_str);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
@@ -184,6 +192,7 @@ if ($_POST["action"] === 'GET_PRICE') {
 ## Fetch records
     $query_str = "SELECT * FROM v_ims_price_approve_header WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
+
 
     $stmt = $conn->prepare("SELECT * FROM v_ims_price_approve_header WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
@@ -215,8 +224,8 @@ if ($_POST["action"] === 'GET_PRICE') {
             $data[] = array(
                 "id" => $row['id'],
                 "doc_no" => $row['doc_no'],
-                "supplier_id" => $row['supplier_id'],
-                "select" => "<button type='button' name='select' id='" . $row['doc_no'] . "@" . $row['supplier_id'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
+                "customer_name" => $row['customer_name'],
+                "select" => "<button type='button' name='select' id='" . $row['doc_no'] . "@" . $row['customer_name'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",
             );
         }
@@ -232,5 +241,6 @@ if ($_POST["action"] === 'GET_PRICE') {
     );
 
     echo json_encode($response);
+
 
 }
