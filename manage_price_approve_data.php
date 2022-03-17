@@ -197,16 +197,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                 <div class="form-group row">
                                                                     <div class="col-sm-5">
-                                                                        <label for="doc_no"
-                                                                               class="control-label">เลขที่เอกสาร</label>
-                                                                        <input type="line_no"
-                                                                               class="form-control"
-                                                                               id="doc_no" name="doc_no"
-                                                                               required="required"
-                                                                               readonly="true"
-                                                                               placeholder="เลขที่เอกสาร">
-                                                                    </div>
-                                                                    <div class="col-sm-5">
                                                                         <label for="line_no"
                                                                                class="control-label">รายการที่</label>
                                                                         <input type="line_no"

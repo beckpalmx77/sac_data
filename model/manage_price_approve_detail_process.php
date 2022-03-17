@@ -40,10 +40,10 @@ if ($_POST["action_detail"] === 'ADD') {
 
         if ($_POST["KeyAddDetail"] !== '') {
             $doc_no = $_POST["KeyAddDetail"];
-            $table_name = "ims_order_detail_temp";
+            $table_name = "ims_price_approve_detail_temp";
         } else {
             $doc_no = $_POST["doc_no_detail"];
-            $table_name = "ims_order_detail";
+            $table_name = "ims_price_approve_detail";
         }
 
         $doc_date = $_POST["doc_date_detail"];
@@ -84,22 +84,19 @@ if ($_POST["action_detail"] === 'ADD') {
 
 if ($_POST["action_detail"] === 'UPDATE') {
 
-    if ($_POST["$product_id"] !== '') {
+    if ($_POST["product_name"] !== '') {
 
-        if ($_POST["KeyAddDetail"] !== '') {
-            $doc_no = $_POST["KeyAddDetail"];
-            $table_name = "ims_order_detail_temp";
-        } else {
-            $doc_no = $_POST["doc_no_detail"];
-            $table_name = "ims_order_detail";
-        }
-
+        $table_name = "ims_price_approve_detail";
         $doc_date = $_POST["doc_date_detail"];
         $id = $_POST["detail_id"];
-        $product_id = $_POST["product_id"];
-        $quantity = $_POST["quantity"];
-        $price = $_POST["price"];
-        $unit_id = $_POST["unit_id"];
+        $product_name = $_POST["product_name"];
+        $price_special = $_POST["price_special"];
+
+        $qry = $id . " | " . $price_special . " | " . $product_name . " | ";
+
+        $myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $qry);
+        fclose($myfile);
 
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";
@@ -109,15 +106,10 @@ if ($_POST["action_detail"] === 'UPDATE') {
             echo $error;
         } else {
             $sql_update = "UPDATE " . $table_name
-                . " SET doc_date=:doc_date,product_id=:product_id,quantity=:quantity "
-                . ",price=:price,unit_id=:unit_id "
+                . " SET price_special=:price_special "
                 . " WHERE id = :id ";
             $query = $conn->prepare($sql_update);
-            $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
-            $query->bindParam(':product_id', $product_id, PDO::PARAM_STR);
-            $query->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-            $query->bindParam(':price', $price, PDO::PARAM_STR);
-            $query->bindParam(':unit_id', $unit_id, PDO::PARAM_STR);
+            $query->bindParam(':price_special', $price_special, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             if($query->execute()){
                 echo $save_success;
@@ -135,10 +127,10 @@ if ($_POST["action_detail"] === 'DELETE') {
 
         if ($_POST["KeyAddDetail"] !== '') {
             $doc_no = $_POST["KeyAddDetail"];
-            $table_name = "ims_order_detail_temp";
+            $table_name = "ims_price_approve_detail_temp";
         } else {
             $doc_no = $_POST["doc_no_detail"];
-            $table_name = "ims_order_detail";
+            $table_name = "ims_price_approve_detail";
         }
 
         $id = $_POST["detail_id"];
@@ -180,12 +172,13 @@ if ($_POST["action"] === 'SAVE_DETAIL') {
             $doc_date = $result['doc_date'];
         }
 
-        $sql_find_detail = "SELECT * FROM ims_order_detail_temp WHERE doc_no = '" . $KeyAddData . "'";
+        $sql_find_detail = "SELECT * FROM ims_price_approve_detail_temp WHERE doc_no = '" . $KeyAddData . "'";
         $statement = $conn->query($sql_find_detail);
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
         foreach ($results as $result) {
 
-            $sql = "INSERT INTO ims_order_detail (doc_no,doc_date,product_id,unit_id,quantity,price,line_no) 
+            $sql = "INSERT INTO ims_price_approve_detail (doc_no,doc_date,product_id,unit_id,quantity,price,line_no) 
             VALUES (:doc_no,:doc_date,:product_id,:unit_id,:quantity,:price,:line_no)";
             $query = $conn->prepare($sql);
             $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
