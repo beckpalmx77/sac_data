@@ -94,9 +94,9 @@ if ($_POST["action_detail"] === 'UPDATE') {
 
         $qry = $id . " | " . $price_special . " | " . $product_name . " | ";
 
-        $myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $qry);
-        fclose($myfile);
+        //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile, $qry);
+        //fclose($myfile);
 
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";

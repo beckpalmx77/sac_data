@@ -99,9 +99,9 @@ if ($_POST["action"] === 'UPDATE') {
 
         $qry = $doc_no . "|" . $request_status . "|" . $approve_status . "|" . $edit_price_status . "|" . $update_date . " | " . $_SESSION['permission_price'];
 
-        $myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $qry);
-        fclose($myfile);
+        //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile, $qry);
+        //fclose($myfile);
 
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
@@ -185,8 +185,16 @@ if ($_POST["action"] === 'GET_PRICE') {
     $query_str = "SELECT * FROM v_ims_price_approve_header WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset";
 
+    $columnName = " id " ;
+    $columnSortOrder = " desc " ;
+
     $stmt = $conn->prepare("SELECT * FROM v_ims_price_approve_header WHERE 1 " . $searchQuery
+        //. " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+
+    $myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
+    fwrite($myfile, $query_str);
+    fclose($myfile);
 
 // Bind values
     foreach ($searchArray as $key => $search) {
