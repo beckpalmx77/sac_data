@@ -6,7 +6,7 @@ error_reporting(~0);
 include ("../config/connect_sqlserver.php");
 include ("../config/connect_db.php");
 
-include ("../cond_file/doc_info-query-main.php");
+include ("../cond_file/doc_info-query-001.php");
 
 $doc_id_prefix = 'BKSV%';
 $year = date("Y");
@@ -27,23 +27,27 @@ $stmt_sqlsvr->execute();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
-    $sql_find = "SELECT * FROM ims_price_approve_detail WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"] . "'";
+    $sql_find = "SELECT * FROM ims_price_approve_detail WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"] . "'"
+              . " AND line_no = " . $result_sqlsvr["TRD_SEQ"];
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
-        echo $dup;
+        echo "Dup";
     } else {
-
 
         $doc_date = substr($result_sqlsvr["DI_DATE"],8,2) . "/" . substr($result_sqlsvr["DI_DATE"],5,2) . "/" . strval(intval(substr($result_sqlsvr["DI_DATE"],0,4))+543);
         //echo $doc_date . " | " ;
 
-        $sql = "INSERT INTO ims_price_approve_detail(DI_KEY,doc_no,doc_date,customer_id,customer_name) VALUES (:DI_KEY,:doc_no,:doc_date,:customer_id,:customer_name)";
+        $sql = "INSERT INTO ims_price_approve_detail(DI_KEY,doc_no,line_no,doc_date,customer_id,customer_name,product_id,product_name) 
+                VALUES (:DI_KEY,:doc_no,:line_no,:doc_date,:customer_id,:customer_name,:product_id,:product_name)";
         $query = $conn->prepare($sql);
         $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
         $query->bindParam(':doc_no', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
+        $query->bindParam(':line_no', $result_sqlsvr["TRD_SEQ"], PDO::PARAM_STR);
         $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
         $query->bindParam(':customer_id', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
         $query->bindParam(':customer_name', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
+        $query->bindParam(':product_id', $result_sqlsvr["TRD_SH_CODE"], PDO::PARAM_STR);
+        $query->bindParam(':product_name', $result_sqlsvr["TRD_SH_NAME"], PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();

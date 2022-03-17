@@ -30,7 +30,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $sql_find = "SELECT * FROM ims_price_approve_header WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"] . "'";
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
-        echo $dup;
+        echo "Dup";
     } else {
 
 
