@@ -330,7 +330,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_ORDER", sub_action: "GET_MASTER"};
+            let formData = {action: "GET_PRICE", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
                 'columnDefs': [{"orderSequence": ["desc", "asc"]}],
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],

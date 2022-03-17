@@ -131,7 +131,7 @@ if ($_POST["action"] === 'DELETE') {
     }
 }
 
-if ($_POST["action"] === 'GET_ORDER') {
+if ($_POST["action"] === 'GET_PRICE') {
 
     ## Read value
     $draw = $_POST['draw'];
