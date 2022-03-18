@@ -14,15 +14,15 @@ $month = date("m");
 
 echo "Year = " . $year ; echo "\n\r"; echo "Month = " . $month ; echo "\n\r";
 
-$sql_sqlsvr = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
+$sql_sqlsvr_detail = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
     . " AND YEAR(DI_DATE) = " . $year . " AND MONTH(DI_DATE) = " . $month
     . $sql_order ;
 
 $myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $sql_sqlsvr);
+fwrite($myfile, $sql_sqlsvr_detail);
 fclose($myfile);
 
-$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
+$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr_detail);
 $stmt_sqlsvr->execute();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
@@ -63,4 +63,4 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $conn_sqlsvr=null;
-$conn=null;
+

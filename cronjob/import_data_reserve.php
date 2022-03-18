@@ -58,4 +58,4 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $conn_sqlsvr=null;
-$conn=null;
+
