@@ -240,7 +240,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <input type="number" class="form-control"
                                                                                id="price_normal"
                                                                                name="price"
-                                                                               readonly="true"
                                                                                placeholder="ราคาขายปกติ">
                                                                     </div>
                                                                     <div class="col-sm-5">
