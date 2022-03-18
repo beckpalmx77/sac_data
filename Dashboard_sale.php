@@ -113,6 +113,32 @@ if (strlen($_SESSION['alogin']) == "") {
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    สถิติการ เข้าชมโครงการ - จองบ้าน (จำนวนราย)
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">ปี 2565</h5>
+                                    <canvas id="myChart" width="200" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    สถิติการจองบ้านแบบต่างๆ
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">ปี 2565</h5>
+                                    <canvas id="myChart2" width="200" height="200"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <!--div class="row">
                         <div class="col-lg-12">
@@ -146,12 +172,12 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/myadmin.min.js"></script>
-    <script src="vendor/chart.js/Chart.min.js"></script>
-    <script src="js/chart/chart-area-demo.js"></script>
+    <script src="js/chart.js"></script>
 
     <link href='vendor/calendar/main.css' rel='stylesheet'/>
     <script src='vendor/calendar/main.js'></script>
     <script src='vendor/calendar/locales/th.js'></script>
+
 
     <script>
 
@@ -191,6 +217,75 @@ if (strlen($_SESSION['alogin']) == "") {
             });
         }
 
+    </script>
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: 'เข้าชมโครงการ',
+                    data: [21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(238, 34, 200, 1)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderWidth: 1
+                }, {
+                    label: 'จองบ้าน',
+                    data: [14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(59, 252,200, 1)',
+                    ],
+                    borderColor: [
+                        'rgba(153, 102, 255, 0.2)',
+                    ],
+                    borderWidth: 1
+
+                }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        let xValues = ["แบบที่ 1", "แบบที่ 2", "แบบที่ 3", "แบบที่ 4", "แบบที่ 5"];
+        let yValues = [3, 6, 5, 5, 2];
+        let barColors = [
+            "#b91d47",
+            "#00aba9",
+            "#2b5797",
+            "#e8c3b9",
+            "#1e7145"
+        ];
+
+        new Chart("myChart2", {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: ""
+                }
+            }
+        });
     </script>
 
 
