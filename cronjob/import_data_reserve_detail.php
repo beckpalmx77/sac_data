@@ -14,15 +14,15 @@ $month = date("m");
 
 echo "Year = " . $year ; echo "\n\r"; echo "Month = " . $month ; echo "\n\r";
 
-$sql_sqlsvr_detail = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
+$sql_sqlsvr = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
     . " AND YEAR(DI_DATE) = " . $year . " AND MONTH(DI_DATE) = " . $month
     . $sql_order ;
 
 $myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $sql_sqlsvr_detail);
+fwrite($myfile, $sql_sqlsvr);
 fclose($myfile);
 
-$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr_detail);
+$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
 $stmt_sqlsvr->execute();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
@@ -37,8 +37,10 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $doc_date = substr($result_sqlsvr["DI_DATE"],8,2) . "/" . substr($result_sqlsvr["DI_DATE"],5,2) . "/" . strval(intval(substr($result_sqlsvr["DI_DATE"],0,4))+543);
         //echo $doc_date . " | " ;
 
-        $sql = "INSERT INTO ims_price_approve_detail(DI_KEY,doc_no,line_no,doc_date,customer_id,customer_name,product_id,product_name) 
-                VALUES (:DI_KEY,:doc_no,:line_no,:doc_date,:customer_id,:customer_name,:product_id,:product_name)";
+        $remark = "Price/Unit ^^ TRD_K_U_PRC = " . $result_sqlsvr["TRD_K_U_PRC"] . " | TRD_U_PRC = " . $result_sqlsvr["TRD_U_PRC"];
+
+        $sql = "INSERT INTO ims_price_approve_detail(DI_KEY,doc_no,line_no,doc_date,customer_id,customer_name,product_id,product_name,price_normal,remark) 
+                VALUES (:DI_KEY,:doc_no,:line_no,:doc_date,:customer_id,:customer_name,:product_id,:product_name,:price_normal,:remark)";
         $query = $conn->prepare($sql);
         $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
         $query->bindParam(':doc_no', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
@@ -48,6 +50,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':customer_name', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
         $query->bindParam(':product_id', $result_sqlsvr["TRD_SH_CODE"], PDO::PARAM_STR);
         $query->bindParam(':product_name', $result_sqlsvr["TRD_SH_NAME"], PDO::PARAM_STR);
+        $query->bindParam(':price_normal', $result_sqlsvr["TRD_K_U_PRC"], PDO::PARAM_STR);
+        $query->bindParam(':remark', $remark, PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
