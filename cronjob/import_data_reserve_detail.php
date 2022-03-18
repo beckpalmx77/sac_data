@@ -35,8 +35,6 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     } else {
 
         $doc_date = substr($result_sqlsvr["DI_DATE"],8,2) . "/" . substr($result_sqlsvr["DI_DATE"],5,2) . "/" . strval(intval(substr($result_sqlsvr["DI_DATE"],0,4))+543);
-        //echo $doc_date . " | " ;
-
         $remark = "Price/Unit ^^ TRD_K_U_PRC = " . $result_sqlsvr["TRD_K_U_PRC"] . " | TRD_U_PRC = " . $result_sqlsvr["TRD_U_PRC"];
 
         $sql = "INSERT INTO ims_price_approve_detail(DI_KEY,doc_no,line_no,doc_date,customer_id,customer_name,product_id,product_name,price_normal,remark) 
