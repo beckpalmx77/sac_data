@@ -12,14 +12,11 @@ $doc_id_prefix = 'BKSV%';
 $year = date("Y");
 $month = date("m");
 
-$year = 2022;
-$month = 01;
-
 echo "Year = " . $year ; echo "\n\r"; echo "Month = " . $month ; echo "\n\r";
 
 $sql_sqlsvr = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
             . " AND YEAR(DI_DATE) = " . $year
-            //. " AND MONTH(DI_DATE) = " . $month
+            . " AND MONTH(DI_DATE) = " . $month
             . $sql_order ;
 
 $myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
