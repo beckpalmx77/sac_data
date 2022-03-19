@@ -49,6 +49,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':product_id', $result_sqlsvr["TRD_SH_CODE"], PDO::PARAM_STR);
         $query->bindParam(':product_name', $result_sqlsvr["TRD_SH_NAME"], PDO::PARAM_STR);
         $query->bindParam(':price_normal', $result_sqlsvr["TRD_K_U_PRC"], PDO::PARAM_STR);
+        $query->bindParam(':price_special', $result_sqlsvr["TRD_K_U_PRC"], PDO::PARAM_STR);
         $query->bindParam(':remark', $remark, PDO::PARAM_STR);
         $query->execute();
 
