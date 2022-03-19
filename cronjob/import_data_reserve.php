@@ -12,6 +12,9 @@ $doc_id_prefix = 'BKSV%';
 $year = date("Y");
 $month = date("m");
 
+$year = 2022;
+$month = 01;
+
 echo "Year = " . $year ; echo "\n\r"; echo "Month = " . $month ; echo "\n\r";
 
 $sql_sqlsvr = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix . "'"
