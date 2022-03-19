@@ -8,9 +8,9 @@ include ("../config/connect_db.php");
 
 include ("../cond_file/doc_info-query-001.php");
 
-$doc_id_prefix = 'BKSV%';
-$year = date("Y");
-$month = date("m");
+//$doc_id_prefix = 'BKSV%';
+//$year = date("Y");
+//$month = date("m");
 
 echo "Year = " . $year ; echo "\n\r"; echo "Month = " . $month ; echo "\n\r";
 
