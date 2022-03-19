@@ -28,7 +28,10 @@ if ($_POST["action"] === 'GET_DATA') {
             "product_id" => $result['product_id'],
             "product_name" => $result['product_name'],
             "price_normal" => $result['price_normal'],
-            "price_special" => $result['price_special']);
+            "price_special" => $result['price_special'],
+            "remark" => $result['remark'],
+            "picture" => $result['picture'],
+            "request_edit_price_status" => $result['request_edit_price_status']);
     }
 
     echo json_encode($return_arr);
@@ -91,6 +94,7 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $id = $_POST["detail_id"];
         $product_name = $_POST["product_name"];
         $price_special = $_POST["price_special"];
+        $request_edit_price_status = $_POST["request_edit_price_status"];
 
         $qry = $id . " | " . $price_special . " | " . $product_name . " | ";
 
@@ -106,10 +110,11 @@ if ($_POST["action_detail"] === 'UPDATE') {
             echo $error;
         } else {
             $sql_update = "UPDATE " . $table_name
-                . " SET price_special=:price_special "
+                . " SET price_special=:price_special , request_edit_price_status=:request_edit_price_status"
                 . " WHERE id = :id ";
             $query = $conn->prepare($sql_update);
             $query->bindParam(':price_special', $price_special, PDO::PARAM_STR);
+            $query->bindParam(':request_edit_price_status', $request_edit_price_status, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             if($query->execute()){
                 echo $save_success;
@@ -268,8 +273,11 @@ if ($_POST["action"] === 'GET_PRICE_DETAIL') {
                 "line_no" => $row['line_no'],
                 "product_id" => $row['product_id'],
                 "product_name" => $row['product_name'],
-                "price_normal" => number_format($row['price_normal'],2),
-                "price_special" => number_format($row['price_special'],2),
+                "price_normal" => $row['request_edit_price_status']==='Y' ? "<div class='text-danger'>" . number_format($row['price_normal'],2) . "</div>" : number_format($row['price_normal'],2),
+                "price_special" => $row['request_edit_price_status']==='Y' ? "<div class='text-danger'>" . number_format($row['price_special'],2) . "</div>" : number_format($row['price_special'],2),
+                //"price_normal" => number_format($row['price_normal'],2),
+                //"price_special" => number_format($row['price_special'],2),
+                "request_edit_price_status" => $row['request_edit_price_status'],
                 "update" => "<button type='button' name='update' id='" . $row['id'] . "' class='btn btn-info btn-xs update' data-toggle='tooltip' title='Update'>Update</button>"
             );
         } else {

@@ -253,6 +253,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
+                                                                <?php if ($_SESSION['permission_price'] === "REQUESTER" || $_SESSION['permission_price'] === "ADMIN") { ?>
+                                                                    <div class="form-group">
+                                                                        <label for="request_edit_price_status"
+                                                                               class="control-label">ขออนุมัติราคาขาย</label>
+                                                                        <select id="request_edit_price_status" name="request_edit_price_status"
+                                                                                class="form-control"
+                                                                                data-live-search="true"
+                                                                                title="Please select">
+                                                                            <option>N</option>
+                                                                            <option>Y</option>
+                                                                        </select>
+                                                                    </div>
+                                                                <?php } else { ?> <input type="hidden" name="request_edit_price_status"
+                                                                                         id="request_edit_price_status"/> <?php } ?>
+
+
                                                             </div>
                                                         </div>
 
@@ -623,6 +639,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         let product_name = response[i].product_name;
                         let price_normal = response[i].price_normal;
                         let price_special = response[i].price_special;
+                        let request_edit_price_status = response[i].request_edit_price_status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
@@ -634,6 +651,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#product_name').val(product_name);
                         $('#price_normal').val(price_normal);
                         $('#price_special').val(price_special);
+                        $('#request_edit_price_status').val(request_edit_price_status);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action_detail').val('UPDATE');
                         $('#save').val('Save');
