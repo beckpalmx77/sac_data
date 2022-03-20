@@ -117,7 +117,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติการ เข้าชมโครงการ - จองบ้าน (จำนวนราย)
+                                    สถิติ
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี 2565</h5>
@@ -129,7 +129,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติการจองบ้านแบบต่างๆ
+                                    สถิติ
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี 2565</h5>
@@ -226,7 +226,7 @@ if (strlen($_SESSION['alogin']) == "") {
             data: {
                 labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 datasets: [{
-                    label: 'เข้าชมโครงการ',
+                    label: 'Data1',
                     data: [21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: [
                         'rgba(238, 34, 200, 1)'
@@ -236,7 +236,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     ],
                     borderWidth: 1
                 }, {
-                    label: 'จองบ้าน',
+                    label: 'Data2',
                     data: [14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: [
                         'rgba(59, 252,200, 1)',

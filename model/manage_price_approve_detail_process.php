@@ -92,15 +92,16 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $table_name = "ims_price_approve_detail";
         $doc_date = $_POST["doc_date_detail"];
         $id = $_POST["detail_id"];
+        //$doc_no = $_POST["doc_no_detail"];
         $product_name = $_POST["product_name"];
         $price_special = $_POST["price_special"];
         $request_edit_price_status = $_POST["request_edit_price_status"];
 
+        //$qry = $id . " | " . $price_special . " | " . $product_name . " | " . $doc_no;
         $qry = $id . " | " . $price_special . " | " . $product_name . " | ";
-
-        //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
-        //fwrite($myfile, $qry);
-        //fclose($myfile);
+        $myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $qry);
+        fclose($myfile);
 
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";
@@ -117,6 +118,7 @@ if ($_POST["action_detail"] === 'UPDATE') {
             $query->bindParam(':request_edit_price_status', $request_edit_price_status, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             if($query->execute()){
+                save_approve_head();
                 echo $save_success;
             }else{
                 echo $error;
@@ -303,5 +305,27 @@ if ($_POST["action"] === 'GET_PRICE_DETAIL') {
     echo json_encode($response);
 
 
+}
+
+function save_approve_head () {
+
+    $sql_update = "UPDATE ims_price_approve_header SET request_status=:request_status WHERE doc_no = :doc_no";
+
+    $myfile = fopen("sql_update_data2.txt", "w") or die("Unable to open file!");
+    fwrite($myfile, $sql_update);
+    fclose($myfile);
+
+
+    /*$query = $conn->prepare($sql_update);
+    $query->bindParam(':request_status', $request_status, PDO::PARAM_STR);
+    $query->bindParam(':approve_status', $approve_status, PDO::PARAM_STR);
+    $query->bindParam(':edit_price_status', $edit_price_status, PDO::PARAM_STR);
+    $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
+    if ($query->execute()) {
+        echo $save_success;
+    } else {
+        echo $error;
+    }
+    */
 }
 

@@ -6,7 +6,7 @@ error_reporting(~0);
 include ("../config/connect_sqlserver.php");
 include ("../config/connect_db.php");
 
-include ("../cond_file/doc_info-query-main.php");
+include ("../cond_file/doc_info_credit_sale.php");
 
 $doc_id_prefix = 'BKSV%';
 $year = date("Y");
