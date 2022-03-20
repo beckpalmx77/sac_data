@@ -239,7 +239,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                class="control-label">ราคาขายปกติ</label>
                                                                         <input type="number" class="form-control"
                                                                                id="price_normal"
-                                                                               name="price"
+                                                                               name="price_normal"
                                                                                placeholder="ราคาขายปกติ">
                                                                     </div>
                                                                     <div class="col-sm-5">

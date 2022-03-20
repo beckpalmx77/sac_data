@@ -48,15 +48,24 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $id = $_POST["detail_id"];
         $doc_no = $_POST["doc_no_detail_line"];
         $product_name = $_POST["product_name"];
-        //$price_normal = $_POST["price_normal"];
+        $price_normal = $_POST["price_normal"];
         $price_special = $_POST["price_special"];
         $request_edit_price_status = $_POST["request_edit_price_status"];
 
-        $qry = $id . " | " .  " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
-        //$qry = $id . " | " . $price_normal . " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
-        //$myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
-        //fwrite($myfile, $qry);
-        //fclose($myfile);
+        $price_diff = $price_normal - $price_special ;
+
+        if ($price_diff<>0) {
+            $request_edit_price_status = "Y";
+        } else {
+            $request_edit_price_status = "N";
+        }
+
+        //$qry = $id . " | " .  " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
+        $qry = $id . " | " . $price_normal . " | " . $price_special . " | " . $price_diff . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
+
+        $myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $qry);
+        fclose($myfile);
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";
 
