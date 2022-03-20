@@ -48,11 +48,12 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $id = $_POST["detail_id"];
         $doc_no = $_POST["doc_no_detail_line"];
         $product_name = $_POST["product_name"];
+        //$price_normal = $_POST["price_normal"];
         $price_special = $_POST["price_special"];
         $request_edit_price_status = $_POST["request_edit_price_status"];
 
-        $qry = $id . " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
-        //$qry = $id . " | " . $price_special . " | " . $product_name . " | ";
+        $qry = $id . " | " .  " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
+        //$qry = $id . " | " . $price_normal . " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
         //$myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
         //fwrite($myfile, $qry);
         //fclose($myfile);
@@ -80,54 +81,6 @@ if ($_POST["action_detail"] === 'UPDATE') {
 
     }
 }
-
-
-if ($_POST["action"] === 'SAVE_DETAIL') {
-
-    if ($_POST["KeyAddData"] != '') {
-
-        $KeyAddData = $_POST["KeyAddData"];
-
-        $sql_find = "SELECT * FROM ims_order_master WHERE KeyAddData = '" . $KeyAddData . "'";
-        $statement = $conn->query($sql_find);
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($results as $result) {
-            $doc_no = $result['doc_no'];
-            $doc_date = $result['doc_date'];
-        }
-
-        $sql_find_detail = "SELECT * FROM ims_price_approve_detail_temp WHERE doc_no = '" . $KeyAddData . "'";
-        $statement = $conn->query($sql_find_detail);
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach ($results as $result) {
-
-            $sql = "INSERT INTO ims_price_approve_detail (doc_no,doc_date,product_id,unit_id,quantity,price,line_no) 
-            VALUES (:doc_no,:doc_date,:product_id,:unit_id,:quantity,:price,:line_no)";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
-            $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
-            $query->bindParam(':product_id', $result['product_id'], PDO::PARAM_STR);
-            $query->bindParam(':unit_id', $result['unit_id'], PDO::PARAM_STR);
-            $query->bindParam(':quantity', $result['quantity'], PDO::PARAM_STR);
-            $query->bindParam(':price', $result['price'], PDO::PARAM_STR);
-            $query->bindParam(':line_no', $result['line_no'], PDO::PARAM_STR);
-            $query->execute();
-            $lastInsertId = $conn->lastInsertId();
-
-        }
-
-
-        if ($lastInsertId) {
-            echo $save_success;
-        } else {
-            echo $error;
-        }
-
-    }
-
-}
-
 
 if ($_POST["action"] === 'GET_PRICE_DETAIL') {
 
