@@ -63,9 +63,9 @@ if ($_POST["action_detail"] === 'UPDATE') {
         //$qry = $id . " | " .  " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
         $qry = $id . " | " . $price_normal . " | " . $price_special . " | " . $price_diff . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
 
-        $myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $qry);
-        fclose($myfile);
+        //$myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile, $qry);
+        //fclose($myfile);
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";
 
