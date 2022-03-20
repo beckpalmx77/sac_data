@@ -182,8 +182,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <input type="hidden" class="form-control"
-                                                                       id="doc_no_detail"
-                                                                       name="doc_no_detail" value="">
+                                                                       id="doc_no_detail_line"
+                                                                       name="doc_no_detail_line" value="">
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <input type="hidden" class="form-control"
@@ -500,6 +500,7 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script type="text/javascript">
+        //alert("OK Detail");
         let queryString = new Array();
         $(function () {
             if (queryString.length == 0) {
@@ -589,31 +590,6 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-        $(document).ready(function () {
-            $("#btnAdd").click(function () {
-                if ($('#doc_date').val() == '' || $('#customer_name').val() == '') {
-                    alertify.error("กรุณาป้อนวันที่ / ชื่อลูกค้า ");
-                } else {
-                    $('#recordModal').modal('show');
-                    $('#KeyAddDetail').val($('#KeyAddData').val());
-                    $('#doc_no_detail').val($('#doc_no').val());
-                    $('#doc_date_detail').val($('#doc_date').val());
-                    $('#product_id').val("");
-                    $('#name_t').val("");
-                    $('#quantity').val("");
-                    $('#price').val("");
-                    $('#total_price').val("");
-                    $('#unit_id').val("");
-                    $('#unit_name').val("");
-                    $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
-                    $('#action_detail').val('ADD');
-                    $('#save').val('Save');
-                }
-            });
-        });
-    </script>
-
-    <script>
 
         $("#TableOrderDetailList").on('click', '.update', function () {
 
@@ -645,7 +621,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#id').val(id);
                         $('#line_no').val(line_no);
                         $('#detail_id').val(rec_id);
-                        $('#doc_no_detail').val(doc_no);
+                        $('#doc_no_detail_line').val(doc_no);
                         $('#doc_date_detail').val(doc_date);
                         $('#product_id').val(product_id);
                         $('#product_name').val(product_name);
@@ -655,62 +631,6 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action_detail').val('UPDATE');
                         $('#save').val('Save');
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        });
-
-    </script>
-
-    <script>
-
-        $("#TableOrderDetailList").on('click', '.delete', function () {
-
-            let rec_id = $(this).attr("id");
-
-            if ($('#KeyAddData').val() !== '') {
-                doc_no = $('#KeyAddData').val();
-                table_name = "v_ims_price_approve_detail_temp";
-            } else {
-                doc_no = $('#doc_no').val();
-                table_name = "v_ims_price_approve_detail";
-            }
-
-            let formData = {action: "GET_DATA", id: rec_id, doc_no: doc_no, table_name: table_name};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_price_approve_detail_process.php',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    let len = response.length;
-                    for (let i = 0; i < len; i++) {
-                        let product_id = response[i].product_id;
-                        let id = response[i].id;
-                        let name_t = response[i].name_t;
-                        let quantity = response[i].quantity;
-                        let price = response[i].price;
-                        let total_price = response[i].total_price;
-                        let unit_id = response[i].unit_id;
-                        let unit_name = response[i].unit_name;
-
-                        $('#recordModal').modal('show');
-                        $('#id').val(id);
-                        $('#detail_id').val(rec_id);
-                        $('#doc_no_detail').val(doc_no);
-                        $('#product_id').val(product_id);
-                        $('#name_t').val(name_t);
-                        $('#quantity').val(quantity);
-                        $('#price').val(price);
-                        $('#total_price').val(total_price);
-                        $('#unit_id').val(unit_id);
-                        $('#unit_name').val(unit_name);
-                        $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
-                        $('#action_detail').val('DELETE');
-                        $('#save').val('Confirm Delete');
                     }
                 },
                 error: function (response) {

@@ -38,52 +38,6 @@ if ($_POST["action"] === 'GET_DATA') {
 
 }
 
-if ($_POST["action_detail"] === 'ADD') {
-    if ($_POST["doc_date"] !== '') {
-
-        if ($_POST["KeyAddDetail"] !== '') {
-            $doc_no = $_POST["KeyAddDetail"];
-            $table_name = "ims_price_approve_detail_temp";
-        } else {
-            $doc_no = $_POST["doc_no_detail"];
-            $table_name = "ims_price_approve_detail";
-        }
-
-        $doc_date = $_POST["doc_date_detail"];
-        $product_id = $_POST["product_id"];
-        $unit_id = $_POST["unit_id"];
-        $quantity = $_POST["quantity"];
-        $price = $_POST["price"];
-
-        $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE doc_no = '" . $doc_no . "'";
-        $row = $conn->query($sql_find)->fetch();
-        if (empty($row["0"])) {
-            $line_no = 1;
-        } else {
-            $line_no = $row["0"] + 1;
-        }
-        $sql = "INSERT INTO " . $table_name . " (doc_no,doc_date,product_id,unit_id,quantity,price,line_no) 
-            VALUES (:doc_no,:doc_date,:product_id,:unit_id,:quantity,:price,:line_no)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
-        $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
-        $query->bindParam(':product_id', $product_id, PDO::PARAM_STR);
-        $query->bindParam(':unit_id', $unit_id, PDO::PARAM_STR);
-        $query->bindParam(':quantity', $quantity, PDO::PARAM_STR);
-        $query->bindParam(':price', $price, PDO::PARAM_STR);
-        $query->bindParam(':line_no', $line_no, PDO::PARAM_STR);
-        $query->execute();
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo $save_success;
-        } else {
-            echo $error . " | " . $doc_no . " | " . $line_no . " | " . $product_id . " | " . $quantity . " | " . $unit_id;
-        }
-
-    }
-}
-
 
 if ($_POST["action_detail"] === 'UPDATE') {
 
@@ -92,17 +46,16 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $table_name = "ims_price_approve_detail";
         $doc_date = $_POST["doc_date_detail"];
         $id = $_POST["detail_id"];
-        //$doc_no = $_POST["doc_no_detail"];
+        $doc_no = $_POST["doc_no_detail_line"];
         $product_name = $_POST["product_name"];
         $price_special = $_POST["price_special"];
         $request_edit_price_status = $_POST["request_edit_price_status"];
 
-        //$qry = $id . " | " . $price_special . " | " . $product_name . " | " . $doc_no;
-        $qry = $id . " | " . $price_special . " | " . $product_name . " | ";
-        $myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $qry);
-        fclose($myfile);
-
+        $qry = $id . " | " . $price_special . " | " . $product_name . " | " . $doc_no . " | " . $doc_date;
+        //$qry = $id . " | " . $price_special . " | " . $product_name . " | ";
+        //$myfile = fopen("qry_file_update.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile, $qry);
+        //fclose($myfile);
 
         $sql_find = "SELECT count(*) as row FROM " . $table_name . " WHERE id = '" . $id . "'";
 
@@ -117,10 +70,10 @@ if ($_POST["action_detail"] === 'UPDATE') {
             $query->bindParam(':price_special', $price_special, PDO::PARAM_STR);
             $query->bindParam(':request_edit_price_status', $request_edit_price_status, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
-            if($query->execute()){
-                save_approve_head();
+            if ($query->execute()) {
+                save_approve_head($doc_no, $conn);
                 echo $save_success;
-            }else{
+            } else {
                 echo $error;
             }
         }
@@ -128,42 +81,6 @@ if ($_POST["action_detail"] === 'UPDATE') {
     }
 }
 
-if ($_POST["action_detail"] === 'DELETE') {
-
-    if ($_POST["$product_id"] !== '') {
-
-        if ($_POST["KeyAddDetail"] !== '') {
-            $doc_no = $_POST["KeyAddDetail"];
-            $table_name = "ims_price_approve_detail_temp";
-        } else {
-            $doc_no = $_POST["doc_no_detail"];
-            $table_name = "ims_price_approve_detail";
-        }
-
-        $id = $_POST["detail_id"];
-        $product_id = $_POST["product_id"];
-        $quantity = $_POST["quantity"];
-        $unit_id = $_POST["unit_id"];
-        $sql_find = "SELECT * FROM " . $table_name . " WHERE id = " . $id;
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            try {
-                $sql = "DELETE FROM " . $table_name . " WHERE id = " . $id;
-                $query = $conn->prepare($sql);
-                $query->execute();
-
-                Reorder_Record_By_DocNO($conn, $table_name, $doc_no);
-
-                echo $del_success;
-
-            } catch (Exception $e) {
-                echo 'Message: ' . $e->getMessage();
-            }
-        }
-
-
-    }
-}
 
 if ($_POST["action"] === 'SAVE_DETAIL') {
 
@@ -275,8 +192,8 @@ if ($_POST["action"] === 'GET_PRICE_DETAIL') {
                 "line_no" => $row['line_no'],
                 "product_id" => $row['product_id'],
                 "product_name" => $row['product_name'],
-                "price_normal" => $row['request_edit_price_status']==='Y' ? "<div class='text-danger'>" . number_format($row['price_normal'],2) . "</div>" : number_format($row['price_normal'],2),
-                "price_special" => $row['request_edit_price_status']==='Y' ? "<div class='text-danger'>" . number_format($row['price_special'],2) . "</div>" : number_format($row['price_special'],2),
+                "price_normal" => $row['request_edit_price_status'] === 'Y' ? "<div class='text-danger'>" . number_format($row['price_normal'], 2) . "</div>" : number_format($row['price_normal'], 2),
+                "price_special" => $row['request_edit_price_status'] === 'Y' ? "<div class='text-danger'>" . number_format($row['price_special'], 2) . "</div>" : number_format($row['price_special'], 2),
                 //"price_normal" => number_format($row['price_normal'],2),
                 //"price_special" => number_format($row['price_special'],2),
                 "request_edit_price_status" => $row['request_edit_price_status'],
@@ -307,25 +224,44 @@ if ($_POST["action"] === 'GET_PRICE_DETAIL') {
 
 }
 
-function save_approve_head () {
+function save_approve_head($doc_no, $conn)
+{
+
+    $query_str = "SELECT count(*) as record_counts FROM ims_price_approve_detail WHERE doc_no = '" . $doc_no . "' and request_edit_price_status = 'Y'";
+
+    //$myfile = fopen("sql_update_data2.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $query_str);
+    //fclose($myfile);
+
+    $statement = $conn->query($query_str);
+    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $record = 0;
+
+    foreach ($results as $result) {
+        $record = $result['record_counts'];
+    }
+
+    if ($record > 0) {
+        $request_status = "Y ขออนุมัติราคาขาย";
+    } else {
+        $request_status = "N ขายราคาปกติ";
+    }
 
     $sql_update = "UPDATE ims_price_approve_header SET request_status=:request_status WHERE doc_no = :doc_no";
 
-    $myfile = fopen("sql_update_data2.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $sql_update);
-    fclose($myfile);
+    //$myfile = fopen("sql_update_data3.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $sql_update . " | " . $request_status . " | " . $doc_no . " | " . $request_status);
+    //fclose($myfile);
 
-
-    /*$query = $conn->prepare($sql_update);
+    $query = $conn->prepare($sql_update);
     $query->bindParam(':request_status', $request_status, PDO::PARAM_STR);
-    $query->bindParam(':approve_status', $approve_status, PDO::PARAM_STR);
-    $query->bindParam(':edit_price_status', $edit_price_status, PDO::PARAM_STR);
     $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
     if ($query->execute()) {
-        echo $save_success;
+        echo "Success";
     } else {
-        echo $error;
+        echo "Error";
     }
-    */
+
+
 }
 

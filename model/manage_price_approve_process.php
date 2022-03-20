@@ -45,46 +45,6 @@ if ($_POST["action"] === 'SEARCH') {
     }
 }
 
-if ($_POST["action"] === 'ADD') {
-    if ($_POST["supplier_id"] !== '') {
-        $table = "ims_price_approve_header";
-        $KeyAddData = $_POST["KeyAddData"];
-        $doc_year = substr($_POST["doc_date"], 0, 4);
-        $field = "doc_runno";
-        $doc_type = "-PRH-";
-        $doc_runno = LAST_ID_YEAR($conn, $table, $field, $doc_year);
-        $doc_no = $doc_year . $doc_type . sprintf('%06s', $doc_runno);
-        $supplier_id = $_POST["supplier_id"];
-        $doc_date = $_POST["doc_date"];
-        $status = $_POST["status"];
-        $sql_find = "SELECT * FROM " . $table . " WHERE doc_no = '" . $doc_no . "'";
-        $stmt = $conn->query($sql_find);
-        $nRows = $stmt->rowCount();
-
-        if ($nRows > 0) {
-            echo $dup;
-        } else {
-            $sql = "INSERT INTO " . $table . " (doc_no,supplier_id,doc_date,doc_year,doc_runno,KeyAddData,status)
-                    VALUES (:doc_no,:supplier_id,:doc_date,:doc_year,:doc_runno,:KeyAddData,:status)";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':doc_no', $doc_no, PDO::PARAM_STR);
-            $query->bindParam(':supplier_id', $supplier_id, PDO::PARAM_STR);
-            $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
-            $query->bindParam(':doc_year', $doc_year, PDO::PARAM_STR);
-            $query->bindParam(':doc_runno', $doc_runno, PDO::PARAM_STR);
-            $query->bindParam(':KeyAddData', $KeyAddData, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->execute();
-            $lastInsertId = $conn->lastInsertId();
-            if ($lastInsertId) {
-                echo $save_success;
-            } else {
-                echo $error;
-            }
-        }
-    }
-}
-
 
 if ($_POST["action"] === 'UPDATE') {
 
@@ -103,6 +63,26 @@ if ($_POST["action"] === 'UPDATE') {
         //fwrite($myfile, $qry);
         //fclose($myfile);
 
+        $query_str = "SELECT count(*) as record_counts FROM ims_price_approve_detail WHERE doc_no = '" . $doc_no . "' and request_edit_price_status = 'Y'";
+
+        //$myfile = fopen("sql_update_data2.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile, $query_str);
+        //fclose($myfile);
+
+        $statement = $conn->query($query_str);
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $record = 0;
+
+        foreach ($results as $result) {
+            $record = $result['record_counts'];
+        }
+
+        if ($record > 0) {
+            $request_status = "Y ขออนุมัติราคาขาย";
+        } else {
+            $request_status = "N ขายราคาปกติ";
+        }
+
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             $sql_update = "UPDATE ims_price_approve_header SET request_status=:request_status,approve_status=:approve_status            
@@ -119,25 +99,6 @@ if ($_POST["action"] === 'UPDATE') {
             }
         }
 
-    }
-}
-
-
-if ($_POST["action"] === 'DELETE') {
-
-    $id = $_POST["id"];
-
-    $sql_find = "SELECT * FROM ims_price_approve_header WHERE id = " . $id;
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        try {
-            $sql = "DELETE FROM ims_price_approve_header WHERE id = " . $id;
-            $query = $conn->prepare($sql);
-            $query->execute();
-            echo $del_success;
-        } catch (Exception $e) {
-            echo 'Message: ' . $e->getMessage();
-        }
     }
 }
 
@@ -192,9 +153,9 @@ if ($_POST["action"] === 'GET_PRICE') {
         //. " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
-    $myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $query_str);
-    fclose($myfile);
+    //$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $query_str);
+    //fclose($myfile);
 
 // Bind values
     foreach ($searchArray as $key => $search) {
