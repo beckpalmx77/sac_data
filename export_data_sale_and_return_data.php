@@ -46,6 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
+                                                              action="export_process/export_data_sale_return.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -170,7 +171,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-    <script>
+    <!--script>
         $(document).ready(function () {
             $("form").on("submit", function (event) {
                 event.preventDefault();
@@ -189,7 +190,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 });
             });
         });
-    </script>
+    </script-->
 
     <script>
         $(document).ready(function () {
