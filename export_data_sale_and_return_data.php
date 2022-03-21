@@ -45,7 +45,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="from_data">
+                                                        <form id="from_data" method="post"
+                                                              enctype="multipart/form-data">
 
                                                             <div class="modal-body">
 
@@ -55,6 +56,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-3">
                                                                             <label for="doc_date_start"
                                                                                    class="control-label">วันที่เริ่มต้น</label>
+                                                                            <i class="fa fa-calendar"
+                                                                               aria-hidden="true"></i>
                                                                             <input type="text" class="form-control"
                                                                                    id="doc_date_start"
                                                                                    name="doc_date_start"
@@ -66,6 +69,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-3">
                                                                             <label for="doc_date_to"
                                                                                    class="control-label">วันที่เสิ้นสุด</label>
+                                                                            <i class="fa fa-calendar"
+                                                                               aria-hidden="true"></i>
                                                                             <input type="text" class="form-control"
                                                                                    id="doc_date_to"
                                                                                    name="doc_date_to"
@@ -83,11 +88,12 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <div class="modal-footer">
                                                                 <input type="hidden" name="id" id="id"/>
-                                                                <input type="hidden" name="save_status" id="save_status"/>
+                                                                <input type="hidden" name="save_status"
+                                                                       id="save_status"/>
                                                                 <input type="hidden" name="action" id="action"
                                                                        value=""/>
-                                                                <button type="button" class="btn btn-success"
-                                                                        id="btnSave">Export <i
+                                                                <button type="submit" class="btn btn-success"
+                                                                        id="btnExport">Export <i
                                                                             class="fa fa-check"></i>
                                                                 </button>
                                                                 <button type="button" class="btn btn-danger"
@@ -169,47 +175,21 @@ if (strlen($_SESSION['alogin']) == "") {
             $("form").on("submit", function (event) {
                 event.preventDefault();
                 let formValues = $(this).serialize();
-                $.post("model/manage_account_process.php", formValues, function (response) {
+                alert("OK");
+                $.post("export_process/export_data_sale_return.php", formValues, function (response) {
                     if (response == 1) {
                         document.getElementById("from_data").reset();
-                        alertify.success("บันทึกข้อมูลเรียบร้อย Save Data Success");
+                        alertify.success("Export Complete");
 
                     } else if (response == 2) {
-                        alertify.error("ไม่สามารถบันทึกข้อมูลได้ มี User นี้แล้ว ");
+                        alertify.error("-");
                     } else {
-                        alertify.error("ไม่สามารถบันทึกข้อมูลได้ DB Error ");
+                        alertify.error("DB Error ");
                     }
                 });
             });
         });
     </script>
-
-    <script>
-
-        $('#email').blur(function () {
-
-            let action = "GET_COUNT_RECORDS_COND";
-            let table_name = "ims_user";
-            let cond = " WHERE email = '" + $('#email').val() + "'";
-            let formData = {action: action, table_name: table_name, cond: cond};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_general_data.php',
-                data: formData,
-                success: function (response) {
-                    if (response > 0) {
-                        alertify.error("มี User Email นี้ในระบบแล้วโปรดใช้ User อื่น");
-                        $('#email').val("");
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        });
-
-    </script>
-
 
     <script>
         $(document).ready(function () {
@@ -232,8 +212,6 @@ if (strlen($_SESSION['alogin']) == "") {
             });
         });
     </script>
-
-
 
     </body>
 
