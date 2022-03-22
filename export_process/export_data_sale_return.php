@@ -25,7 +25,7 @@ for ($loop = 1; $loop <= 2; $loop++) {
         fwrite($my_file, $String_Sql);
         fclose($my_file);
 
-        $data = "DI_REF,DI_DATE,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,WL_CODE,ARCD_NAME\n";
+        $data = "DI_REF,DI_DATE,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,BRN_NAME,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,WL_CODE,ARCD_NAME\n";
 
     } else {
 
@@ -56,6 +56,7 @@ for ($loop = 1; $loop <= 2; $loop++) {
         $data .= str_replace(",", "^", $row['SLMN_NAME']) . ",";
         $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
         $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
+        $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
 
         if ($loop === 2) {
             $TRD_QTY = "-" . $row['TRD_QTY'];

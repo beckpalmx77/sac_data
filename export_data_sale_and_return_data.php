@@ -94,13 +94,13 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <input type="hidden" name="action" id="action"
                                                                        value=""/>
                                                                 <button type="submit" class="btn btn-success"
-                                                                        id="btnExport">Export <i
+                                                                        id="btnExport"> Export <i
                                                                             class="fa fa-check"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-danger"
+                                                                <!--button type="button" class="btn btn-danger"
                                                                         id="btnClose">Close <i
                                                                             class="fa fa-window-close"></i>
-                                                                </button>
+                                                                </button-->
                                                             </div>
 
 
