@@ -1,106 +1,76 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
-$filename = "Data_Sale_Return-" . date('m/d/Y H:i:s', time()) . ".csv";
+$filename = "Data_Sale_Return-Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
 @header('Content-Encoding: UTF-8');
 @header("Content-Disposition: attachment; filename=" . $filename);
 
 include('../config/connect_sqlserver.php');
-include('../cond_file/doc_info_credit_sale.php');
-include('../cond_file/doc_info_return_product.php');
+include('../cond_file/doc_info_sale_return_daily.php');
 
 $doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
 $doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
 
-for ($loop = 1; $loop <= 2; $loop++) {
 
-    if ($loop === 1) {
+$String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
+    . $select_query_daily_order;
 
-        $String_Sql = $select_query_sale . $sql_cond_sale . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
-            . $sql_order_sale;
+$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
+fwrite($my_file, $String_Sql);
+fclose($my_file);
 
-        $my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, $String_Sql);
-        fclose($my_file);
+$data = "DI_DATE,,,AR_CODE,SKU_CODE,SKU_NAME,BRN_NAME,BRN_NAME,DI_REF,AR_NAME,SLMN_NAME,,TRD_QTY,TRD_U_PRC,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,,,WL_CODE\n";
 
-        $data = "DI_DATE,,,AR_CODE,SKU_CODE,SKU_NAME,SLMN_CODE,SLMN_NAME,BRN_NAME,BRN_CODE,DI_REF,AR_NAME
-        ,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,WL_CODE,ARCD_NAME\n";
+$query = $conn_sqlsvr->prepare($String_Sql);
+$query->execute();
 
-    } else {
+while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
-        $String_Sql = $select_query_return . $sql_cond_return . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
-            . $sql_order_return;
+    $data .= " " . $row['DI_DATE'] . ",";
+    $data .= " " . ",";
+    $data .= " " . ",";
 
-        $my_file = fopen("D-sac_str2.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, $String_Sql);
-        fclose($my_file);
+    //$DI_DATE = str_replace("\\r\ ", "", $row['DI_DATE']);
+    //$data .= $DI_DATE . ",";
 
-    }
+    $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
+    $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
+    $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
+    $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
+    $data .= str_replace(",", "^", $row['BRN_CODE']) . ",";
+    $data .= str_replace(",", "^", $row['DI_REF']) . ",";
+    $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
+    $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
+    $data .= str_replace(",", "^", $row['SLMN_NAME']) . ",";
 
-    $query = $conn_sqlsvr->prepare($String_Sql);
-    $query->execute();
+    $TRD_QTY = $row['TRD_QTY'];
+    $TRD_U_PRC = $row['TRD_U_PRC'];
+    $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
+    $TRD_B_SELL = $row['TRD_G_SELL'];
+    $TRD_B_VAT = $row['TRD_G_VAT'];
+    $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
 
-    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    $my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
+    fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
+        . $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
+    fclose($my_file);
 
-        $data .= $row['DI_REF'] . ",";
 
-        $data .= " " . $row['DI_DATE'] . ",";
+    $data .= $TRD_QTY . ",";
+    $data .= $TRD_U_PRC . ",";
+    $data .= $TRD_DSC_KEYINV . ",";
+    $data .= $TRD_B_SELL . ",";
+    $data .= $TRD_B_VAT . ",";
+    $data .= $TRD_G_KEYIN . ",";
 
-        //$DI_DATE = str_replace("\\r\ ", "", $row['DI_DATE']);
-        //$data .= $DI_DATE . ",";
+    $data .= " " . ",";
+    $data .= " " . ",";
 
-        $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
-        $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
-        $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
-        $data .= str_replace(",", "^", $row['SLMN_NAME']) . ",";
-        $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
-        $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
-        $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
-        $data .= str_replace(",", "^", $row['BRN_CODE']) . ",";
+    $data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
 
-        if ($loop === 2) {
-            $TRD_QTY = "-" . $row['TRD_QTY'];
-            $TRD_Q_FREE = "-" . $row['TRD_Q_FREE'];
-            $TRD_U_PRC = "-" . $row['TRD_U_PRC'];
-            $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
-            $TRD_G_SELL = "-" . $row['TRD_G_SELL'];
-            $TRD_G_VAT = "-" . $row['TRD_G_VAT'];
-            $my_file = fopen("sac_str_sale.txt", "w") or die("Unable to open file!");
-            fwrite($my_file, "Loop " . $loop . " = " . $TRD_QTY . " | " . $TRD_Q_FREE . " | " . $TRD_U_PRC . " | "
-                . $TRD_G_KEYIN . " | " . $TRD_G_SELL . " | " . $TRD_G_VAT);
-            fclose($my_file);
-        } else {
-            $TRD_QTY = $row['TRD_QTY'];
-            $TRD_Q_FREE = $row['TRD_Q_FREE'];
-            $TRD_U_PRC = $row['TRD_U_PRC'];
-            $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
-            $TRD_G_SELL = $row['TRD_G_SELL'];
-            $TRD_G_VAT = $row['TRD_G_VAT'];
-            $my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-            fwrite($my_file, "Loop " . $loop . " = " . $TRD_QTY . " | " . $TRD_Q_FREE . " | " . $TRD_U_PRC . " | "
-                . $TRD_G_KEYIN . " | " . $TRD_G_SELL . " | " . $TRD_G_VAT);
-            fclose($my_file);
-        }
 
-        $data .= $TRD_QTY . ",";
-        $data .= $TRD_Q_FREE . ",";
-        $data .= $TRD_U_PRC . ",";
-        $data .= $TRD_G_KEYIN . ",";
-        $data .= $TRD_G_SELL . ",";
-        $data .= $TRD_G_VAT . ",";
-
-        //$data .= $row['TRD_QTY'] . ",";
-        //$data .= $row['TRD_Q_FREE'] . ",";
-        //$data .= $row['TRD_U_PRC'] . ",";
-        //$data .= $row['TRD_G_KEYIN'] . ",";
-        //$data .= $row['TRD_G_SELL'] . ",";
-        //$data .= $row['TRD_G_VAT'] . ",";
-        $data .= str_replace(",", "^", $row['WL_CODE']) . ",";
-        $data .= str_replace(",", "^", $row['ARCD_NAME']) . "\n";
-
-    }
 }
 
 $data = iconv("utf-8", "tis-620", $data);
