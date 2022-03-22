@@ -56,7 +56,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                         <div class="col-sm-3">
                                                                             <label for="doc_date_start"
-                                                                                   class="control-label">วันที่เริ่มต้น</label>
+                                                                                   class="control-label">จากวันที่</label>
                                                                             <i class="fa fa-calendar"
                                                                                aria-hidden="true"></i>
                                                                             <input type="text" class="form-control"
@@ -64,12 +64,12 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                    name="doc_date_start"
                                                                                    required="required"
                                                                                    readonly="true"
-                                                                                   placeholder="วันที่เริ่มต้น">
+                                                                                   placeholder="จากวันที่">
                                                                         </div>
 
                                                                         <div class="col-sm-3">
                                                                             <label for="doc_date_to"
-                                                                                   class="control-label">วันที่เสิ้นสุด</label>
+                                                                                   class="control-label">ถึงวันที่</label>
                                                                             <i class="fa fa-calendar"
                                                                                aria-hidden="true"></i>
                                                                             <input type="text" class="form-control"
@@ -77,7 +77,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                    name="doc_date_to"
                                                                                    required="required"
                                                                                    readonly="true"
-                                                                                   placeholder="วันที่เสิ้นสุด">
+                                                                                   placeholder="ถึงวันที่">
                                                                         </div>
 
 
