@@ -46,7 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_sale_return.php"
+                                                              action="export_process/export_data_sale_return_daily.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -170,27 +170,6 @@ if (strlen($_SESSION['alogin']) == "") {
     <link href="vendor/date-picker-1.9/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
     <script src="js/MyFrameWork/framework_util.js"></script>
-
-    <!--script>
-        $(document).ready(function () {
-            $("form").on("submit", function (event) {
-                event.preventDefault();
-                let formValues = $(this).serialize();
-                alert("OK");
-                $.post("export_process/export_data_sale_return.php", formValues, function (response) {
-                    if (response == 1) {
-                        document.getElementById("from_data").reset();
-                        alertify.success("Export Complete");
-
-                    } else if (response == 2) {
-                        alertify.error("-");
-                    } else {
-                        alertify.error("DB Error ");
-                    }
-                });
-            });
-        });
-    </script-->
 
     <script>
         $(document).ready(function () {
