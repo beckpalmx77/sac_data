@@ -17,9 +17,9 @@ $doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_da
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $select_query_daily_order;
 
-$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
-fwrite($my_file, $String_Sql);
-fclose($my_file);
+//$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
+//fwrite($my_file, $String_Sql);
+//fclose($my_file);
 
 $data = "DI_DATE,,,AR_CODE,SKU_CODE,SKU_NAME,BRN_NAME,BRN_NAME,DI_REF,AR_NAME,SLMN_NAME,,TRD_QTY,TRD_U_PRC,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,,,WL_CODE\n";
 
@@ -52,10 +52,10 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $TRD_B_VAT = $row['TRD_G_VAT'];
     $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
 
-    $my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-    fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
-        . $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
-    fclose($my_file);
+    //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
+    //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
+        //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
+    //fclose($my_file);
 
 
     $data .= $TRD_QTY . ",";
