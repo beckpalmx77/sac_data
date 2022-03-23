@@ -21,7 +21,7 @@ $my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
 fwrite($my_file, $String_Sql);
 fclose($my_file);
 
-$data = "DI_DATE,,,AR_CODE,SKU_CODE,SKU_NAME,BRN_NAME,BRN_CODE,DI_REF,AR_NAME,SLMN_NAME,,TRD_QTY,TRD_FREE,TRD_U_PRC,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,,,WL_CODE\n";
+$data = "DI_DATE,,,AR_CODE,SKU_CODE,SKU_NAME,BRN_NAME,BRN_CODE,DI_REF,AR_NAME,SLMN_NAME,,TRD_QTY,TRD_U_PRC,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,,,WL_CODE\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
