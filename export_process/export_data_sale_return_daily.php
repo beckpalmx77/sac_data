@@ -10,6 +10,8 @@ $filename = "Data_Sale_Return-Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 include('../config/connect_sqlserver.php');
 include('../cond_file/doc_info_sale_return_daily.php');
 
+$DT_DOCCODE_MINUS = "IS";
+
 $doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
 $doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
 
@@ -61,12 +63,32 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     //fclose($my_file);
 
 
+
+if(strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS) !== false){
+    $data .= "-" . $TRD_QTY . ",";
+    $data .= "-" . $TRD_U_PRC . ",";
+    $data .= "-" . $TRD_DSC_KEYINV . ",";
+    $data .= "-" . $TRD_B_SELL . ",";
+    $data .= "-" . $TRD_B_VAT . ",";
+    $data .= "-" . $TRD_G_KEYIN . ",";
+} else {
     $data .= $TRD_QTY . ",";
     $data .= $TRD_U_PRC . ",";
     $data .= $TRD_DSC_KEYINV . ",";
     $data .= $TRD_B_SELL . ",";
     $data .= $TRD_B_VAT . ",";
     $data .= $TRD_G_KEYIN . ",";
+}
+/*
+    $data .= $TRD_QTY . ",";
+    $data .= $TRD_U_PRC . ",";
+    $data .= $TRD_DSC_KEYINV . ",";
+    $data .= $TRD_B_SELL . ",";
+    $data .= $TRD_B_VAT . ",";
+    $data .= $TRD_G_KEYIN . ",";
+
+*/
+
 
     $data .= " " . ",";
     $data .= " " . ",";
