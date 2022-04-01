@@ -1,0 +1,2 @@
+INSERT INTO ims_product(product_key,product_id,name_t,brand_id,price_code,price) 
+                VALUES (:product_key,:product_id,:name_t,:brand_id,:price_code,:price)

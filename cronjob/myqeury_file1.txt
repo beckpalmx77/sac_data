@@ -1,0 +1,1 @@
+UPDATE ims_product SET name_t=:name_t , brand_id=:brand_id , price=:price  WHERE product_id = 'BS2356017-EP850' AND product_key = '4479' AND price_code = 'S3'
