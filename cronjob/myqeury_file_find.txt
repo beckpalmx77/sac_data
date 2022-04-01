@@ -1,1 +1,0 @@
-SELECT * FROM ims_product WHERE product_id = 'QMAX6715-101' AND product_key = '4480' AND price_code = 'S1'
