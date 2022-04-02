@@ -46,7 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_sale_return_daily.php"
+                                                              action="export_process/export_data_sale_return_document_cp.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -84,9 +84,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
 
                                                                     <div class="form-group">
-                                                                        <label for="status"
+                                                                        <label for="branch"
                                                                                class="control-label">สาขา</label>
-                                                                        <select id="status" name="status"
+                                                                        <select id="branch" name="branch"
                                                                                 class="form-control"
                                                                                 data-live-search="true"
                                                                                 title="Please select">
