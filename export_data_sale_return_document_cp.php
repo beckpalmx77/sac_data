@@ -100,7 +100,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 </div>
 
 
-                                                             </div>
+                                                            </div>
 
                                                             <div class="modal-footer">
                                                                 <input type="hidden" name="id" id="id"/>
