@@ -32,9 +32,9 @@ for ($loop = 1; $loop <= 2; $loop++) {
         $String_Sql = $select_query_return . $sql_cond_return . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
             . $sql_order_return;
 
-        $my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, $String_Sql);
-        fclose($my_file);
+        //$my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
+        //fwrite($my_file, $String_Sql);
+        //fclose($my_file);
 
     }
 
@@ -66,10 +66,10 @@ for ($loop = 1; $loop <= 2; $loop++) {
             $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
             $TRD_G_SELL = "-" . $row['TRD_G_SELL'];
             $TRD_G_VAT = "-" . $row['TRD_G_VAT'];
-            $my_file = fopen("sac_str_sale.txt", "w") or die("Unable to open file!");
-            fwrite($my_file, "Loop " . $loop . " = " . $TRD_QTY . " | " . $TRD_Q_FREE . " | " . $TRD_U_PRC . " | "
-                . $TRD_G_KEYIN . " | " . $TRD_G_SELL . " | " . $TRD_G_VAT);
-            fclose($my_file);
+            //$my_file = fopen("sac_str_sale.txt", "w") or die("Unable to open file!");
+            //fwrite($my_file, "Loop " . $loop . " = " . $TRD_QTY . " | " . $TRD_Q_FREE . " | " . $TRD_U_PRC . " | "
+                //. $TRD_G_KEYIN . " | " . $TRD_G_SELL . " | " . $TRD_G_VAT);
+            //fclose($my_file);
         } else {
             $TRD_QTY = $row['TRD_QTY'];
             $TRD_Q_FREE = $row['TRD_Q_FREE'];
