@@ -1,7 +1,9 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
-$filename = "Data_Sale_Return-Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
+$branch = $_POST["branch"];
+
+$filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
 @header('Content-Encoding: UTF-8');
@@ -9,8 +11,6 @@ $filename = "Data_Sale_Return-Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 include('../config/connect_sqlserver.php');
 include('../cond_file/doc_info_sale_daily_cp.php');
-
-$branch = $_POST["branch"];
 
 switch ($branch) {
     case "CP-340":
