@@ -1,4 +1,6 @@
-<?php
+<? phpinfo(); ?>
+
+<!--?php
 
 $serverName = "192.168.88.13";
 $userName = "SYY";
