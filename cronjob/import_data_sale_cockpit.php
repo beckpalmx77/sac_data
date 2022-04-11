@@ -23,12 +23,17 @@ $month_arr=array(
     "12"=>"ธันวาคม"
 );
 
+echo "Today is " . date("Y/m/d") ;
+echo "\n\r" . date("Y/m/d", strtotime("yesterday"));
 
 $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4','CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6','CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2','CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
 
-$query_year = " AND YEAR(DI_DATE) >= '2022' ";
+//$query_year = " AND DI_DATE >= '2022' ";
+$query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
+
+echo $sql_sqlsvr ;
 
 //$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
 //fwrite($myfile, $sql_sqlsvr);
@@ -106,8 +111,9 @@ $sql_update = " UPDATE ims_product_sale_cockpit SET AR_CODE=:AR_CODE,AR_NAME=:AR
 
         $query->execute();
 
-        echo " UPDATE DATA ";
         $update_data .= $result_sqlsvr["DI_REF"] . " | ";
+
+        echo " UPDATE DATA " . $update_data;
 
         //$myfile = fopen("update_chk.txt", "w") or die("Unable to open file!");
         //fwrite($myfile, $update_data);
@@ -173,7 +179,8 @@ $sql_update = " UPDATE ims_product_sale_cockpit SET AR_CODE=:AR_CODE,AR_NAME=:AR
         $lastInsertId = $conn->lastInsertId();
 
         if ($lastInsertId) {
-            echo " Save OK ";
+            $update_data .= $result_sqlsvr["DI_REF"] . " | ";
+            echo " Save OK " . $update_data;
         } else {
             echo " Error ";
         }
