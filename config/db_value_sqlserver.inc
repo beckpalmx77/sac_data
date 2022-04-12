@@ -13,3 +13,9 @@ $dbpass = 'sadmin';
 $dbname = 'SAC';
 */
 
+/*
+$host = 'SAC-SHINEIT\MSSQLEXPRESS';
+$dbuser = 'sa';
+$dbpass = 'sadmin';
+$dbname = 'SAC';
+*/
