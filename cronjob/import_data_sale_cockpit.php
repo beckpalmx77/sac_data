@@ -28,12 +28,17 @@ $str2 = 'CS.8 CS.9 IC.3 IC.4 IS.3 IS.4 S.5 S.6';
 $str3 = 'CS.6 CS.7 IC.1 IC.2 IS.1 IS.2 S.1 S.2';
 $str4 = 'CS.2 CS.3 IC.5 IC.6 IS.5 IS.6 S.3 S.4';
 
+$group1 = "6SAC08 2SAC01 2SAC09 2SAC11 2SAC02 2SAC06 2SAC05 2SAC04 2SAC03 2SAC12 2SAC07 2SAC08 2SAC10 2SAC13 2SAC14 2SAC15 3SAC03 1SAC10";
+$group2 = "9SA01 999-13 999-07 999-08 TATA-004";
+$group3 = "5SAC02 8SAC11 5SAC01 TA01-001 8SAC09 TA01-003 8CPA01-002 8BTCA01-002 8CPA01-001 8BTCA01-001";
+$group4 = "TATA-003 SAC08 10SAC12";
+
 echo "Today is " . date("Y/m/d");
 echo "\n\r" . date("Y/m/d", strtotime("yesterday"));
 
 $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4','CS.8','CS.9','IC.3','IC.4','IS.3','IS.4','S.5','S.6','CS.6','CS.7','IC.1','IC.2','IS.1','IS.2','S.1','S.2','CS.2','CS.3','IC.5','IC.6','IS.5','IS.6','S.3','S.4')) ";
 
-//$query_year = " AND DI_DATE <= '2022' ";
+//$query_year = " AND DI_DATE >= '2022' ";
 $query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 //$query_year = " AND DI_DATE BETWEEN '2010/01/01' AND '" . date("Y/m/d") . "'";
 
@@ -55,6 +60,7 @@ $return_arr = array();
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
+    $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
 
     $branch = "";
 
@@ -74,6 +80,25 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $branch = "CP-BB";
     }
 
+    $p_group = "";
+
+    if (strpos($group1, $ICCAT_CODE) !== false) {
+        $p_group = "P1";
+    }
+
+    if (strpos($group2, $ICCAT_CODE) !== false) {
+        $p_group = "P2";
+    }
+
+    if (strpos($group3, $ICCAT_CODE) !== false) {
+        $p_group = "P3";
+    }
+
+    if (strpos($group4, $ICCAT_CODE) !== false) {
+        $p_group = "P4";
+    }
+
+
 
     $sql_find = "SELECT * FROM ims_product_sale_cockpit "
         . " WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"]
@@ -88,7 +113,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $sql_update = " UPDATE ims_product_sale_cockpit SET AR_CODE=:AR_CODE,AR_NAME=:AR_NAME,SLMN_CODE=:SLMN_CODE,SLMN_NAME=:SLMN_NAME
 ,SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,SKU_CAT=:SKU_CAT,ICCAT_NAME=:ICCAT_NAME,TRD_QTY=:TRD_QTY,TRD_U_PRC=:TRD_U_PRC
 ,TRD_DSC_KEYINV=:TRD_DSC_KEYINV,TRD_B_SELL=:TRD_B_SELL
-,TRD_B_VAT=:TRD_B_VAT,TRD_G_KEYIN=:TRD_G_KEYIN,WL_CODE=:WL_CODE,BRANCH=:BRANCH,BRN_CODE=:BRN_CODE,BRN_NAME=:BRN_NAME,DI_TIME_CHK=:DI_TIME_CHK  
+,TRD_B_VAT=:TRD_B_VAT,TRD_G_KEYIN=:TRD_G_KEYIN,WL_CODE=:WL_CODE,BRANCH=:BRANCH,BRN_CODE=:BRN_CODE
+,BRN_NAME=:BRN_NAME,DI_TIME_CHK=:DI_TIME_CHK,PGROUP=:PGROUP  
         WHERE DI_KEY = :DI_KEY         
         AND DI_REF  = :DI_REF
         AND DI_DATE = :DI_DATE
@@ -112,27 +138,11 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':TRD_G_KEYIN', $result_sqlsvr["TRD_G_KEYIN"], PDO::PARAM_STR);
         $query->bindParam(':WL_CODE', $result_sqlsvr["WL_CODE"], PDO::PARAM_STR);
 
-
-        /*
-
-        if (preg_match('([30|CS4|CS5|DS4|IS3|IS4|ISC3|ISC4])', $DT_DOCCODE) === 1) {
-            $branch = "CP-340";
-        } else if (preg_match('([CS.8|CS.9|IC.3|IC.4|IS.3|IS.4|S.5|S.6])', $DT_DOCCODE) === 1) {
-            $branch = "CP-BY";
-        } else if (preg_match('([CS.6|CS.7|IC.1|IC.2|IS.1|IS.2|S.1|S.2])', $DT_DOCCODE) === 1) {
-            $branch = "CP-RP";
-        } else if (preg_match('([CS.2|CS.3|IC.5|IC.6|IS.5|IS.6|S.3|S.4])', $DT_DOCCODE) === 1) {
-            $branch = "CP-BB";
-        } else {
-            $branch = "-";
-        }
-
-        */
-
         $query->bindParam(':BRANCH', $branch, PDO::PARAM_STR);
         $query->bindParam(':BRN_CODE', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
         $query->bindParam(':BRN_NAME', $result_sqlsvr["BRN_NAME"], PDO::PARAM_STR);
         $query->bindParam(':DI_TIME_CHK', $result_sqlsvr["DI_TIME_CHK"], PDO::PARAM_STR);
+        $query->bindParam(':PGROUP', $p_group, PDO::PARAM_STR);
 
         $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
         $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
@@ -154,10 +164,10 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
         $sql = " INSERT INTO ims_product_sale_cockpit(DI_KEY,DI_REF,DI_DATE,DI_MONTH,DI_MONTH_NAME,DI_YEAR
         ,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,SKU_CAT,ICCAT_NAME,TRD_QTY,TRD_U_PRC
-        ,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,WL_CODE,BRANCH,DT_DOCCODE,TRD_SEQ,BRN_CODE,BRN_NAME,DI_TIME_CHK)
+        ,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,WL_CODE,BRANCH,DT_DOCCODE,TRD_SEQ,BRN_CODE,BRN_NAME,DI_TIME_CHK,PGROUP)
         VALUES (:DI_KEY,:DI_REF,:DI_DATE,:DI_MONTH,:DI_MONTH_NAME,:DI_YEAR,:AR_CODE,:AR_NAME,:SLMN_CODE,:SLMN_NAME,:SKU_CODE,:SKU_NAME,:SKU_CAT
         ,:ICCAT_NAME,:TRD_QTY,:TRD_U_PRC,:TRD_DSC_KEYINV,:TRD_B_SELL,:TRD_B_VAT,:TRD_G_KEYIN
-        ,:WL_CODE,:BRANCH,:DT_DOCCODE,:TRD_SEQ,:BRN_CODE,:BRN_NAME,:DI_TIME_CHK) ";
+        ,:WL_CODE,:BRANCH,:DT_DOCCODE,:TRD_SEQ,:BRN_CODE,:BRN_NAME,:DI_TIME_CHK,:PGROUP) ";
         $query = $conn->prepare($sql);
         $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
         $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
@@ -181,25 +191,6 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':TRD_G_KEYIN', $result_sqlsvr["TRD_G_KEYIN"], PDO::PARAM_STR);
         $query->bindParam(':WL_CODE', $result_sqlsvr["WL_CODE"], PDO::PARAM_STR);
 
-        /*
-
-        $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
-
-        $branch = "";
-
-        if (preg_match('([30|CS4|CS5|DS4|IS3|IS4|ISC3|ISC4])', $DT_DOCCODE) === 1) {
-            $branch = "CP-340";
-        } else if (preg_match('([CS.8|CS.9|IC.3|IC.4|IS.3|IS.4|S.5|S.6])', $DT_DOCCODE) === 1) {
-            $branch = "CP-BY";
-        } else if (preg_match('([CS.6|CS.7|IC.1|IC.2|IS.1|IS.2|S.1|S.2])', $DT_DOCCODE) === 1) {
-            $branch = "CP-RP";
-        } else if (preg_match('([CS.2|CS.3|IC.5|IC.6|IS.5|IS.6|S.3|S.4])', $DT_DOCCODE) === 1) {
-            $branch = "CP-BB";
-        } else {
-            $branch = "-";
-        }
-        */
-
         $query->bindParam(':BRANCH', $branch, PDO::PARAM_STR);
 
         $query->bindParam(':DT_DOCCODE', $DT_DOCCODE, PDO::PARAM_STR);
@@ -211,6 +202,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':BRN_NAME', $result_sqlsvr["BRN_NAME"], PDO::PARAM_STR);
 
         $query->bindParam(':DI_TIME_CHK', $result_sqlsvr["DI_TIME_CHK"], PDO::PARAM_STR);
+
+        $query->bindParam(':PGROUP', $p_group, PDO::PARAM_STR);
 
         $query->execute();
 
