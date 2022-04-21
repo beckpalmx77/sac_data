@@ -10,7 +10,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <!DOCTYPE html>
     <html lang="th">
-    <body id="page-top" onload="showGraph_Tires_Brand();">
+    <body id="page-top" onload="showGraph_Cockpit_Daily();showGraph_Tires_Brand();">
     <div id="wrapper">
         <?php
         include('includes/Side-Bar.php');
@@ -102,9 +102,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text4"></p></div>
                                             <div class="mt-2 mb-0 text-muted text-xs">
-                                                <!--span class="text-danger mr-2"><i
-                                                            class="fas fa-arrow-down"></i> 1.10%</span>
-                                                    <span>Since yesterday</span-->
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -120,10 +117,11 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติ
+                                    สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา วันที่
+                                    <?php echo date("d-m-Y"); ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี 2565</h5>
+                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
                                     <canvas id="myChart" width="200" height="200"></canvas>
                                 </div>
                             </div>
@@ -135,7 +133,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     สถิติ มูลค่าการขายยาง Cockpit แต่ละยี่ห้อ
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y");?></h5>
+                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
                                     <canvas id="myChart2" width="200" height="200"></canvas>
                                 </div>
                             </div>
@@ -209,46 +207,6 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: 'Data1',
-                    data: [21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    backgroundColor: [
-                        'rgba(238, 34, 200, 1)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderWidth: 1
-                }, {
-                    label: 'Data2',
-                    data: [14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    backgroundColor: [
-                        'rgba(59, 252,200, 1)',
-                    ],
-                    borderColor: [
-                        'rgba(153, 102, 255, 0.2)',
-                    ],
-                    borderWidth: 1
-
-                }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-
-    <script>
 
         function showGraph_Tires_Brand() {
             {
@@ -274,7 +232,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 ];
 
-                $.post("engine/chart_data_pie_tires_brand.php", {doc_date: "1" ,branch: "2" }, function (data) {
+                $.post("engine/chart_data_pie_tires_brand.php", {doc_date: "1", branch: "2"}, function (data) {
                     console.log(data);
                     let label = [];
                     let total = [];
@@ -304,6 +262,49 @@ if (strlen($_SESSION['alogin']) == "") {
                 })
 
 
+            }
+        }
+
+    </script>
+
+    <script>
+        function showGraph_Cockpit_Daily() {
+            {
+
+                //let data_date = $("#data_date").val();
+
+                let backgroundColor = '#0a4dd3';
+                let borderColor = '#46d5f1';
+
+                let hoverBackgroundColor = '#a2a1a3';
+                let hoverBorderColor = '#a2a1a3';
+
+                $.post("engine/chart_data_cockpit_daily.php", {date: "2"}, function (data) {
+                    console.log(data);
+                    let branch = [];
+                    let total = [];
+                    for (let i in data) {
+                        branch.push(data[i].BRANCH);
+                        total.push(data[i].TRD_G_KEYIN);
+                    }
+
+                    let chartdata = {
+                        labels: branch,
+                        datasets: [{
+                            label: 'ยอดขายรายวัน รวม VAT (Daily)',
+                            backgroundColor: backgroundColor,
+                            borderColor: borderColor,
+                            hoverBackgroundColor: hoverBackgroundColor,
+                            hoverBorderColor: hoverBorderColor,
+                            data: total
+                        }]
+                    };
+                    let graphTarget = $('#myChart');
+                    let barGraph = new Chart(graphTarget, {
+                        type: 'bar',
+                        data: chartdata
+                    })
+                })
             }
         }
 
