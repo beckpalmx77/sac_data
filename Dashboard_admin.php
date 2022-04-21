@@ -3,11 +3,14 @@ include('includes/Header.php');
 if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
 } else {
+
+    include("config/connect_db.php");
+
     ?>
 
     <!DOCTYPE html>
     <html lang="th">
-    <body id="page-top">
+    <body id="page-top" onload="showGraph_Tires_Brand();">
     <div id="wrapper">
         <?php
         include('includes/Side-Bar.php');
@@ -129,30 +132,16 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติ
+                                    สถิติ มูลค่าการขายยาง Cockpit แต่ละยี่ห้อ
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี 2565</h5>
+                                    <h5 class="card-title">ปี <?php echo date("Y");?></h5>
                                     <canvas id="myChart2" width="200" height="200"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-                    <!--div class="row">
-                        <div class="col-lg-12">
-                            <div class="card mb-12">
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                </div>
-                                <div class="card-body">
-                                    <section class="container-fluid">
-                                        <div id='calendar'></div>
-                                    </section>
-                                </div>
-                            </div>
-                        </div>
-                    </div-->
                 </div>
             </div>
         </div>
@@ -260,32 +249,64 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-        let xValues = ["แบบที่ 1", "แบบที่ 2", "แบบที่ 3", "แบบที่ 4", "แบบที่ 5"];
-        let yValues = [3, 6, 5, 5, 2];
-        let barColors = [
-            "#b91d47",
-            "#00aba9",
-            "#2b5797",
-            "#e8c3b9",
-            "#1e7145"
-        ];
 
-        new Chart("myChart2", {
-            type: "pie",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: ""
-                }
+        function showGraph_Tires_Brand() {
+            {
+
+                let barColors = [
+                    "#0a4dd3",
+                    "#c21bf8",
+                    "#f3661a",
+                    "#f81b61",
+                    "#12f361",
+                    "#1da5f2",
+                    "#af43f5",
+                    "#0e0b71",
+                    "#e9e207",
+                    "#07e9d8",
+                    "#b91d47",
+                    "#00aba9",
+                    "#fa6ae4",
+                    "#1d7804",
+                    "#1a8cec",
+                    "#50e310",
+                    "#fcae13"
+
+                ];
+
+                $.post("engine/chart_data_pie_tires_brand.php", {doc_date: "1" ,branch: "2" }, function (data) {
+                    console.log(data);
+                    let label = [];
+                    let total = [];
+                    for (let i in data) {
+                        label.push(data[i].BRN_CODE);
+                        total.push(data[i].TRD_G_KEYIN);
+                        //alert(label);
+                    }
+
+                    new Chart("myChart2", {
+                        type: "pie",
+                        data: {
+                            labels: label,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: total
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: ""
+                            }
+                        }
+                    });
+
+                })
+
+
             }
-        });
+        }
+
     </script>
 
 
