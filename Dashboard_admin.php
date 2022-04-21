@@ -32,11 +32,11 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text1"></p></div>
-                                            <div class="mt-2 mb-0 text-muted text-xs">
+                                            <!--div class="mt-2 mb-0 text-muted text-xs">
                                                 <span class="text-success mr-2"><i
                                                             class="fa fa-arrow-up"></i></span>
                                                 <span>Since last month</span>
-                                            </div>
+                                            </div-->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-shopping-cart fa-2x text-success"></i>
@@ -55,11 +55,11 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text2"></p></div>
-                                            <div class="mt-2 mb-0 text-muted text-xs">
+                                            <!--div class="mt-2 mb-0 text-muted text-xs">
                                                 <span class="text-success mr-2"><i
                                                             class="fas fa-arrow-up"></i> 12%</span>
                                                 <span>Since last years</span>
-                                            </div>
+                                            </div-->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-box fa-2x text-primary"></i>
@@ -78,11 +78,11 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text3"></p></div>
-                                            <div class="mt-2 mb-0 text-muted text-xs">
+                                            <!--div class="mt-2 mb-0 text-muted text-xs">
                                                 <span class="text-success mr-2"><i
                                                             class="fas fa-arrow-up"></i> 20.4%</span>
                                                 <span>Since last month</span>
-                                            </div>
+                                            </div-->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-info"></i>
@@ -172,13 +172,13 @@ if (strlen($_SESSION['alogin']) == "") {
 
             GET_DATA("ims_order_master", "1");
             GET_DATA("ims_product", "2");
-            GET_DATA("ims_customer", "3");
+            GET_DATA("ims_customer_ar", "3");
             GET_DATA("ims_supplier", "4");
 
             setInterval(function () {
                 GET_DATA("ims_order_master", "1");
                 GET_DATA("ims_product", "2");
-                GET_DATA("ims_customer", "3");
+                GET_DATA("ims_customer_ar", "3");
                 GET_DATA("ims_supplier", "4");
             }, 3000);
         });
@@ -276,7 +276,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 let backgroundColor = '#0a4dd3';
                 let borderColor = '#46d5f1';
 
-                let hoverBackgroundColor = '#a2a1a3';
+                let hoverBackgroundColor = '#1712bf';
                 let hoverBorderColor = '#a2a1a3';
 
                 $.post("engine/chart_data_cockpit_daily.php", {date: "2"}, function (data) {
