@@ -10,6 +10,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <!DOCTYPE html>
     <html lang="th">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
     <body id="page-top" onload="showGraph_Cockpit_Daily();showGraph_Tires_Brand();">
     <div id="wrapper">
         <?php
@@ -125,7 +128,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <canvas id="myChart" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
-                                    <table id='TableRecordList' class='display dataTable'>
+                                    <table id="example" class="display table table-striped table-bordered"
+                                           cellspacing="0" width="100%">
                                         <thead>
                                         <tr>
                                             <th>สาขา</th>
@@ -138,6 +142,26 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <th>ยอดขาย</th>
                                         </tr>
                                         </tfoot>
+                                        <tbody>
+                                        <?php
+                                        $date = date("d/m/Y");
+                                        $sql = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+                                                      FROM ims_product_sale_cockpit 
+                                                      WHERE DI_DATE = '" .$date . "'
+                                                      GROUP BY  BRANCH
+                                                      ORDER BY BRANCH";
+
+                                        $statement = $conn->query($sql);
+                                        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                                        foreach ($results as $row) { ?>
+
+                                        <tr>
+                                            <td><?php echo htmlentities($row['BRANCH']); ?></td>
+                                            <td><?php echo htmlentities($row['TRD_G_KEYIN']); ?></td>
+                                        <?php } ?>
+
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -151,6 +175,51 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-body">
                                     <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
                                     <canvas id="myChart2" width="200" height="200"></canvas>
+                                </div>
+                                <div class="card-body">
+                                    <table id="example" class="display table table-striped table-bordered"
+                                           cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>ยี่ห้อ</th>
+                                            <th>จำนวน (เส้น)</th>
+                                            <th>ยอดขาย</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>ยี่ห้อ</th>
+                                            <th>จำนวน (เส้น)</th>
+                                            <th>ยอดขาย</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        <?php
+                                        $year = date("Y");
+                                        $sql =  "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+                                        FROM ims_product_sale_cockpit
+                                        WHERE SKU_CAT IN ('2SAC01','2SAC02','2SAC03','2SAC02','2SAC04','2SAC05','2SAC06','2SAC07','2SAC08','2SAC09','2SAC10','2SAC11','2SAC12','2SAC13','2SAC14','2SAC15')
+                                        AND DI_YEAR = '" . $year . "'
+                                        GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
+                                        ORDER BY SKU_CAT ";
+
+                                        $myfile = fopen("sql.txt", "w") or die("Unable to open file!");
+                                        fwrite($myfile,  $sql);
+                                        fclose($myfile);
+
+                                        $statement = $conn->query($sql);
+                                        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                                        foreach ($results as $row) { ?>
+
+                                        <tr>
+                                            <td><?php echo htmlentities($row['BRN_NAME']); ?></td>
+                                            <td><?php echo htmlentities($row['TRD_QTY']); ?></td>
+                                            <td><?php echo htmlentities($row['TRD_G_KEYIN']); ?></td>
+                                            <?php } ?>
+
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -327,40 +396,6 @@ if (strlen($_SESSION['alogin']) == "") {
         }
 
     </script>
-
-    <script>
-        $(document).ready(function () {
-            let formData = {action: "GET_BRANCH", sub_action: "GET_MASTER"};
-            let dataRecords = $('#TableRecordList').DataTable({
-                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
-                'language': {
-                    search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
-                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
-                    infoEmpty: 'ไม่มีข้อมูล',
-                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
-                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
-                    paginate: {
-                        previous: 'ก่อนหน้า',
-                        last: 'สุดท้าย',
-                        next: 'ต่อไป'
-                    }
-                },
-                'processing': true,
-                'serverSide': true,
-                'serverMethod': 'post',
-                'ajax': {
-                    'url': 'engine/data_detail_cockpit_daily.php',
-                    'data': formData
-                },
-                'columns': [
-                    {data: 'branch'},
-                    {data: 'total'}
-                ]
-            });
-        });
-    </script>
-
-
 
     </body>
 
