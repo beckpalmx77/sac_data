@@ -202,11 +202,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         AND DI_YEAR = '" . $year . "'
                                         GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
                                         ORDER BY SKU_CAT ";
-
-                                        $myfile = fopen("sql.txt", "w") or die("Unable to open file!");
-                                        fwrite($myfile,  $sql);
-                                        fclose($myfile);
-
+                                        
                                         $statement = $conn->query($sql);
                                         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
