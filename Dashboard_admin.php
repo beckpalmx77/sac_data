@@ -145,23 +145,25 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tbody>
                                         <?php
                                         $date = date("d/m/Y");
-                                        $sql = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+                                        $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_DATE = '" .$date . "'
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
-                                        $statement = $conn->query($sql);
-                                        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+                                        $statement_daily = $conn->query($sql_daily);
+                                        $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results as $row) { ?>
+                                        foreach ($results_daily as $row_daily) { ?>
 
                                         <tr>
-                                            <td><?php echo htmlentities($row['BRANCH']); ?></td>
-                                            <td><?php echo htmlentities($row['TRD_G_KEYIN']); ?></td>
+                                            <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
+                                            <td><?php echo htmlentities($row_daily['TRD_G_KEYIN']); ?></td>
+                                            <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                         <?php } ?>
 
                                         </tbody>
+                                        <?php echo "ยอดขายรวมทุกสาขา : " .  $total . " บาท "?>
                                     </table>
                                 </div>
                             </div>
@@ -196,25 +198,28 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tbody>
                                         <?php
                                         $year = date("Y");
-                                        $sql =  "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+                                        $sql_brand =  "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
                                         FROM ims_product_sale_cockpit
                                         WHERE SKU_CAT IN ('2SAC01','2SAC02','2SAC03','2SAC02','2SAC04','2SAC05','2SAC06','2SAC07','2SAC08','2SAC09','2SAC10','2SAC11','2SAC12','2SAC13','2SAC14','2SAC15')
                                         AND DI_YEAR = '" . $year . "'
                                         GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
                                         ORDER BY SKU_CAT ";
-                                        
-                                        $statement = $conn->query($sql);
-                                        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results as $row) { ?>
+                                        $statement_brand = $conn->query($sql_brand);
+                                        $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
+
+                                        foreach ($results_brand as $row_brand) { ?>
 
                                         <tr>
-                                            <td><?php echo htmlentities($row['BRN_NAME']); ?></td>
-                                            <td><?php echo htmlentities($row['TRD_QTY']); ?></td>
-                                            <td><?php echo htmlentities($row['TRD_G_KEYIN']); ?></td>
+                                            <td><?php echo htmlentities($row_brand['BRN_NAME']); ?></td>
+                                            <td><?php echo htmlentities($row_brand['TRD_QTY']); ?></td>
+                                            <?php $total = $total + $row_brand['TRD_QTY']; ?>
+                                            <td><?php echo htmlentities($row_brand['TRD_G_KEYIN']); ?></td>
+                                            <?php $total_sale = $total_sale + $row_brand['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
                                         </tbody>
+                                        <?php echo "รวม : ยางทั้งหมด  = " . $total . " เส้น จำนวนเงินรวม = " .  $total_sale . " บาท "?>
                                     </table>
                                 </div>
                             </div>
