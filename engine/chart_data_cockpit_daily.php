@@ -33,4 +33,3 @@ foreach ($results as $result) {
 }
 
 echo json_encode($return_arr);
-

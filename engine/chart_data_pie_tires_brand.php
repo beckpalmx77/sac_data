@@ -5,7 +5,7 @@ include("../config/connect_db.php");
 
 $year = date("Y");
 
-$doc_date = str_replace("-","/",$_POST["doc_date"]);
+$doc_date = str_replace("-", "/", $_POST["doc_date"]);
 $branch = $_POST["branch"];
 
 $sql_get = "
@@ -28,6 +28,7 @@ $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($results as $result) {
     $return_arr[] = array("BRN_CODE" => $result['BRN_CODE'],
+        "BRN_NAME" => $result['BRN_NAME'],
         "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 

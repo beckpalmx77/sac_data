@@ -124,6 +124,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
                                     <canvas id="myChart" width="200" height="200"></canvas>
                                 </div>
+                                <div class="card-body">
+                                    <table id='TableRecordList' class='display dataTable'>
+                                        <thead>
+                                        <tr>
+                                            <th>สาขา</th>
+                                            <th>ยอดขาย</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>สาขา</th>
+                                            <th>ยอดขาย</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
@@ -235,9 +251,11 @@ if (strlen($_SESSION['alogin']) == "") {
                 $.post("engine/chart_data_pie_tires_brand.php", {doc_date: "1", branch: "2"}, function (data) {
                     console.log(data);
                     let label = [];
+                    let label_name = [];
                     let total = [];
                     for (let i in data) {
                         label.push(data[i].BRN_CODE);
+                        label_name.push(data[i].BRN_NAME);
                         total.push(data[i].TRD_G_KEYIN);
                         //alert(label);
                     }
@@ -245,7 +263,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     new Chart("myChart2", {
                         type: "pie",
                         data: {
-                            labels: label,
+                            labels: label_name,
                             datasets: [{
                                 backgroundColor: barColors,
                                 data: total
@@ -309,6 +327,39 @@ if (strlen($_SESSION['alogin']) == "") {
         }
 
     </script>
+
+    <script>
+        $(document).ready(function () {
+            let formData = {action: "GET_BRANCH", sub_action: "GET_MASTER"};
+            let dataRecords = $('#TableRecordList').DataTable({
+                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                'language': {
+                    search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
+                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    infoEmpty: 'ไม่มีข้อมูล',
+                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
+                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    paginate: {
+                        previous: 'ก่อนหน้า',
+                        last: 'สุดท้าย',
+                        next: 'ต่อไป'
+                    }
+                },
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': 'engine/data_detail_cockpit_daily.php',
+                    'data': formData
+                },
+                'columns': [
+                    {data: 'branch'},
+                    {data: 'total'}
+                ]
+            });
+        });
+    </script>
+
 
 
     </body>
