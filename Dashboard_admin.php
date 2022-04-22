@@ -145,6 +145,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tbody>
                                         <?php
                                         $date = date("d/m/Y");
+                                        $total = 0;
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_DATE = '" .$date . "'
@@ -198,6 +199,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tbody>
                                         <?php
                                         $year = date("Y");
+                                        $total = 0;
+                                        $total_sale = 0;
                                         $sql_brand =  "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
                                         FROM ims_product_sale_cockpit
                                         WHERE SKU_CAT IN ('2SAC01','2SAC02','2SAC03','2SAC02','2SAC04','2SAC05','2SAC06','2SAC07','2SAC08','2SAC09','2SAC10','2SAC11','2SAC12','2SAC13','2SAC14','2SAC15')
