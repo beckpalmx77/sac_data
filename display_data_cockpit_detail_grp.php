@@ -6,10 +6,13 @@ $branch = $_POST["branch"];
 $total = 0;
 $total_sale = 0;
 
-$sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+$sql_data = "  SELECT BRANCH,PGROUP,ims_pgroup.pgroup_name,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
+ LEFT JOIN ims_pgroup
+ ON ims_pgroup.pgroup_id = ims_product_sale_cockpit.pgroup
  WHERE DI_DATE = '" . $doc_date . "' AND BRANCH = '" . $branch . "' AND TRD_G_KEYIN > 0 
- GROUP BY BRANCH,AR_CODE ,AR_NAME, SKU_CODE , SKU_NAME ";
+ GROUP BY  BRANCH,PGROUP,pgroup_name 
+ ORDER BY PGROUP  ";
 
 ?>
 <br>
@@ -19,7 +22,6 @@ $sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_
     <thead>
     <tr>
         <th>#</th>
-        <th>ชื่อลูกค้า</th>
         <th>รายการ</th>
         <th>จำนวนเงิน</th>
     </tr>
@@ -27,7 +29,6 @@ $sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_
     <tfoot>
     <tr>
         <th>#</th>
-        <th>ชื่อลูกค้า</th>
         <th>รายการ</th>
         <th>จำนวนเงิน</th>
     </tr>
@@ -42,13 +43,11 @@ $sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_
     as $row_data) { ?>
     <tr>
         <td><?php echo htmlentities($cnt); ?></td>
-        <td><?php echo htmlentities($row_data['AR_NAME']); ?></td>
-        <td><?php echo htmlentities($row_data['SKU_NAME']); ?></td>
-        <td><?php echo htmlentities($row_data['SKU_NAME']); ?></td>
+        <td><?php echo htmlentities($row_data['pgroup_name']); ?></td>
         <td><p class="number"><?php echo htmlentities(number_format($row_data['TRD_G_KEYIN'], 2)); ?></p></td>
         <?php $total_sale = $total_sale + $row_data['TRD_G_KEYIN']; ?>
         <?php $cnt = $cnt+1; ?>
         <?php } ?>
     </tbody>
-    <div><?php echo "ยอดรวมรายการทั้งหมด :   = " . number_format($total_sale, 2) . " บาท " ?></div>
+    <div><?php echo "ยอดรวมรายการ ตามกลุ่มสินค้า ทั้งหมด  = " . number_format($total_sale, 2) . " บาท " ?></div>
 </table>

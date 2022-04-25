@@ -38,6 +38,12 @@ foreach ($BranchRecords as $rows) {
             height: auto;
         }
     </style>
+
+    <style>
+        p.number {
+            text-align-last: right;
+        }
+    </style>
 </head>
 
 <body onload="showGraph_Daily()">
@@ -49,15 +55,19 @@ foreach ($BranchRecords as $rows) {
     <input type="hidden" name="doc_date" id="doc_date" value="<?php echo $doc_date; ?>">
     <input type="hidden" name="branch" id="branch" value="<?php echo $_POST["branch"]; ?>">
     <input type="hidden" name="branch_name" id="branch_name" class="form-control" value="<?php echo $branch_name; ?>">
-
     <div class="card-body">
-
         <div id="chart-container">
             <canvas id="graphCanvas_Daily"></canvas>
         </div>
 
     </div>
 </div>
+
+
+<?php
+include("display_data_cockpit_detail_grp.php");
+include("display_data_cockpit_detail.php");
+?>
 
 
 <script>
@@ -119,5 +129,8 @@ foreach ($BranchRecords as $rows) {
     }
 
 </script>
+
+
+
 </body>
 </html>
