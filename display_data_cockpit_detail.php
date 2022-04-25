@@ -44,7 +44,6 @@ $sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_
         <td><?php echo htmlentities($cnt); ?></td>
         <td><?php echo htmlentities($row_data['AR_NAME']); ?></td>
         <td><?php echo htmlentities($row_data['SKU_NAME']); ?></td>
-        <td><?php echo htmlentities($row_data['SKU_NAME']); ?></td>
         <td><p class="number"><?php echo htmlentities(number_format($row_data['TRD_G_KEYIN'], 2)); ?></p></td>
         <?php $total_sale = $total_sale + $row_data['TRD_G_KEYIN']; ?>
         <?php $cnt = $cnt+1; ?>
