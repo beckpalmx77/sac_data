@@ -40,15 +40,15 @@ $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS
 
 //$query_year = " AND DI_DATE >= '2022' ";
 $query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
-//$query_year = " AND DI_DATE BETWEEN '2010/01/01' AND '" . date("Y/m/d") . "'";
+//$query_year = " AND DI_DATE BETWEEN '2022/01/01' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
 
 echo $sql_sqlsvr;
 
-//$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $sql_sqlsvr);
-//fclose($myfile);
+$myfile = fopen("qry_file_mssql_server.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $sql_sqlsvr);
+fclose($myfile);
 
 $update_data = "";
 

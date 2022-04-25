@@ -13,6 +13,12 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
+    <style>
+        p.number {
+            text-align-last: right;
+        }
+    </style>
+
     <body id="page-top" onload="showGraph_Cockpit_Daily();showGraph_Cockpit_Monthly();showGraph_Tires_Brand();">
     <div id="wrapper">
         <?php
@@ -148,23 +154,25 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $total = 0;
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
-                                                      WHERE DI_DATE = '" .$date . "'
+                                                      WHERE DI_DATE = '" . $date . "'
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily as $row_daily) { ?>
+                                        foreach ($results_daily
+
+                                        as $row_daily) { ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                                            <td><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'],2)); ?></td>
+                                            <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
-                                        <?php } ?>
+                                            <?php } ?>
 
                                         </tbody>
-                                        <?php echo "ยอดขายรวมทุกสาขา วันที่ " . $date  . " = " .  number_format($total,2) . " บาท "?>
+                                        <?php echo "ยอดขายรวมทุกสาขา วันที่ " . $date . " = " . number_format($total, 2) . " บาท " ?>
                                     </table>
                                 </div>
 
@@ -206,22 +214,23 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily as $row_daily) { ?>
+                                        foreach ($results_daily
+
+                                        as $row_daily) { ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                                            <td><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'],2)); ?></td>
+                                            <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
                                         </tbody>
-                                        <?php echo "ยอดขายรวมทุกสาขา เดือน " . date("n") . " " . date("Y")  . " = " .  number_format($total,2) . " บาท "?>
+                                        <?php echo "ยอดขายรวมทุกสาขา เดือน " . date("n") . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
                                     </table>
                                 </div>
 
                             </div>
                         </div>
-
 
 
                         <div class="col-md-6">
@@ -255,7 +264,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $year = date("Y");
                                         $total = 0;
                                         $total_sale = 0;
-                                        $sql_brand =  "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+                                        $sql_brand = "SELECT BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
                                         FROM ims_product_sale_cockpit
                                         WHERE SKU_CAT IN ('2SAC01','2SAC02','2SAC03','2SAC02','2SAC04','2SAC05','2SAC06','2SAC07','2SAC08','2SAC09','2SAC10','2SAC11','2SAC12','2SAC13','2SAC14','2SAC15')
                                         AND DI_YEAR = '" . $year . "'
@@ -265,18 +274,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $statement_brand = $conn->query($sql_brand);
                                         $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_brand as $row_brand) { ?>
+                                        foreach ($results_brand
+
+                                        as $row_brand) { ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_brand['BRN_NAME']); ?></td>
-                                            <td><?php echo htmlentities(number_format($row_brand['TRD_QTY'],2)); ?></td>
+                                            <td><?php echo htmlentities(number_format($row_brand['TRD_QTY'], 2)); ?></td>
                                             <?php $total = $total + $row_brand['TRD_QTY']; ?>
-                                            <td><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'],2)); ?></td>
+                                            <td><p class="number"><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'], 2)); ?></p></td>
                                             <?php $total_sale = $total_sale + $row_brand['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
                                         </tbody>
-                                        <?php echo "รวม : ยางทั้งหมด  = " . number_format($total,2) . " เส้น จำนวนเงินรวม = " .  number_format($total_sale,2) . " บาท "?>
+                                        <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
                                     </table>
                                 </div>
                             </div>

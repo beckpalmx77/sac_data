@@ -96,10 +96,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <option>CP-BB</option>
                                                                         </select>
                                                                     </div>
-
                                                                 </div>
-
-
                                                             </div>
 
                                                             <div class="modal-footer">

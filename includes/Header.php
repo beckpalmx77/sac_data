@@ -30,6 +30,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <link href="../vendor/datatables/v11/fontawesome53.all.min.css" rel="stylesheet">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
     <script src="../vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
     <script src="../vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
     <link href="../vendor/date-picker-1.9/css/date_picker_style.css" rel="stylesheet"/>
