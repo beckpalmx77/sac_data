@@ -6,9 +6,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
-    $month_num = date('m');
+    $month_num = str_replace('0','',date('m'));
 
-    $sql_curr_month = " SELECT * FROM ims_month where month_id = '" . str_replace($month_num,'','0') . "'";
+    $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
     $stmt_curr_month = $conn->prepare($sql_curr_month);
     $stmt_curr_month->execute();
@@ -16,6 +16,10 @@ if (strlen($_SESSION['alogin']) == "") {
     foreach ($MonthCurr as $row_curr) {
         $month_name = $row_curr["month_name"];
     }
+
+    //$myfile = fopen("param.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, "month_num = " . $month_num . "| month_name" . $month_name . " | " . $sql_curr_month);
+    //fclose($myfile);
 
     $sql_month = " SELECT * FROM ims_month ";
     $stmt_month = $conn->prepare($sql_month);
@@ -84,7 +88,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                                 <label for="month">เลือกเดือน :</label>
                                                                                 <select name="month" id="month" class="form-control" required>
-                                                                                    <!--option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option-->
+                                                                                    <option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option>
                                                                                     <?php foreach ($MonthRecords as $row) { ?>
                                                                                         <option value="<?php echo $row["month"]; ?>">
                                                                                             <?php echo $row["month_name"]; ?>
