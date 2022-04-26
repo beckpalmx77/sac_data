@@ -32,7 +32,6 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
         echo "Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . "\n\r";
 
-
         $sql = "INSERT INTO ims_customer_ar(customer_id,tax_id,f_name,credit,phone,address,tumbol,amphure,province,zipcode)
         VALUES (:customer_id,:tax_id,:f_name,:credit,:phone,:address,:tumbol,:amphure,:province,:zipcode)";
         $query = $conn->prepare($sql);
