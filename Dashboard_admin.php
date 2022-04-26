@@ -37,7 +37,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-uppercase mb-1">All Order
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text1"></p></div>
@@ -106,7 +106,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-uppercase mb-1">Total Supplier
+                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><p class="text-success"
                                                                                                    id="Text4"></p></div>
