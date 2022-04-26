@@ -2,6 +2,7 @@
 
 include("config/connect_db.php");
 
+$month_name = "";
 
 $sql_month = " SELECT * FROM ims_month where month = '" . $_POST["month"] . "'";
 $stmt_month = $conn->prepare($sql_month);
