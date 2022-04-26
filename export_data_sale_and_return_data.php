@@ -171,36 +171,12 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-    <!--script>
-        $(document).ready(function () {
-            $("form").on("submit", function (event) {
-                event.preventDefault();
-                let formValues = $(this).serialize();
-                alert("OK");
-                $.post("export_process/export_data_sale_return.php", formValues, function (response) {
-                    if (response == 1) {
-                        document.getElementById("from_data").reset();
-                        alertify.success("Export Complete");
-
-                    } else if (response == 2) {
-                        alertify.error("-");
-                    } else {
-                        alertify.error("DB Error ");
-                    }
-                });
-            });
-        });
-    </script-->
+    <script src="js/util.js"></script>
 
     <script>
         $(document).ready(function () {
             let today = new Date();
-            let year = today.getFullYear();
-            let month = String(today.getMonth() + 1).padStart(2, '0');
-            let day = String(today.getDate()).padStart(2, '0');
-
-            let doc_date = day + "-" + month + "-" + year;
-
+            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
             $('#doc_date_start').val(doc_date);
             $('#doc_date_to').val(doc_date);
         });

@@ -171,15 +171,12 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
+    <script src="js/util.js"></script>
+
     <script>
         $(document).ready(function () {
             let today = new Date();
-            let year = today.getFullYear();
-            let month = String(today.getMonth() + 1).padStart(2, '0');
-            let day = String(today.getDate()).padStart(2, '0');
-
-            let doc_date = day + "-" + month + "-" + year;
-
+            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
             $('#doc_date_start').val(doc_date);
             $('#doc_date_to').val(doc_date);
         });

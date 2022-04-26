@@ -6,6 +6,17 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
+    $month_num = date('m');
+
+    $sql_curr_month = " SELECT * FROM ims_month where month_id = '" . $month_num . "'";
+
+    $stmt_curr_month = $conn->prepare($sql_curr_month);
+    $stmt_curr_month->execute();
+    $MonthCurr = $stmt_curr_month->fetchAll();
+    foreach ($MonthCurr as $row_curr) {
+        $month_name = $row_curr["month_name"];
+    }
+
     $sql_month = " SELECT * FROM ims_month ";
     $stmt_month = $conn->prepare($sql_month);
     $stmt_month->execute();
@@ -73,6 +84,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                                 <label for="month">เลือกเดือน :</label>
                                                                                 <select name="month" id="month" class="form-control" required>
+                                                                                    <option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option>
                                                                                     <?php foreach ($MonthRecords as $row) { ?>
                                                                                         <option value="<?php echo $row["month"]; ?>">
                                                                                             <?php echo $row["month_name"]; ?>
