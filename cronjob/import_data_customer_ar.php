@@ -9,7 +9,8 @@ include ("../config/connect_db.php");
 include ("../cond_file/doc_info_customer_ar.php");
 
 $sql_sqlsvr = $select_query
-            . $sql_cond . " AND AR_CODE like 'SAC%' "
+            //. $sql_cond . " AND AR_CODE like 'SAC%' "
+            . $sql_cond
             . $sql_order ;
 
 //$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
