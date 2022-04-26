@@ -6,9 +6,9 @@ include("../config/connect_db.php");
 $month = date("n");
 $year = date("Y");
 
-$myfile = fopen("param_month.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $month  . "| Year = " . $year);
-fclose($myfile);
+//$myfile = fopen("param_month.txt", "w") or die("Unable to open file!");
+//fwrite($myfile, $month  . "| Year = " . $year);
+//fclose($myfile);
 
 $sql_get = "
  SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN

@@ -46,9 +46,9 @@ $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond
 
 echo $sql_sqlsvr;
 
-$myfile = fopen("qry_file_mssql_server.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $sql_sqlsvr);
-fclose($myfile);
+//$myfile = fopen("qry_file_mssql_server.txt", "w") or die("Unable to open file!");
+//fwrite($myfile, $sql_sqlsvr);
+//fclose($myfile);
 
 $update_data = "";
 

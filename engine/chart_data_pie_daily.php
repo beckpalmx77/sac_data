@@ -15,9 +15,9 @@ $sql_get = "
  GROUP BY  BRANCH,PGROUP,pgroup_name 
  ORDER BY PGROUP ";
 
-$myfile = fopen("sql_get.txt", "w") or die("Unable to open file!");
-fwrite($myfile, "[" . $sql_get . " / " . $doc_date);
-fclose($myfile);
+//$myfile = fopen("sql_get.txt", "w") or die("Unable to open file!");
+//fwrite($myfile, "[" . $sql_get . " / " . $doc_date);
+//fclose($myfile);
 
 $return_arr = array();
 
@@ -29,9 +29,9 @@ foreach ($results as $result) {
         "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 
-$myfile = fopen("qry_file_pie.txt", "w") or die("Unable to open file!");
-fwrite($myfile, $sql_get);
-fclose($myfile);
+//$myfile = fopen("qry_file_pie.txt", "w") or die("Unable to open file!");
+//fwrite($myfile, $sql_get);
+//fclose($myfile);
 
 echo json_encode($return_arr);
 

@@ -179,6 +179,16 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
+
+            let today = new Date();
+            let year = today.getFullYear();
+            let month = String(today.getMonth() + 1).padStart(2, '0');
+            let day = String(today.getDate()).padStart(2, '0');
+
+            let doc_date = day + "-" + month + "-" + year;
+
+            $('#doc_date').val(doc_date);
+
             $('#doc_date').datepicker({
                 format: "dd-mm-yyyy",
                 todayHighlight: true,

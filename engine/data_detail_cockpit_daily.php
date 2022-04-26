@@ -16,9 +16,9 @@ $date = date("d/m/Y");
  GROUP BY  BRANCH
  ORDER BY BRANCH";
 
-$myfile = fopen("sql_get.txt", "w") or die("Unable to open file!");
-fwrite($myfile,  $sql_get);
-fclose($myfile);
+//$myfile = fopen("sql_get.txt", "w") or die("Unable to open file!");
+//fwrite($myfile,  $sql_get);
+//fclose($myfile);
 
 $data = array();
 
