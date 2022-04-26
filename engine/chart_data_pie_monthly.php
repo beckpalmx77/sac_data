@@ -18,9 +18,9 @@ $sql_get = "
  GROUP BY  BRANCH,PGROUP,pgroup_name 
  ORDER BY PGROUP ";
 
-$myfile = fopen("sql_get-1.txt", "w") or die("Unable to open file!");
-fwrite($myfile, "[" . $sql_get . " / " . $month);
-fclose($myfile);
+//$myfile = fopen("sql_get-1.txt", "w") or die("Unable to open file!");
+//fwrite($myfile, "[" . $sql_get . " / " . $month);
+//fclose($myfile);
 
 $return_arr = array();
 
