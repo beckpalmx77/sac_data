@@ -6,6 +6,15 @@ include("config/connect_db.php");
 $month = $_POST['month'];
 $year = $_POST['year'];
 
+$sql_curr_month = " SELECT * FROM ims_month where month = '" . $month . "'";
+
+$stmt_curr_month = $conn->prepare($sql_curr_month);
+$stmt_curr_month->execute();
+$MonthCurr = $stmt_curr_month->fetchAll();
+foreach ($MonthCurr as $row_curr) {
+    $month_name = $row_curr["month_name"];
+}
+
 $sql_branch = " SELECT * FROM ims_branch where branch = '" . $_POST["branch"] . "'";
 $stmt_branch = $conn->prepare($sql_branch);
 $stmt_branch->execute();
@@ -51,7 +60,7 @@ foreach ($BranchRecords as $rows) {
 <body onload="showGraph_Monthly()">
 <div class="card">
     <div class="card-header bg-success text-white">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขาย เดือน <?php echo $_POST["month"]; ?>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขาย เดือน <?php echo $month_name . " " . $year; ?>
         <?php echo $branch_name; ?>
     </div>
     <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
