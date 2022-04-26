@@ -111,6 +111,10 @@ include('config/lang.php');
             <span>Front End</span></a>
     </li-->
 
+    <?php $localIP = getHostByName(getHostName());;
+          echo $localIP;
+    ?>
+
     <li class="nav-item active">
         <a class="nav-link" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
             <i class="fas fa-sign-out-alt"></i>
