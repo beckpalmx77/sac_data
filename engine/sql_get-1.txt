@@ -1,0 +1,8 @@
+[
+ SELECT BRANCH,PGROUP,ims_pgroup.pgroup_name,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ FROM ims_product_sale_cockpit 
+ LEFT JOIN ims_pgroup
+ ON ims_pgroup.pgroup_id = ims_product_sale_cockpit.pgroup
+ WHERE DI_MONTH = '4' AND DI_YEAR = '2022' AND BRANCH = 'CP-340' AND TRD_G_KEYIN > 0  
+ GROUP BY  BRANCH,PGROUP,pgroup_name 
+ ORDER BY PGROUP  / 4
