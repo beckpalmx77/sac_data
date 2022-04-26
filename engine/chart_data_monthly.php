@@ -7,7 +7,7 @@ $month = $_POST["month"];
 $year = $_POST["year"];
 $branch = $_POST["branch"];
 
-//$myfile = fopen("param.txt", "w") or die("Unable to open file!");
+//$myfile = fopen("param-1.txt", "w") or die("Unable to open file!");
 //fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch );
 //fclose($myfile);
 

@@ -7,9 +7,9 @@ $month = $_POST["month"];
 $year = $_POST["year"];
 $branch = $_POST["branch"];
 
-//$myfile = fopen("param.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch );
-//fclose($myfile);
+$myfile = fopen("param.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch );
+fclose($myfile);
 
 $sql_get = "
  SELECT BRANCH,DAY(STR_TO_DATE(DI_DATE,'%d/%m/%Y')) as DI_DATE,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
@@ -30,9 +30,9 @@ foreach ($results as $result) {
       "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 
-//$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $sql_get);
-//fclose($myfile);
+$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $sql_get);
+fclose($myfile);
 
 echo json_encode($return_arr);
 
