@@ -47,9 +47,9 @@ if ($_POST["action"] === 'SEARCH_DATA') {
 
                 $sql_ins1 .= $sql_ins;
 
-                $my_file = fopen("SEARCH_DATA-3.txt", "w") or die("Unable to open file!");
-                fwrite($my_file, $sql_ins1);
-                fclose($my_file);
+                //$my_file = fopen("SEARCH_DATA-3.txt", "w") or die("Unable to open file!");
+                //fwrite($my_file, $sql_ins1);
+                //fclose($my_file);
 
                 $query = $conn->prepare($sql_ins);
                 $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
