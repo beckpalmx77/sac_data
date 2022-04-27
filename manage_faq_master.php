@@ -23,8 +23,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page'] ?>">Home</a>
-                            </li>
+                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page']?>">Home</a></li>
                             <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
                             <li class="breadcrumb-item active"
                                 aria-current="page"><?php echo urldecode($_GET['s']) ?></li>
@@ -39,31 +38,33 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-body">
                                     <section class="container-fluid">
 
-                                        <!--div class="col-md-12 col-md-offset-2">
-                                            <label for="province"
+                                        <div class="col-md-12 col-md-offset-2">
+                                            <label for="name_t"
                                                    class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
 
                                             <button type='button' name='btnAdd' id='btnAdd'
                                                     class='btn btn-primary btn-xs'>Add
                                                 <i class="fa fa-plus"></i>
                                             </button>
-                                        </div-->
+                                        </div>
 
                                         <div class="col-md-12 col-md-offset-2">
                                             <table id='TableRecordList' class='display dataTable'>
                                                 <thead>
                                                 <tr>
-                                                    <th>รหัส</th>
-                                                    <th>ชื่อ</th>
-                                                    <th>จังหวัด</th>
+                                                    <th>รหัสคำถาม</th>
+                                                    <th>คำถาม</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
-                                                    <th>รหัส</th>
-                                                    <th>ชื่อ</th>
-                                                    <th>จังหวัด</th>
+                                                    <th>รหัสคำถาม</th>
+                                                    <th>คำถาม</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
@@ -87,37 +88,32 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <div class="modal-body">
 
                                                                 <div class="form-group">
-                                                                    <label for="customer_id" class="control-label">รหัสลูกค้า</label>
-                                                                    <input type="customer_id" class="form-control"
-                                                                           id="customer_id" name="customer_id"
+                                                                    <label for="faq_id" class="control-label">รหัสคำถาม</label>
+                                                                    <input type="faq_id" class="form-control"
+                                                                           id="faq_id" name="faq_id"
                                                                            readonly="true"
                                                                            placeholder="สร้างอัตโนมัติ">
                                                                 </div>
 
                                                                 <div class="form-group">
-                                                                    <label for="f_name" class="control-label">ชื่อลูกค้า</label>
-                                                                    <input type="f_name" class="form-control"
-                                                                           id="f_name" name="f_name"
-                                                                           readonly="true"
-                                                                           placeholder="">
+                                                                    <label for="name_t"
+                                                                           class="control-label">คำถาม</label>
+                                                                    <input type="text" class="form-control"
+                                                                           id="faq_desc"
+                                                                           name="faq_desc"
+                                                                           required="required"
+                                                                           placeholder="คำถาม">
                                                                 </div>
 
                                                                 <div class="form-group">
-                                                                    <label for="credit" class="control-label">วงเงิน</label>
-                                                                    <input type="credit" class="form-control"
-                                                                           id="credit" name="credit"
-                                                                           readonly="true"
-                                                                           placeholder="">
+                                                                    <label for="status" class="control-label">Status</label>
+                                                                    <select id="status" name="status"
+                                                                            class="form-control" data-live-search="true"
+                                                                            title="Please select">
+                                                                        <option>Active</option>
+                                                                        <option>Inactive</option>
+                                                                    </select>
                                                                 </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="phone" class="control-label">โทรฯ</label>
-                                                                    <input type="phone" class="form-control"
-                                                                           id="phone" name="phone"
-                                                                           readonly="true"
-                                                                           placeholder="">
-                                                                </div>
-
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -162,14 +158,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <thead>
                                                                 <tr>
                                                                     <th>รหัส</th>
-                                                                    <th>ยี่ห้อ-ชื่อทางการค้า</th>
+                                                                    <th>หน่วยนับ</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tfoot>
                                                                 <tr>
                                                                     <th>รหัส</th>
-                                                                    <th>ยี่ห้อ-ชื่อทางการค้า</th>
+                                                                    <th>หน่วยนับ</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </tfoot>
@@ -179,7 +175,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 </div>
                                             </div>
                                         </div>
-                                    </section>
                                 </div>
                             </div>
                         </div>
@@ -249,14 +244,14 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#province").blur(function () {
+        $("#faq_desc").blur(function () {
             let method = $('#action').val();
             if (method === "ADD") {
-                let f_name = $('#f_name').val();
-                let province = $('#province').val();
-                let formData = {action: "SEARCH", f_name: f_name, province: province};
+                let faq_id = $('#faq_id').val();
+                let faq_desc = $('#faq_desc').val();
+                let formData = {action: "SEARCH", faq_id: faq_id, faq_desc: faq_desc};
                 $.ajax({
-                    url: 'model/manage_unit_process.php',
+                    url: 'model/manage_faq_process.php',
                     method: "POST",
                     data: formData,
                     success: function (data) {
@@ -272,7 +267,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_CUSTOMER", sub_action: "GET_MASTER"};
+            let formData = {action: "GET_FAQ", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -291,14 +286,15 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_customer_ar_process.php',
+                    'url': 'model/manage_faq_process.php',
                     'data': formData
                 },
                 'columns': [
-                    {data: 'customer_id'},
-                    {data: 'f_name'},
-                    {data: 'province'},
-                    {data: 'detail'}
+                    {data: 'faq_id'},
+                    {data: 'faq_desc'},
+                    {data: 'status'},
+                    {data: 'update'},
+                    {data: 'delete'}
                 ]
             });
 
@@ -308,7 +304,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#save').attr('disabled', 'disabled');
                 let formData = $(this).serialize();
                 $.ajax({
-                    url: 'model/manage_customer_ar_process.php',
+                    url: 'model/manage_faq_process.php',
                     method: "POST",
                     data: formData,
                     success: function (data) {
@@ -324,69 +320,13 @@ if (strlen($_SESSION['alogin']) == "") {
         });
     </script>
 
-
-    <script>
-
-        $("#TableRecordList").on('click', '.detail', function () {
-            let id = $(this).attr("id");
-            //alert(id);
-            let formData = {action: "GET_DATA", id: id};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_customer_ar_process.php',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    let len = response.length;
-                    for (let i = 0; i < len; i++) {
-                        let id = response[i].id;
-                        let customer_id = response[i].customer_id;
-                        let tax_id = response[i].tax_id;
-                        let citizend_id = response[i].citizend_id;
-                        let f_name = response[i].f_name;
-                        let phone = response[i].phone;
-                        let province = response[i].province;
-                        let amphure = response[i].amphure;
-                        let tumbol = response[i].tumbol;
-                        let zipcode = response[i].zipcode;
-                        let lat = response[i].lat;
-                        let long = response[i].long;
-                        let status = response[i].status;
-
-                        $('#recordModal').modal('show');
-                        $('#id').val(id);
-                        $('#customer_id').val(customer_id);
-                        $('#tax_id').val(tax_id);
-                        $('#citizend_id').val(citizend_id);
-                        $('#f_name').val(f_name);
-                        $('#phone').val(phone);
-                        $('#province').val(province);
-                        $('#amphure').val(amphure);
-                        $('#tumbol').val(tumbol);
-                        $('#zipcode').val(zipcode);
-                        $('#lat').val(lat);
-                        $('#long').val(long);
-                        $('#status').val(status);
-                        $('.modal-title').html("<i class='fa fa-plus'></i> Detail Record");
-                        $('#action').val('UPDATE');
-                        $('#save').val('Save');
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        });
-
-    </script>
-
     <script>
         $(document).ready(function () {
             $("#btnAdd").click(function () {
                 $('#recordModal').modal('show');
                 $('#id').val("");
-                $('#f_name').val("");
-                $('#province').val("");
+                $('#faq_id').val("");
+                $('#faq_desc').val("");
                 $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
                 $('#action').val('ADD');
                 $('#save').val('Save');
@@ -402,22 +342,21 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_customer_ar_process.php',
+                url: 'model/manage_faq_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let f_name = response[i].f_name;
-                        let province = response[i].province;
+                        let faq_id = response[i].faq_id;
+                        let faq_desc = response[i].faq_desc;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
-                        $('#f_name').val(f_name);
-                        $('#phone').val(phone);
-                        $('#province').val(province);
+                        $('#faq_id').val(faq_id);
+                        $('#faq_desc').val(faq_desc);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action').val('UPDATE');
@@ -439,21 +378,21 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_customer_ar_process.php',
+                url: 'model/manage_faq_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let f_name = response[i].f_name;
-                        let province = response[i].province;
+                        let faq_id = response[i].faq_id;
+                        let faq_desc = response[i].faq_desc;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
-                        $('#f_name').val(f_name);
-                        $('#province').val(province);
+                        $('#faq_id').val(faq_id);
+                        $('#faq_desc').val(faq_desc);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
                         $('#action').val('DELETE');

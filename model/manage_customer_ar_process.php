@@ -96,6 +96,7 @@ if ($_POST["action"] === 'GET_CUSTOMER') {
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
+                "customer_id" => $row['customer_id'],
                 "f_name" => $row['f_name'],
                 "province" => $row['province'],
                 "detail" => "<button type='button' name='detail' id='" . $row['id'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Detail</button>"
