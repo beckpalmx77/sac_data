@@ -26,17 +26,39 @@ if ($_POST["action"] === 'GET_DATA') {
 
 }
 
-if ($_POST["action"] === 'SEARCH') {
-    if ($_POST["customer_name"] !== '') {
-        $customer_name = $_POST["customer_name"];
-        $sql_find = "SELECT * FROM ims_supplier WHERE customer_name = '" . $customer_name . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            echo 2;
-        } else {
-            echo 1;
+if ($_POST["action"] === 'SEARCH_DATA') {
+    if ($_POST["customer_id"] !== '') {
+        $customer_id = $_POST["customer_id"];
+        $sql_find = "SELECT * FROM ims_faq_master ";
+        $statement = $conn->query($sql_find);
+
+        //$my_file = fopen("SEARCH_DATA-1.txt", "w") or die("Unable to open file!");
+        //fwrite($my_file, $sql_find);
+        //fclose($my_file);
+
+
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($results as $result) {
+            $sql_find_detail = "SELECT * FROM ims_customer_crm WHERE customer_id = '" . $customer_id . "' AND faq_id = '" . $result['faq_id'] . "'";
+            $nRows = $conn->query($sql_find_detail)->fetchColumn();
+            if ($nRows <= 0) {
+                $sql_ins = "INSERT INTO ims_customer_crm(customer_id,faq_id) 
+                            VALUES (:customer_id,:faq_id)";
+
+                $sql_ins1 .= $sql_ins;
+
+                $my_file = fopen("SEARCH_DATA-3.txt", "w") or die("Unable to open file!");
+                fwrite($my_file, $sql_ins1);
+                fclose($my_file);
+
+                $query = $conn->prepare($sql_ins);
+                $query->bindParam(':customer_id', $customer_id, PDO::PARAM_STR);
+                $query->bindParam(':faq_id', $result['faq_id'], PDO::PARAM_STR);
+                $query->execute();
+            }
         }
     }
+    echo "1";
 }
 
 if ($_POST["action"] === 'ADD') {

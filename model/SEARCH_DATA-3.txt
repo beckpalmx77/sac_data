@@ -1,0 +1,2 @@
+INSERT INTO ims_customer_crm(customer_id,faq_id) 
+                            VALUES (:customer_id,:faq_id)

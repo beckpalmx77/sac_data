@@ -61,22 +61,28 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="modal-body">
                                                 <div class="modal-body">
                                                     <div class="form-group row">
-                                                        <input type="hidden" class="form-control"
-                                                               id="supplier_id"
-                                                               name="supplier_id">
-                                                        <div class="col-sm-6">
-                                                            <label for="supplier_name"
+                                                        <div class="col-sm-4">
+                                                            <label for="customer_id"
+                                                                   class="control-label">รหัสลูกค้า</label>
+                                                            <input type="text" class="form-control"
+                                                                   id="customer_id"
+                                                                   name="customer_id"
+                                                                   required="required"
+                                                                   placeholder="รหัสลูกค้า">
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <label for="f_name"
                                                                    class="control-label">ชื่อลูกค้า</label>
                                                             <input type="text" class="form-control"
-                                                                   id="supplier_name"
-                                                                   name="supplier_name"
+                                                                   id="f_name"
+                                                                   name="f_name"
                                                                    required="required"
                                                                    placeholder="ชื่อลูกค้า">
                                                         </div>
                                                         <div class="col-sm-2">
                                                             <label for="CusModal"
                                                                    class="control-label"> เลือกชื่อลูกค้า </label>
-                                                            <a data-toggle="modal" href="#SearchSupModal"
+                                                            <a data-toggle="modal" href="#SearchCusCrmModal"
                                                                class="btn btn-primary">
                                                                 Click <i class="fa fa-search"
                                                                          aria-hidden="true"></i>
@@ -100,18 +106,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                         </tr>
                                                         </thead>
                                                     </table>
-
-                                                    <div class="form-group">
-                                                        <label for="status"
-                                                               class="control-label">Status</label>
-                                                        <select id="status" name="status"
-                                                                class="form-control"
-                                                                data-live-search="true"
-                                                                title="Please select">
-                                                            <option>Active</option>
-                                                            <option>Inactive</option>
-                                                        </select>
-                                                    </div>
 
                                                 </div>
                                             </div>
@@ -273,49 +267,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </div>
 
 
-                                        <div class="modal fade" id="SearchProductModal">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Modal title</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×
-                                                        </button>
-                                                    </div>
-                                                    <div class="container"></div>
-                                                    <div class="modal-body">
-                                                        <div class="modal-body">
-                                                            <table cellpadding="0" cellspacing="0" border="0"
-                                                                   class="display"
-                                                                   id="TableProductList"
-                                                                   width="100%">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>สินค้า</th>
-                                                                    <th>รหัสหน่วยนับ</th>
-                                                                    <th>หน่วยนับ</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tfoot>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>สินค้า</th>
-                                                                    <th>รหัสหน่วยนับ</th>
-                                                                    <th>หน่วยนับ</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </tfoot>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="modal fade" id="SearchSupModal">
+                                        <div class="modal fade" id="SearchCusCrmModal">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -332,7 +284,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <table cellpadding="0" cellspacing="0" border="0"
                                                                    class="display"
-                                                                   id="TableSupplierList"
+                                                                   id="TableCustomerList"
                                                                    width="100%">
                                                                 <thead>
                                                                 <tr>
@@ -407,7 +359,9 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/Calculate.js"></script>
     <!-- Javascript for this page -->
 
-    <script src="js/modal/show_supplier_modal.js"></script>
+    <script src="js/modal/show_customer_crm_modal.js"></script>
+
+
     <script src="js/modal/show_product_modal.js"></script>
     <script src="js/modal/show_unit_modal.js"></script>
 
@@ -508,6 +462,33 @@ if (strlen($_SESSION['alogin']) == "") {
             }
 
         });
+    </script>
+
+    <script>
+        function Save_Answer() {
+
+            let customer_id = $('#customer_id').val();
+
+            alert(customer_id);
+
+            let formData = {action: "SEARCH_DATA", customer_id: customer_id};
+            $.ajax({
+                type: "POST",
+                url: 'model/manage_customer_crm_process.php',
+                dataType: "json",
+                data: formData,
+                success: function (response) {
+                    let len = response.length;
+                    for (let i = 0; i < len; i++) {
+
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
+
+        }
     </script>
 
     </body>

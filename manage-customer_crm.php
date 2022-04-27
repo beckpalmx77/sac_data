@@ -25,7 +25,8 @@ if (strlen($_SESSION['alogin']) == "") {
                         <ol class="breadcrumb">
                             <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
                             <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
-                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page']?>">Home</a></li>
+                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page'] ?>">Home</a>
+                            </li>
                             <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
                             <li class="breadcrumb-item active"
                                 aria-current="page"><?php echo urldecode($_GET['s']) ?></li>
