@@ -469,8 +469,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
             let customer_id = $('#customer_id').val();
 
-            alert(customer_id);
-
             let formData = {action: "SEARCH_DATA", customer_id: customer_id};
             $.ajax({
                 type: "POST",
