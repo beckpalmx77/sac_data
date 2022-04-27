@@ -23,8 +23,9 @@ if (strlen($_SESSION['alogin']) == "") {
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page'] ?>">Home</a>
-                            </li>
+                            <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
+                            <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
+                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page']?>">Home</a></li>
                             <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
                             <li class="breadcrumb-item active"
                                 aria-current="page"><?php echo urldecode($_GET['s']) ?></li>
@@ -38,21 +39,34 @@ if (strlen($_SESSION['alogin']) == "") {
                                 </div>
                                 <div class="card-body">
                                     <section class="container-fluid">
+
+                                        <div class="col-md-12 col-md-offset-2">
+                                            <label for="supplier_name"
+                                                   class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
+
+                                            <button type='button' name='btnAdd' id='btnAdd'
+                                                    class='btn btn-primary btn-xs'>Add
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+
                                         <div class="col-md-12 col-md-offset-2">
                                             <table id='TableRecordList' class='display dataTable'>
                                                 <thead>
                                                 <tr>
-                                                    <th>รหัส</th>
-                                                    <th>ชื่อ</th>
-                                                    <th>จังหวัด</th>
+                                                    <th>รหัสลูกค้า</th>
+                                                    <th>ชื่อลูกค้า</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
-                                                    <th>รหัส</th>
-                                                    <th>ชื่อ</th>
-                                                    <th>จังหวัด</th>
+                                                    <th>รหัสลูกค้า</th>
+                                                    <th>ชื่อลูกค้า</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </tfoot>
@@ -75,43 +89,61 @@ if (strlen($_SESSION['alogin']) == "") {
                                                         <div class="modal-body">
                                                             <div class="modal-body">
 
+
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-4">
+                                                                        <label for="customer_id" class="control-label">รหัสลูกค้า</label>
+                                                                        <input type="customer_id" class="form-control"
+                                                                               id="customer_id" name="customer_id"
+                                                                               readonly="true"
+                                                                               placeholder="รหัสลูกค้า สร้างอัตโนมัติ">
+                                                                    </div>
+                                                                    <div class="col-sm-8">
+                                                                        <label for="supplier_name"
+                                                                               class="control-label">ชื่อลูกค้า</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="supplier_name"
+                                                                               name="supplier_name"
+                                                                               required="required"
+                                                                               placeholder="ชื่อลูกค้า">
+                                                                    </div>
+                                                                </div>
                                                                 <div class="form-group">
-                                                                    <label for="customer_id" class="control-label">รหัสลูกค้า</label>
-                                                                    <input type="customer_id" class="form-control"
-                                                                           id="customer_id" name="customer_id"
-                                                                           readonly="true"
-                                                                           placeholder="สร้างอัตโนมัติ">
+                                                                    <label for="address"
+                                                                           class="control-label">ที่อยู่</label>
+                                                                    <input type="address" class="form-control"
+                                                                           id="address" name="address"
+                                                                           required="required"
+                                                                           placeholder="ที่อยู่">
                                                                 </div>
 
                                                                 <div class="form-group">
-                                                                    <label for="f_name" class="control-label">ชื่อลูกค้า</label>
-                                                                    <input type="f_name" class="form-control"
-                                                                           id="f_name" name="f_name"
-                                                                           readonly="true"
-                                                                           placeholder="">
+                                                                    <label for="phone"
+                                                                           class="control-label">โทรศัพท์</label>
+                                                                    <input type="text" class="form-control"
+                                                                           id="phone"
+                                                                           name="phone"
+                                                                           required="required"
+                                                                           placeholder="โทรศัพท์">
                                                                 </div>
 
                                                                 <div class="form-group">
-                                                                    <label for="credit" class="control-label">วงเงิน</label>
-                                                                    <input type="credit" class="form-control"
-                                                                           id="credit" name="credit"
-                                                                           readonly="true"
-                                                                           placeholder="">
+                                                                    <label for="status"
+                                                                           class="control-label">Status</label>
+                                                                    <select id="status" name="status"
+                                                                            class="form-control"
+                                                                            data-live-search="true"
+                                                                            title="Please select">
+                                                                        <option>Active</option>
+                                                                        <option>Inactive</option>
+                                                                    </select>
                                                                 </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="phone" class="control-label">โทรฯ</label>
-                                                                    <input type="phone" class="form-control"
-                                                                           id="phone" name="phone"
-                                                                           readonly="true"
-                                                                           placeholder="">
-                                                                </div>
-
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <input type="hidden" name="id" id="id"/>
-                                                            <input type="hidden" name="action" id="action" value=""/>
+                                                            <input type="hidden" name="action" id="action"
+                                                                   value=""/>
                                                             <span class="icon-input-btn">
                                                                 <i class="fa fa-check"></i>
                                                             <input type="submit" name="save" id="save"
@@ -129,46 +161,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </div>
 
 
-                                        <div class="modal fade" id="SearchModal">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Modal title</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                                aria-hidden="true">×
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="container"></div>
-                                                    <div class="modal-body">
-
-                                                        <div class="modal-body">
-
-                                                            <table cellpadding="0" cellspacing="0" border="0"
-                                                                   class="display"
-                                                                   id="TableUnitList"
-                                                                   width="100%">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>ยี่ห้อ-ชื่อทางการค้า</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tfoot>
-                                                                <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>ยี่ห้อ-ชื่อทางการค้า</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                                                                </tfoot>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
                                 </div>
                             </div>
                         </div>
@@ -195,6 +187,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/myadmin.min.js"></script>
+    <script src="js/popup.js"></script>
 
     <!-- Page level plugins -->
 
@@ -238,14 +231,13 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#province").blur(function () {
+        $("#customer_id").blur(function () {
             let method = $('#action').val();
             if (method === "ADD") {
-                let f_name = $('#f_name').val();
-                let province = $('#province').val();
-                let formData = {action: "SEARCH", f_name: f_name, province: province};
+                let customer_id = $('#customer_id').val();
+                let formData = {action: "SEARCH", customer_id: customer_id};
                 $.ajax({
-                    url: 'model/manage_unit_process.php',
+                    url: 'model/manage_customer_crm_process.php',
                     method: "POST",
                     data: formData,
                     success: function (data) {
@@ -261,7 +253,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_CUSTOMER", sub_action: "GET_MASTER"};
+            let formData = {action: "GET_SUPPLIER", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -280,14 +272,15 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_customer_ar_process.php',
+                    'url': 'model/manage_customer_crm_process.php',
                     'data': formData
                 },
                 'columns': [
                     {data: 'customer_id'},
-                    {data: 'f_name'},
-                    {data: 'province'},
-                    {data: 'detail'}
+                    {data: 'customer_name'},
+                    {data: 'status'},
+                    {data: 'update'},
+                    {data: 'delete'}
                 ]
             });
 
@@ -297,7 +290,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#save').attr('disabled', 'disabled');
                 let formData = $(this).serialize();
                 $.ajax({
-                    url: 'model/manage_customer_ar_process.php',
+                    url: 'model/manage_customer_crm_process.php',
                     method: "POST",
                     data: formData,
                     success: function (data) {
@@ -313,74 +306,17 @@ if (strlen($_SESSION['alogin']) == "") {
         });
     </script>
 
-
     <script>
 
-        $("#TableRecordList").on('click', '.detail', function () {
-            let id = $(this).attr("id");
-            //alert(id);
-            let formData = {action: "GET_DATA", id: id};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_customer_ar_process.php',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    let len = response.length;
-                    for (let i = 0; i < len; i++) {
-                        let id = response[i].id;
-                        let customer_id = response[i].customer_id;
-                        let tax_id = response[i].tax_id;
-                        let citizend_id = response[i].citizend_id;
-                        let f_name = response[i].f_name;
-                        let phone = response[i].phone;
-                        let province = response[i].province;
-                        let amphure = response[i].amphure;
-                        let tumbol = response[i].tumbol;
-                        let zipcode = response[i].zipcode;
-                        let lat = response[i].lat;
-                        let long = response[i].long;
-                        let status = response[i].status;
-
-                        $('#recordModal').modal('show');
-                        $('#id').val(id);
-                        $('#customer_id').val(customer_id);
-                        $('#tax_id').val(tax_id);
-                        $('#citizend_id').val(citizend_id);
-                        $('#f_name').val(f_name);
-                        $('#phone').val(phone);
-                        $('#province').val(province);
-                        $('#amphure').val(amphure);
-                        $('#tumbol').val(tumbol);
-                        $('#zipcode').val(zipcode);
-                        $('#lat').val(lat);
-                        $('#long').val(long);
-                        $('#status').val(status);
-                        $('.modal-title').html("<i class='fa fa-plus'></i> Detail Record");
-                        $('#action').val('UPDATE');
-                        $('#save').val('Save');
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
+        $("#btnAdd").click(function () {
+            let main_menu = document.getElementById("main_menu").value;
+            let sub_menu = document.getElementById("sub_menu").value;
+            let url = "create-customer_crm.php?title=สร้างแบบสอบถามลูกค้า"
+                + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
+                + '&action=ADD';
+            OpenPopupCenter(url, "", "");
         });
 
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $("#btnAdd").click(function () {
-                $('#recordModal').modal('show');
-                $('#id').val("");
-                $('#f_name').val("");
-                $('#province').val("");
-                $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
-                $('#action').val('ADD');
-                $('#save').val('Save');
-            });
-        });
     </script>
 
     <script>
@@ -391,22 +327,25 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_customer_ar_process.php',
+                url: 'model/manage_customer_crm_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let f_name = response[i].f_name;
-                        let province = response[i].province;
+                        let customer_id = response[i].customer_id;
+                        let supplier_name = response[i].supplier_name;
+                        let address = response[i].address;
+                        let phone = response[i].phone;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
-                        $('#f_name').val(f_name);
+                        $('#customer_id').val(customer_id);
+                        $('#supplier_name').val(supplier_name);
+                        $('#address').val(address);
                         $('#phone').val(phone);
-                        $('#province').val(province);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action').val('UPDATE');
@@ -428,21 +367,25 @@ if (strlen($_SESSION['alogin']) == "") {
             let formData = {action: "GET_DATA", id: id};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_customer_ar_process.php',
+                url: 'model/manage_customer_crm_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
-                        let f_name = response[i].f_name;
-                        let province = response[i].province;
+                        let customer_id = response[i].customer_id;
+                        let supplier_name = response[i].supplier_name;
+                        let address = response[i].address;
+                        let phone = response[i].phone;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
-                        $('#f_name').val(f_name);
-                        $('#province').val(province);
+                        $('#customer_id').val(customer_id);
+                        $('#supplier_name').val(supplier_name);
+                        $('#address').val(address);
+                        $('#phone').val(phone);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
                         $('#action').val('DELETE');
