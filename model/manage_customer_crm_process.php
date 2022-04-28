@@ -67,9 +67,9 @@ if ($_POST["action_detail"] === 'UPDATE') {
         $faq_anwser = $_POST["faq_anwser"];
         $sql_find = "SELECT * FROM ims_customer_crm WHERE customer_id = '" . $customer_id . "' AND faq_id = '" . $faq_id . "'" ;
 
-        $myfile = fopen("sql_faq.txt", "w") or die("Unable to open file!");
-        fwrite($myfile,  $id  . " | " . $sql_find);
-        fclose($myfile);
+        //$myfile = fopen("sql_faq.txt", "w") or die("Unable to open file!");
+        //fwrite($myfile,  $id  . " | " . $sql_find);
+        //fclose($myfile);
 
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
