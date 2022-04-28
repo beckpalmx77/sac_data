@@ -57,7 +57,7 @@ foreach ($BranchRecords as $rows) {
     </style>
 </head>
 
-<body onload="showGraph_Monthly();showGraph_Tires_Brand_Monthly();">
+<body onload="showGraph_Monthly();showGraph_Tires_Brand_Monthly();showGraph_Part_Monthly();">
 <div class="card">
     <div class="card-header bg-success text-white">
         <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขาย เดือน <?php echo $month_name . " " . $year; ?>
@@ -144,6 +144,73 @@ include("display_data_cockpit_detail_grp_monthly.php");
 
             </tbody>
             <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
+        </table>
+    </div>
+
+</div>
+
+
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายยางแต่ละยี่ห้อ
+        เดือน <?php echo $month_name . " " . $year; ?>
+        <?php echo $branch_name; ?>
+    </div>
+    <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
+    <input type="hidden" name="year" id="year" value="<?php echo $year; ?>">
+    <input type="hidden" name="branch" id="branch" value="<?php echo $_POST["branch"]; ?>">
+    <input type="hidden" name="branch_name" id="branch_name" class="form-control" value="<?php echo $branch_name; ?>">
+    <div class="card-body">
+        <div id="chart-container">
+            <canvas id="graphCanvas_Part_Monthly"></canvas>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <table id="example" class="display table table-striped table-bordered"
+               cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>อะไหล่</th>
+                <th>ยอดขาย</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>อะไหล่</th>
+                <th>ยอดขาย</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            <?php
+            $total = 0;
+            $total_sale = 0;
+            $sql_brand = " SELECT SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+ FROM ims_product_sale_cockpit
+ WHERE PGROUP = 'P2'
+ AND DI_YEAR = '" . $year . "'
+ AND DI_MONTH = '" . $month . "'
+ AND BRANCH = '" . $branch . "'
+ GROUP BY SKU_CAT,ICCAT_NAME
+ ORDER BY SKU_CAT ";
+
+            $statement_brand = $conn->query($sql_brand);
+            $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results_brand
+
+            as $row_brand) { ?>
+
+            <tr>
+                <td><?php echo htmlentities($row_brand['ICCAT_NAME']); ?></td>
+                <!--td><?php echo htmlentities(number_format($row_brand['TRD_QTY'], 2)); ?></td-->
+                <!--?php $total = $total + $row_brand['TRD_QTY']; ?-->
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'], 2)); ?></p></td>
+                <?php $total_sale = $total_sale + $row_brand['TRD_G_KEYIN']; ?>
+                <?php } ?>
+
+            </tbody>
+            <?php echo "รวม : อะไหล่ทั้งหมด จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
         </table>
     </div>
 
@@ -261,6 +328,74 @@ include("display_data_cockpit_detail.php");
                 }
 
                 new Chart("graphCanvas_Brand_Monthly", {
+                    type: "pie",
+                    data: {
+                        labels: label_name,
+                        datasets: [{
+                            backgroundColor: barColors,
+                            data: total
+                        }]
+                    },
+                    options: {
+                        title: {
+                            display: true,
+                            text: ""
+                        }
+                    }
+                });
+
+            })
+
+
+        }
+    }
+
+</script>
+
+<script>
+
+    function showGraph_Part_Monthly() {
+        {
+
+            let month = $("#month").val();
+            let year = $("#year").val();
+            let branch = $("#branch").val();
+
+            let barColors = [
+                "#0a4dd3",
+                "#17c024",
+                "#f3661a",
+                "#f81b61",
+                "#0c3f10",
+                "#1da5f2",
+                "#0e0b71",
+                "#e9e207",
+                "#07e9d8",
+                "#b91d47",
+                "#af43f5",
+                "#00aba9",
+                "#fcae13",
+                "#1d7804",
+                "#1a8cec",
+                "#50e310",
+                "#fa6ae4"
+            ];
+
+            $.post("engine/chart_data_pie_part_monthly.php", {
+                month: month,
+                year: year,
+                branch: branch
+            }, function (data) {
+                console.log(data);
+                let label_name = [];
+                let total = [];
+                for (let i in data) {
+                    label_name.push(data[i].ICCAT_NAME);
+                    total.push(parseFloat(data[i].TRD_G_KEYIN).toFixed(2));
+                    //alert(label);
+                }
+
+                new Chart("graphCanvas_Part_Monthly", {
                     type: "pie",
                     data: {
                         labels: label_name,
