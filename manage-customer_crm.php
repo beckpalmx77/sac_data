@@ -43,11 +43,10 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         <div class="col-md-12 col-md-offset-2">
                                             <label for="supplier_name"
-                                                   class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
+                                                   class="control-label"><b>เพิ่ม-แก้ไข <?php echo urldecode($_GET['s']) ?></b></label>
 
                                             <button type='button' name='btnAdd' id='btnAdd'
-                                                    class='btn btn-primary btn-xs'>Add
-                                                <i class="fa fa-plus"></i>
+                                                    class='btn btn-primary btn-xs'>Add - Edit
                                             </button>
                                         </div>
 
@@ -57,18 +56,18 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <tr>
                                                     <th>รหัสลูกค้า</th>
                                                     <th>ชื่อลูกค้า</th>
-                                                    <th>Status</th>
+                                                    <!--th>Status</th>
                                                     <th>Action</th>
-                                                    <th>Action</th>
+                                                    <th>Action</th-->
                                                 </tr>
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
                                                     <th>รหัสลูกค้า</th>
                                                     <th>ชื่อลูกค้า</th>
-                                                    <th>Status</th>
+                                                    <!--th>Status</th>
                                                     <th>Action</th>
-                                                    <th>Action</th>
+                                                    <th>Action</th-->
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -254,7 +253,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         $(document).ready(function () {
-            let formData = {action: "GET_SUPPLIER", sub_action: "GET_MASTER"};
+            let formData = {action: "GET_CUSTOMER_DATA_CRM", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
                 'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
                 'language': {
@@ -278,10 +277,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 },
                 'columns': [
                     {data: 'customer_id'},
-                    {data: 'customer_name'},
-                    {data: 'status'},
-                    {data: 'update'},
-                    {data: 'delete'}
+                    {data: 'customer_name'}
                 ]
             });
 

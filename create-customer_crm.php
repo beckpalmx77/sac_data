@@ -91,41 +91,45 @@ if (strlen($_SESSION['alogin']) == "") {
                                                         </div>
                                                     </div>
 
-                                                    <table cellpadding="0" cellspacing="0" border="0"
-                                                           class="display"
-                                                           id="TablePurchaseDetailList"
-                                                           width="100%">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>สินค้า</th>
-                                                            <th>จำนวน</th>
-                                                            <th>หน่วยนับ</th>
-                                                            <th>Action</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                        </thead>
-                                                    </table>
+                                                    <div class="col-md-12 col-md-offset-2">
+                                                        <table id='TableRecordList' class='display dataTable'>
+                                                            <thead>
+                                                            <tr>
+                                                                <th>รหัสคำถาม</th>
+                                                                <th>คำถาม</th>
+                                                                <th>คำตอบ</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tfoot>
+                                                            <tr>
+                                                                <th>รหัสคำถาม</th>
+                                                                <th>คำถาม</th>
+                                                                <th>คำตอบ</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                            </tfoot>
+                                                        </table>
 
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <?php include("includes/stick_menu.php"); ?>
+                                                <?php include("includes/stick_menu.php"); ?>
 
-                                            <div class="modal-footer">
-                                                <input type="hidden" name="id" id="id"/>
-                                                <input type="hidden" name="save_status" id="save_status"/>
-                                                <input type="hidden" name="action" id="action"
-                                                       value=""/>
-                                                <button type="button" class="btn btn-primary"
-                                                        id="btnSave">Save <i
-                                                            class="fa fa-check"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-danger"
-                                                        id="btnClose">Close <i
-                                                            class="fa fa-window-close"></i>
-                                                </button>
-                                            </div>
+                                                <div class="modal-footer">
+                                                    <input type="hidden" name="id" id="id"/>
+                                                    <input type="hidden" name="save_status" id="save_status"/>
+                                                    <input type="hidden" name="action" id="action"
+                                                           value=""/>
+                                                    <button type="button" class="btn btn-primary"
+                                                            id="btnSave">Save <i
+                                                                class="fa fa-check"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger"
+                                                            id="btnClose">Close <i
+                                                                class="fa fa-window-close"></i>
+                                                    </button>
+                                                </div>
                                         </form>
 
                                         <div class="modal fade" id="recordModal">
@@ -146,14 +150,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                        name="KeyAddDetail" value="">
                                                             </div>
                                                             <div class="col-sm-5">
-                                                                <input type="hidden" class="form-control"
-                                                                       id="doc_no_detail"
-                                                                       name="doc_no_detail" value="">
-                                                            </div>
-                                                            <div class="col-sm-5">
-                                                                <input type="hidden" class="form-control"
-                                                                       id="doc_date_detail"
-                                                                       name="doc_date_detail" value="">
+                                                                <input type="text" class="form-control"
+                                                                       id="customer_detail_id"
+                                                                       name="customer_detail_id" value="">
                                                             </div>
                                                         </div>
 
@@ -162,83 +161,39 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                 <div class="form-group row">
                                                                     <div class="col-sm-5">
-                                                                        <label for="product_id"
-                                                                               class="control-label">รหัสสินค้า/วัสดุ</label>
-                                                                        <input type="product_id"
+                                                                        <label for="faq_id"
+                                                                               class="control-label">รหัสคำถาม</label>
+                                                                        <input type="faq_id"
                                                                                class="form-control"
-                                                                               id="product_id" name="product_id"
+                                                                               id="faq_id" name="faq_id"
                                                                                required="required"
                                                                                readonly="true"
-                                                                               placeholder="รหัสสินค้า/วัสดุ">
-                                                                    </div>
-
-                                                                    <div class="col-sm-5">
-                                                                        <label for="name_t"
-                                                                               class="control-label">ชื่อสินค้า/วัสดุ</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="name_t"
-                                                                               name="name_t"
-                                                                               required="required"
-                                                                               readonly="true"
-                                                                               placeholder="ชื่อสินค้า/วัสดุ">
-                                                                    </div>
-
-                                                                    <div class="col-sm-2">
-                                                                        <label for="quantity"
-                                                                               class="control-label">เลือก</label>
-
-                                                                        <a data-toggle="modal"
-                                                                           href="#SearchProductModal"
-                                                                           class="btn btn-primary">
-                                                                            Click <i class="fa fa-search"
-                                                                                     aria-hidden="true"></i>
-                                                                        </a>
+                                                                               placeholder="รหัสคำถาม">
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="form-group row">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="quantity"
-                                                                               class="control-label">จำนวน</label>
+                                                                    <div class="col-sm-12">
+                                                                        <label for="faq_desc"
+                                                                               class="control-label">คำถาม</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="quantity"
-                                                                               name="quantity"
-                                                                               required="required"
-                                                                               placeholder="จำนวน">
-                                                                    </div>
-                                                                    <input type="hidden" class="form-control"
-                                                                           id="unit_id"
-                                                                           name="unit_id">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="unit_name"
-                                                                               class="control-label">หน่วยนับ</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="unit_name"
-                                                                               name="unit_name"
+                                                                               id="faq_desc"
+                                                                               name="faq_desc"
                                                                                required="required"
                                                                                readonly="true"
-                                                                               placeholder="หน่วยนับ">
+                                                                               placeholder="คำถาม">
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="form-group row">
-                                                                    <div class="col-sm-5">
-                                                                        <label for="price"
-                                                                               class="control-label">ราคา/หน่วย</label>
+                                                                    <div class="col-sm-12">
+                                                                        <label for="faq_anwser"
+                                                                               class="control-label">คำตอบ</label>
                                                                         <input type="text" class="form-control"
-                                                                               id="price"
-                                                                               name="price"
+                                                                               id="faq_anwser"
+                                                                               name="faq_anwser"
                                                                                required="required"
-                                                                               placeholder="ราคา/หน่วย">
-                                                                    </div>
-                                                                    <div class="col-sm-5">
-                                                                        <label for="total_price"
-                                                                               class="control-label">ราคารวม</label>
-                                                                        <input type="text" class="form-control"
-                                                                               id="total_price"
-                                                                               name="total_price"
-                                                                               required="required"
-                                                                               placeholder="ราคารวม">
+                                                                               placeholder="คำตอบ">
                                                                     </div>
                                                                 </div>
 
@@ -476,9 +431,11 @@ if (strlen($_SESSION['alogin']) == "") {
                 dataType: "json",
                 data: formData,
                 success: function (response) {
+
+                    Load_Answer();
+
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
-
                     }
                 },
                 error: function (response) {
@@ -487,6 +444,109 @@ if (strlen($_SESSION['alogin']) == "") {
             });
 
         }
+    </script>
+
+    <script>
+        function Load_Answer() {
+            let customer_id = $('#customer_id').val();
+            let formData = {action: "GET_DATA_CRM", sub_action: "GET_MASTER", customer_id: customer_id};
+            let dataRecords = $('#TableRecordList').DataTable({
+                'lengthMenu': [[5, 10, 20, 50, 100], [5, 10, 20, 50, 100]],
+                'language': {
+                    search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
+                    info: 'หน้าที่ _PAGE_ จาก _PAGES_',
+                    infoEmpty: 'ไม่มีข้อมูล',
+                    zeroRecords: "ไม่มีข้อมูลตามเงื่อนไข",
+                    infoFiltered: '(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)',
+                    paginate: {
+                        previous: 'ก่อนหน้า',
+                        last: 'สุดท้าย',
+                        next: 'ต่อไป'
+                    }
+                },
+                'processing': true,
+                'serverSide': true,
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': 'model/manage_customer_crm_process.php',
+                    'data': formData
+                },
+                'columns': [
+                    {data: 'faq_id'},
+                    {data: 'faq_desc'},
+                    {data: 'faq_anwser'},
+                    {data: 'update'}
+                ]
+            });
+
+        }
+    </script>
+
+    <script>
+
+        $("#TableRecordList").on('click', '.update', function () {
+            let id = $(this).attr("id");
+            //alert(id);
+            let formData = {action: "GET_DATA", id: id};
+            $.ajax({
+                type: "POST",
+                url: 'model/manage_customer_crm_process.php',
+                dataType: "json",
+                data: formData,
+                success: function (response) {
+                    let len = response.length;
+                    for (let i = 0; i < len; i++) {
+                        let id = response[i].id;
+                        let customer_id = response[i].customer_id;
+                        let faq_id = response[i].faq_id;
+                        let faq_desc = response[i].faq_desc;
+                        let faq_anwser = response[i].faq_anwser;
+
+                        $('#recordModal').modal('show');
+                        $('#id').val(id);
+                        $('#customer_detail_id').val(customer_id);
+                        $('#faq_id').val(faq_id);
+                        $('#faq_desc').val(faq_desc);
+                        $('#faq_anwser').val(faq_anwser);
+                        $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
+                        $('#action').val('UPDATE');
+                        $('#action_detail').val('UPDATE');
+                        $('#save').val('Save');
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+            $("#recordModal").on('submit', '#recordForm', function (event) {
+                event.preventDefault();
+                $('#save').attr('disabled', 'disabled');
+                let formData = $(this).serialize();
+                alert(formData);
+                $.ajax({
+                    url: 'model/manage_customer_crm_process.php',
+                    method: "POST",
+                    data: formData,
+                    success: function (data) {
+                        alertify.success(data);
+                        $('#recordForm')[0].reset();
+                        $('#recordModal').modal('hide');
+                        $('#save').attr('disabled', false);
+                        dataRecords.ajax.reload();
+                    }
+                })
+            });
+            <!-- *** FOR SUBMIT FORM *** -->
+
+        });
+
     </script>
 
     </body>
