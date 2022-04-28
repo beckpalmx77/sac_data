@@ -49,5 +49,5 @@ $sql_data = " SELECT BRANCH,AR_CODE,AR_NAME, SKU_CODE ,SKU_NAME, sum(CAST(TRD_G_
         <?php $cnt = $cnt+1; ?>
         <?php } ?>
     </tbody>
-    <div><?php echo "ยอดรวมรายการทั้งหมด :   = " . number_format($total_sale, 2) . " บาท " ?></div>
+    <div><b><?php echo "ยอดรวมรายการทั้งหมด :   = " . number_format($total_sale, 2) . " บาท " ?></b></div>
 </table>

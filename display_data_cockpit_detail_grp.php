@@ -49,5 +49,5 @@ $sql_data = "  SELECT BRANCH,PGROUP,ims_pgroup.pgroup_name,sum(CAST(TRD_G_KEYIN 
         <?php $cnt = $cnt+1; ?>
         <?php } ?>
     </tbody>
-    <div><?php echo "ยอดรวมรายการ ตามกลุ่มสินค้า ทั้งหมด  = " . number_format($total_sale, 2) . " บาท " ?></div>
+    <div><b><?php echo "ยอดรวมรายการ ตามกลุ่มสินค้า ทั้งหมด  = " . number_format($total_sale, 2) . " บาท " ?></b></div>
 </table>

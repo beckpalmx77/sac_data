@@ -143,7 +143,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
                 <?php } ?>
 
             </tbody>
-            <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
+            <b><?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?></b>
         </table>
     </div>
 
@@ -152,7 +152,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
 
 <div class="card">
     <div class="card-header bg-success text-white">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายอะไหล่ 
+        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายอะไหล่
         เดือน <?php echo $month_name . " " . $year; ?>
         <?php echo $branch_name; ?>
     </div>
@@ -210,7 +210,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
                 <?php } ?>
 
             </tbody>
-            <?php echo "รวม : อะไหล่ทั้งหมด จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
+            <b><?php echo "รวม : อะไหล่ทั้งหมด จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?></b>
         </table>
     </div>
 
