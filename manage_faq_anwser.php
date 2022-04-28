@@ -52,8 +52,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <table id='TableRecordList' class='display dataTable'>
                                                 <thead>
                                                 <tr>
-                                                    <th>รหัสคำถาม</th>
-                                                    <th>คำถาม</th>
+                                                    <th>รหัสคำตอบ</th>
+                                                    <th>คำตอบ</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                     <th>Action</th>
@@ -61,8 +61,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 </thead>
                                                 <tfoot>
                                                 <tr>
-                                                    <th>รหัสคำถาม</th>
-                                                    <th>คำถาม</th>
+                                                    <th>รหัสคำตอบ</th>
+                                                    <th>คำตอบ</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                     <th>Action</th>
@@ -88,21 +88,49 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <div class="modal-body">
 
                                                                 <div class="form-group">
-                                                                    <label for="faq_id" class="control-label">รหัสคำถาม</label>
-                                                                    <input type="faq_id" class="form-control"
-                                                                           id="faq_id" name="faq_id"
+                                                                    <label for="faq_anwser_id" class="control-label">รหัสคำตอบ</label>
+                                                                    <input type="faq_anwser_id" class="form-control"
+                                                                           id="faq_anwser_id" name="faq_anwser_id"
                                                                            readonly="true"
                                                                            placeholder="สร้างอัตโนมัติ">
                                                                 </div>
 
+                                                                <div class="form-group row">
+                                                                    <input type="hidden" class="form-control"
+                                                                           id="faq_id"
+                                                                           name="faq_id">
+                                                                    <div class="col-sm-10">
+                                                                        <label for="faq_desc"
+                                                                               class="control-label">คำถาม</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="faq_desc"
+                                                                               name="faq_desc"
+                                                                               required="required"
+                                                                               placeholder="คำถาม">
+                                                                    </div>
+
+                                                                    <div class="col-sm-2">
+                                                                        <label for="quantity"
+                                                                               class="control-label">เลือก</label>
+
+                                                                        <a data-toggle="modal"
+                                                                           href="#SearchFAQModal"
+                                                                           class="btn btn-primary">
+                                                                            Click <i class="fa fa-search"
+                                                                                     aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+
+
                                                                 <div class="form-group">
                                                                     <label for="name_t"
-                                                                           class="control-label">คำถาม</label>
+                                                                           class="control-label">คำตอบ</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="faq_desc"
-                                                                           name="faq_desc"
+                                                                           id="faq_anwser"
+                                                                           name="faq_anwser"
                                                                            required="required"
-                                                                           placeholder="คำถาม">
+                                                                           placeholder="คำตอบ">
                                                                 </div>
 
                                                                 <div class="form-group">
@@ -136,7 +164,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </div>
 
 
-                                        <div class="modal fade" id="SearchModal">
+                                        <div class="modal fade" id="SearchFAQModal">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -153,19 +181,19 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <table cellpadding="0" cellspacing="0" border="0"
                                                                    class="display"
-                                                                   id="TableUnitList"
+                                                                   id="TableFAQList"
                                                                    width="100%">
                                                                 <thead>
                                                                 <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>หน่วยนับ</th>
+                                                                    <th>รหัสคำถาม</th>
+                                                                    <th>คำถาม</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tfoot>
                                                                 <tr>
-                                                                    <th>รหัส</th>
-                                                                    <th>หน่วยนับ</th>
+                                                                    <th>รหัสคำถาม</th>
+                                                                    <th>คำถาม</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </tfoot>
@@ -201,6 +229,8 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/myadmin.min.js"></script>
+
+    <script src="js/modal/show_faq_modal.js"></script>
 
     <!-- Page level plugins -->
 
@@ -244,12 +274,12 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#faq_desc").blur(function () {
+        $("#faq_anwser").blur(function () {
             let method = $('#action').val();
             if (method === "ADD") {
-                let faq_id = $('#faq_id').val();
-                let faq_desc = $('#faq_desc').val();
-                let formData = {action: "SEARCH", faq_id: faq_id, faq_desc: faq_desc};
+                let faq_anwser_id = $('#faq_anwser_id').val();
+                let faq_anwser = $('#faq_anwser').val();
+                let formData = {action: "SEARCH", faq_anwser_id: faq_anwser_id, faq_anwser: faq_anwser};
                 $.ajax({
                     url: 'model/manage_faq_anwser_process.php',
                     method: "POST",
@@ -290,8 +320,8 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'faq_id'},
-                    {data: 'faq_desc'},
+                    {data: 'faq_anwser_id'},
+                    {data: 'faq_anwser'},
                     {data: 'status'},
                     {data: 'update'},
                     {data: 'delete'}
@@ -325,8 +355,10 @@ if (strlen($_SESSION['alogin']) == "") {
             $("#btnAdd").click(function () {
                 $('#recordModal').modal('show');
                 $('#id').val("");
+                $('#faq_anwser_id').val("");
                 $('#faq_id').val("");
                 $('#faq_desc').val("");
+                $('#faq_anwser').val("");
                 $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
                 $('#action').val('ADD');
                 $('#save').val('Save');
@@ -349,14 +381,18 @@ if (strlen($_SESSION['alogin']) == "") {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
+                        let faq_anwser_id = response[i].faq_anwser_id;
                         let faq_id = response[i].faq_id;
                         let faq_desc = response[i].faq_desc;
+                        let faq_anwser = response[i].faq_anwser;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
                         $('#faq_id').val(faq_id);
                         $('#faq_desc').val(faq_desc);
+                        $('#faq_anwser_id').val(faq_anwser_id);
+                        $('#faq_anwser').val(faq_anwser);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action').val('UPDATE');
@@ -385,14 +421,18 @@ if (strlen($_SESSION['alogin']) == "") {
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
+                        let faq_anwser_id = response[i].faq_anwser_id;
                         let faq_id = response[i].faq_id;
                         let faq_desc = response[i].faq_desc;
+                        let faq_anwser = response[i].faq_anwser;
                         let status = response[i].status;
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
                         $('#faq_id').val(faq_id);
                         $('#faq_desc').val(faq_desc);
+                        $('#faq_anwser_id').val(faq_anwser_id);
+                        $('#faq_anwser').val(faq_anwser);
                         $('#status').val(status);
                         $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
                         $('#action').val('DELETE');

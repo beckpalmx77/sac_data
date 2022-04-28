@@ -13,14 +13,22 @@ if ($_POST["action"] === 'GET_DATA') {
 
     $return_arr = array();
 
-    $sql_get = "SELECT * FROM ims_faq_master WHERE id = " . $id;
+    $sql_get = "SELECT * FROM v_ims_faq_anwser "
+    . " WHERE v_ims_faq_anwser.id = " . $id;
+
+    //$myfile = fopen("myqeury_1.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $sql_get);
+    //fclose($myfile);
+
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($results as $result) {
         $return_arr[] = array("id" => $result['id'],
+            "faq_anwser_id" => $result['faq_anwser_id'],
             "faq_id" => $result['faq_id'],
             "faq_desc" => $result['faq_desc'],
+            "faq_anwser" => $result['faq_anwser'],
             "status" => $result['status']);
     }
 
@@ -30,10 +38,10 @@ if ($_POST["action"] === 'GET_DATA') {
 
 if ($_POST["action"] === 'SEARCH') {
 
-    if ($_POST["faq_desc"] !== '') {
+    if ($_POST["faq_anwser"] !== '') {
 
-        $faq_desc = $_POST["faq_desc"];
-        $sql_find = "SELECT * FROM ims_faq_master WHERE faq_desc = '" . $faq_desc . "'";
+        $faq_anwser = $_POST["faq_anwser"];
+        $sql_find = "SELECT * FROM ims_faq_anwser WHERE faq_anwser = '" . $faq_anwser . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             echo 2;
@@ -44,19 +52,22 @@ if ($_POST["action"] === 'SEARCH') {
 }
 
 if ($_POST["action"] === 'ADD') {
-    if ($_POST["faq_desc"] !== '') {
-        $faq_id = "Q-" . sprintf('%04s', LAST_ID($conn, "ims_faq_master", 'id'));
-        $faq_desc = $_POST["faq_desc"];
+    if ($_POST["faq_anwser"] !== '') {
+        $faq_anwser_id = "A-" . sprintf('%04s', LAST_ID($conn, "ims_faq_anwser", 'id'));
+        $faq_id = $_POST["faq_id"];
+        $faq_anwser = $_POST["faq_anwser"];
         $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_faq_master WHERE faq_desc = '" . $faq_desc . "'";
+        $sql_find = "SELECT * FROM ims_faq_anwser WHERE faq_anwser = '" . $faq_anwser . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             echo $dup;
         } else {
-            $sql = "INSERT INTO ims_faq_master(faq_id,faq_desc,status) VALUES (:faq_id,:faq_desc,:status)";
+            $sql = "INSERT INTO ims_faq_anwser(faq_anwser_id,faq_id,faq_anwser,status) 
+                    VALUES (:faq_anwser_id,:faq_id,:faq_anwser,:status)";
             $query = $conn->prepare($sql);
+            $query->bindParam(':faq_anwser_id', $faq_anwser_id, PDO::PARAM_STR);
             $query->bindParam(':faq_id', $faq_id, PDO::PARAM_STR);
-            $query->bindParam(':faq_desc', $faq_desc, PDO::PARAM_STR);
+            $query->bindParam(':faq_anwser', $faq_anwser, PDO::PARAM_STR);
             $query->bindParam(':status', $status, PDO::PARAM_STR);
             $query->execute();
             $lastInsertId = $conn->lastInsertId();
@@ -73,20 +84,20 @@ if ($_POST["action"] === 'ADD') {
 
 if ($_POST["action"] === 'UPDATE') {
 
-    if ($_POST["faq_desc"] != '') {
+    if ($_POST["faq_anwser"] != '') {
 
         $id = $_POST["id"];
-        $faq_id = $_POST["faq_id"];
-        $faq_desc = $_POST["faq_desc"];
+        $faq_anwser_id = $_POST["faq_anwser_id"];
+        $faq_anwser = $_POST["faq_anwser"];
         $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_faq_master WHERE faq_id = '" . $faq_id . "'";
+        $sql_find = "SELECT * FROM ims_faq_anwser WHERE faq_anwser_id = '" . $faq_anwser_id . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
-            $sql_update = "UPDATE ims_faq_master SET faq_id=:faq_id,faq_desc=:faq_desc,status=:status            
+            $sql_update = "UPDATE ims_faq_anwser SET faq_anwser_id=:faq_anwser_id,faq_anwser=:faq_anwser,status=:status            
             WHERE id = :id";
             $query = $conn->prepare($sql_update);
-            $query->bindParam(':faq_id', $faq_id, PDO::PARAM_STR);
-            $query->bindParam(':faq_desc', $faq_desc, PDO::PARAM_STR);
+            $query->bindParam(':faq_anwser_id', $faq_anwser_id, PDO::PARAM_STR);
+            $query->bindParam(':faq_anwser', $faq_anwser, PDO::PARAM_STR);
             $query->bindParam(':status', $status, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             $query->execute();
@@ -100,11 +111,11 @@ if ($_POST["action"] === 'DELETE') {
 
     $id = $_POST["id"];
 
-    $sql_find = "SELECT * FROM ims_faq_master WHERE id = " . $id;
+    $sql_find = "SELECT * FROM ims_faq_anwser WHERE id = " . $id;
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
         try {
-            $sql = "DELETE FROM ims_faq_master WHERE id = " . $id;
+            $sql = "DELETE FROM ims_faq_anwser WHERE id = " . $id;
             $query = $conn->prepare($sql);
             $query->execute();
             echo $del_success;
@@ -130,28 +141,28 @@ if ($_POST["action"] === 'GET_FAQ') {
 ## Search
     $searchQuery = " ";
     if ($searchValue != '') {
-        $searchQuery = " AND (faq_id LIKE :faq_id or
-        faq_desc LIKE :faq_desc ) ";
+        $searchQuery = " AND (faq_anwser_id LIKE :faq_anwser_id or
+        faq_anwser LIKE :faq_anwser ) ";
         $searchArray = array(
-            'faq_id' => "%$searchValue%",
-            'faq_desc' => "%$searchValue%",
+            'faq_anwser_id' => "%$searchValue%",
+            'faq_anwser' => "%$searchValue%",
         );
     }
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_faq_master ");
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_faq_anwser ");
     $stmt->execute();
     $records = $stmt->fetch();
     $totalRecords = $records['allcount'];
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_faq_master WHERE 1 " . $searchQuery);
+    $stmt = $conn->prepare("SELECT COUNT(*) AS allcount FROM ims_faq_anwser WHERE 1 " . $searchQuery);
     $stmt->execute($searchArray);
     $records = $stmt->fetch();
     $totalRecordwithFilter = $records['allcount'];
 
 ## Fetch records
-    $stmt = $conn->prepare("SELECT * FROM ims_faq_master WHERE 1 " . $searchQuery
+    $stmt = $conn->prepare("SELECT * FROM v_ims_faq_anwser WHERE 1 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 
 // Bind values
@@ -170,8 +181,10 @@ if ($_POST["action"] === 'GET_FAQ') {
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
                 "id" => $row['id'],
+                "faq_anwser_id" => $row['faq_anwser_id'],
                 "faq_id" => $row['faq_id'],
                 "faq_desc" => $row['faq_desc'],
+                "faq_anwser" => $row['faq_anwser'],
                 "update" => "<button type='button' name='update' id='" . $row['id'] . "' class='btn btn-info btn-xs update' data-toggle='tooltip' title='Update'>Update</button>",
                 "delete" => "<button type='button' name='delete' id='" . $row['id'] . "' class='btn btn-danger btn-xs delete' data-toggle='tooltip' title='Delete'>Delete</button>",
                 "status" => $row['status'] === 'Active' ? "<div class='text-success'>" . $row['status'] . "</div>" : "<div class='text-muted'> " . $row['status'] . "</div>"
@@ -179,9 +192,9 @@ if ($_POST["action"] === 'GET_FAQ') {
         } else {
             $data[] = array(
                 "id" => $row['id'],
-                "faq_id" => $row['faq_id'],
-                "faq_desc" => $row['faq_desc'],
-                "select" => "<button type='button' name='select' id='" . $row['faq_id'] . "@" . $row['faq_desc'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
+                "faq_anwser_id" => $row['faq_anwser_id'],
+                "faq_anwser" => $row['faq_anwser'],
+                "select" => "<button type='button' name='select' id='" . $row['faq_anwser_id'] . "@" . $row['faq_anwser'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
 </button>",
             );
         }
