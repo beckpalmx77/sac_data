@@ -152,7 +152,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
 
 <div class="card">
     <div class="card-header bg-success text-white">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายยางแต่ละยี่ห้อ
+        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายอะไหล่ 
         เดือน <?php echo $month_name . " " . $year; ?>
         <?php echo $branch_name; ?>
     </div>
