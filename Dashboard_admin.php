@@ -398,7 +398,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     }
 
                     new Chart("myChart2", {
-                        type: "pie",
+                        type: "doughnut",
                         data: {
                             labels: label_name,
                             datasets: [{
