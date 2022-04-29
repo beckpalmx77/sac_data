@@ -164,7 +164,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
         $query->execute();
 
-        $update_data .= $result_sqlsvr["DI_REF"] . " | ";
+        $update_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " | ";
 
         echo " UPDATE DATA " . $update_data;
 
@@ -222,7 +222,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $lastInsertId = $conn->lastInsertId();
 
         if ($lastInsertId) {
-            $update_data .= $result_sqlsvr["DI_REF"] . " | ";
+            $update_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " | ";
             echo " Save OK " . $update_data;
         } else {
             echo " Error ";
