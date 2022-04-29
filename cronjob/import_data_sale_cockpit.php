@@ -61,7 +61,6 @@ $return_arr = array();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
-    $DT_DOCCODE = "";
     $ICCAT_CODE = "";
 
     $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
@@ -69,27 +68,31 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     $branch = "";
 
-    if (strpos($str1, $DT_DOCCODE) !== false) {
+    if ($DT_DOCCODE==='30' || $DT_DOCCODE==='CS4' || $DT_DOCCODE==='CS5' || $DT_DOCCODE==='DS4' || $DT_DOCCODE==='IS3'
+                         || $DT_DOCCODE==='IS4' || $DT_DOCCODE==='ISC3' || $DT_DOCCODE==='ISC4') {
         $branch = "CP-340";
     }
 
-    if (strpos($str2, $DT_DOCCODE) !== false) {
+    if ($DT_DOCCODE==='CS.8' || $DT_DOCCODE==='CS.9' || $DT_DOCCODE==='IC.3' || $DT_DOCCODE==='IC.4' || $DT_DOCCODE==='IS.3'
+                        || $DT_DOCCODE==='IS.4' || $DT_DOCCODE==='S.5' || $DT_DOCCODE==='S.6') {
         $branch = "CP-BY";
     }
 
-    if (strpos($str3, $DT_DOCCODE) !== false) {
+    if ($DT_DOCCODE==='CS.6' || $DT_DOCCODE==='CS.7' || $DT_DOCCODE==='IC.1' || $DT_DOCCODE==='IC.2' || $DT_DOCCODE==='IS.1'
+                        || $DT_DOCCODE==='IS.2' || $DT_DOCCODE==='S.1' || $DT_DOCCODE==='S.2') {
         $branch = "CP-RP";
     }
 
-    if (strpos($str4, $DT_DOCCODE) !== false) {
+    if ($DT_DOCCODE==='CS.2' || $DT_DOCCODE==='CS.3' || $DT_DOCCODE==='IC.5' || $DT_DOCCODE==='IC.6' || $DT_DOCCODE==='IS.5'
+                        || $DT_DOCCODE==='IS.6' || $DT_DOCCODE==='S.3' || $DT_DOCCODE==='S.4') {
         $branch = "CP-BB";
     }
 
-    $res = $res . $result_sqlsvr["DI_REF"] . "  *** " . $DT_DOCCODE . "\n\r";
+    $res = $res . $result_sqlsvr["DI_REF"] . "  *** " . $result_sqlsvr["DT_DOCCODE"] . " *** " . "\n\r";
 
-    $myfile = fopen("sql_get_DATA.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, "[" . $res) ;
-    fclose($myfile);
+    //$myfile = fopen("sql_get_DATA.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, "[" . $res) ;
+    //fclose($myfile);
 
     $p_group = "";
 
