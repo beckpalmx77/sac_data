@@ -23,10 +23,10 @@ $month_arr = array(
     "12" => "ธันวาคม"
 );
 
-$str1 = '30 CS4 CS5 DS4 IS3 IS4 ISC3 ISC4';
-$str2 = 'CS.8 CS.9 IC.3 IC.4 IS.3 IS.4 S.5 S.6';
-$str3 = 'CS.6 CS.7 IC.1 IC.2 IS.1 IS.2 S.1 S.2';
-$str4 = 'CS.2 CS.3 IC.5 IC.6 IS.5 IS.6 S.3 S.4';
+$str1 = "30 CS4 CS5 DS4 IS3 IS4 ISC3 ISC4";
+$str2 = "CS.8 CS.9 IC.3 IC.4 IS.3 IS.4 S.5 S.6";
+$str3 = "CS.6 CS.7 IC.1 IC.2 IS.1 IS.2 S.1 S.2";
+$str4 = "CS.2 CS.3 IC.5 IC.6 IS.5 IS.6 S.3 S.4";
 
 $group1 = "6SAC08 2SAC01 2SAC09 2SAC11 2SAC02 2SAC06 2SAC05 2SAC04 2SAC03 2SAC12 2SAC07 2SAC08 2SAC10 2SAC13 2SAC14 2SAC15 3SAC03 1SAC10";
 $group2 = "5SAC02 8SAC11 5SAC01 TA01-001 8SAC09 TA01-003 8CPA01-002 8BTCA01-002 8CPA01-001 8BTCA01-001";
@@ -52,12 +52,17 @@ echo $sql_sqlsvr;
 
 $update_data = "";
 
+$res = "";
+
 $stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
 $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+
+    $DT_DOCCODE = "";
+    $ICCAT_CODE = "";
 
     $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
     $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
@@ -80,6 +85,12 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $branch = "CP-BB";
     }
 
+    $res = $res . $result_sqlsvr["DI_REF"] . "  *** " . $DT_DOCCODE . "\n\r";
+
+    $myfile = fopen("sql_get_DATA.txt", "w") or die("Unable to open file!");
+    fwrite($myfile, "[" . $res) ;
+    fclose($myfile);
+
     $p_group = "";
 
     if (strpos($group1, $ICCAT_CODE) !== false) {
@@ -97,8 +108,6 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     if (strpos($group4, $ICCAT_CODE) !== false) {
         $p_group = "P4";
     }
-
-
 
     $sql_find = "SELECT * FROM ims_product_sale_cockpit "
         . " WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"]
