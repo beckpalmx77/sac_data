@@ -293,7 +293,7 @@ include("config/connect_db.php");
             let month = [];
             let total = [];
             for (let i in data) {
-                month.push(data[i].DI_MONTH_NAME);
+                month.push(data[i].DI_MONTH_NAME + " จำนวน " + data[i].TRD_QTY + " เส้น ");
                 total.push(data[i].TRD_G_KEYIN);
             }
 

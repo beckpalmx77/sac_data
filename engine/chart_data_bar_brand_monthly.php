@@ -11,7 +11,9 @@ $brn_name = $_POST["brn_name"];
 //fclose($myfile);
 
 $sql_get = "
- SELECT BRN_NAME,DI_MONTH,DI_MONTH_NAME,DI_DATE,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ SELECT BRN_NAME,DI_MONTH,DI_MONTH_NAME,DI_DATE
+ ,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as TRD_QTY
+ ,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'   
  and BRN_NAME = '" . $brn_name . "'
@@ -26,6 +28,7 @@ $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($results as $result) {
     $return_arr[] = array("DI_MONTH_NAME" => $result['DI_MONTH_NAME'],
+        "TRD_QTY" => $result['TRD_QTY'],
         "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 
