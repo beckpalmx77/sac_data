@@ -25,6 +25,7 @@ if ($_POST["action"] === 'GET_DATA') {
             "f_name" => $result['f_name'],
             "l_name" => $result['l_name'],
             "phone" => $result['phone'],
+            "ARCD_NAME" => $result['ARCD_NAME'],
             "credit" => $result['credit'],
             "email" => $result['email'],
             "address" => $result['address'],

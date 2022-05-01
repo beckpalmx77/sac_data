@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Bar chart with data value on the top of each bar</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script-->
+    <script src="../js/jquery-3.6.0.js"></script>
+    <script src="../js/chartjs-2.9.0.js"></script>
 </head>
 <body>
 <div class="chart-container" style="position: relative; width:80vw">

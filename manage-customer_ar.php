@@ -92,6 +92,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 </div>
 
                                                                 <div class="form-group">
+                                                                    <label for="ARCD_NAME" class="control-label">การชำระเงิน</label>
+                                                                    <input type="ARCD_NAME" class="form-control"
+                                                                           id="ARCD_NAME" name="ARCD_NAME"
+                                                                           readonly="true"
+                                                                           placeholder="">
+                                                                </div>
+
+                                                                <div class="form-group">
                                                                     <label for="credit" class="control-label">วงเงิน</label>
                                                                     <input type="credit" class="form-control"
                                                                            id="credit" name="credit"
@@ -103,6 +111,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <label for="phone" class="control-label">โทรฯ</label>
                                                                     <input type="phone" class="form-control"
                                                                            id="phone" name="phone"
+                                                                           readonly="true"
+                                                                           placeholder="">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="contact_name" class="control-label">ชื่อผู้ติดต่อ</label>
+                                                                    <input type="contact_name" class="form-control"
+                                                                           id="contact_name" name="contact_name"
+                                                                           readonly="true"
+                                                                           placeholder="">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="sale_name" class="control-label">ชื่อ Sale ที่รับผิดชอบ</label>
+                                                                    <input type="sale_name" class="form-control"
+                                                                           id="sale_name" name="sale_name"
                                                                            readonly="true"
                                                                            placeholder="">
                                                                 </div>
@@ -334,6 +358,8 @@ if (strlen($_SESSION['alogin']) == "") {
                         let citizend_id = response[i].citizend_id;
                         let f_name = response[i].f_name;
                         let phone = response[i].phone;
+                        let credit = response[i].credit;
+                        let ARCD_NAME = response[i].ARCD_NAME;
                         let province = response[i].province;
                         let amphure = response[i].amphure;
                         let tumbol = response[i].tumbol;
@@ -349,6 +375,8 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#citizend_id').val(citizend_id);
                         $('#f_name').val(f_name);
                         $('#phone').val(phone);
+                        $('#credit').val(credit);
+                        $('#ARCD_NAME').val(ARCD_NAME);
                         $('#province').val(province);
                         $('#amphure').val(amphure);
                         $('#tumbol').val(tumbol);
