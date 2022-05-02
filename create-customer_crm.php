@@ -150,7 +150,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                        name="KeyAddDetail" value="">
                                                             </div>
                                                             <div class="col-sm-5">
-                                                                <input type="text" class="form-control"
+                                                                <input type="hidden" class="form-control"
                                                                        id="customer_detail_id"
                                                                        name="customer_detail_id" value="">
                                                             </div>
@@ -185,10 +185,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="col-sm-12">
+                                                                    <label for="AnwserModal"
+                                                                           class="control-label"> เลือกคำตอบ </label>
+                                                                    <a data-toggle="modal" href="#SearchAnwserModal"
+                                                                       class="btn btn-primary">
+                                                                        Click <i class="fa fa-search"
+                                                                                 aria-hidden="true"></i>
+                                                                    </a>
+
+                                                                </div>
+
                                                                 <div class="form-group row">
                                                                     <div class="col-sm-12">
                                                                         <label for="faq_anwser"
                                                                                class="control-label">คำตอบ</label>
+                                                                        <input type="hidden" id="faq_anwser_id" name="faq_anwser_id">
                                                                         <input type="text" class="form-control"
                                                                                id="faq_anwser"
                                                                                name="faq_anwser"
@@ -217,6 +229,46 @@ if (strlen($_SESSION['alogin']) == "") {
                                                         </div>
                                                     </form>
 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="SearchAnwserModal">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Modal title</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">×
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="container"></div>
+                                                    <div class="modal-body">
+
+                                                        <div class="modal-body">
+
+                                                            <table cellpadding="0" cellspacing="0" border="0"
+                                                                   class="display"
+                                                                   id="TableAnwserList"
+                                                                   width="100%">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>รหัสคำตอบ</th>
+                                                                    <th>คำตอบ</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tfoot>
+                                                                <tr>
+                                                                    <th>รหัสคำตอบ</th>
+                                                                    <th>คำตอบ</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -314,7 +366,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <!-- Javascript for this page -->
 
     <script src="js/modal/show_customer_crm_modal.js"></script>
-
+    <script src="js/modal/show_anwser_modal.js"></script>
 
     <script src="js/modal/show_product_modal.js"></script>
     <script src="js/modal/show_unit_modal.js"></script>
