@@ -56,6 +56,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <tr>
                                                     <th>รหัสลูกค้า</th>
                                                     <th>ชื่อลูกค้า</th>
+                                                    <th>Action</th>
                                                     <!--th>Status</th>
                                                     <th>Action</th>
                                                     <th>Action</th-->
@@ -65,6 +66,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <tr>
                                                     <th>รหัสลูกค้า</th>
                                                     <th>ชื่อลูกค้า</th>
+                                                    <th>Action</th>
                                                     <!--th>Status</th>
                                                     <th>Action</th>
                                                     <th>Action</th-->
@@ -277,7 +279,8 @@ if (strlen($_SESSION['alogin']) == "") {
                 },
                 'columns': [
                     {data: 'customer_id'},
-                    {data: 'customer_name'}
+                    {data: 'customer_name'},
+                    {data: 'update'}
                 ]
             });
 
@@ -308,7 +311,7 @@ if (strlen($_SESSION['alogin']) == "") {
         $("#btnAdd").click(function () {
             let main_menu = document.getElementById("main_menu").value;
             let sub_menu = document.getElementById("sub_menu").value;
-            let url = "create-customer_crm.php?title=สร้างแบบสอบถามลูกค้า"
+            let url = "create-customer_crm?title=สร้างแบบสอบถามลูกค้า"
                 + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
                 + '&action=ADD';
             OpenPopupCenter(url, "", "");
@@ -320,8 +323,23 @@ if (strlen($_SESSION['alogin']) == "") {
 
         $("#TableRecordList").on('click', '.update', function () {
             let id = $(this).attr("id");
+            let main_menu = document.getElementById("main_menu").value;
+            let sub_menu = document.getElementById("sub_menu").value;
+            let url = "update-customer_crm?title=แบบสอบถามลูกค้า"
+                + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
+                + '&action=UPDATE';
+            OpenPopupCenter(url, "", "");
+        });
+
+    </script>
+
+    <script>
+
+        $("#TableRecordList-bak").on('click', '.update', function () {
+            let id = $(this).attr("id");
             //alert(id);
             let formData = {action: "GET_DATA", id: id};
+
             $.ajax({
                 type: "POST",
                 url: 'model/manage_customer_crm_process.php',
@@ -347,46 +365,6 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('.modal-title').html("<i class='fa fa-plus'></i> Edit Record");
                         $('#action').val('UPDATE');
                         $('#save').val('Save');
-                    }
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        });
-
-    </script>
-
-    <script>
-
-        $("#TableRecordList").on('click', '.delete', function () {
-            let id = $(this).attr("id");
-            let formData = {action: "GET_DATA", id: id};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_customer_crm_process.php',
-                dataType: "json",
-                data: formData,
-                success: function (response) {
-                    let len = response.length;
-                    for (let i = 0; i < len; i++) {
-                        let id = response[i].id;
-                        let customer_id = response[i].customer_id;
-                        let supplier_name = response[i].supplier_name;
-                        let address = response[i].address;
-                        let phone = response[i].phone;
-                        let status = response[i].status;
-
-                        $('#recordModal').modal('show');
-                        $('#id').val(id);
-                        $('#customer_id').val(customer_id);
-                        $('#supplier_name').val(supplier_name);
-                        $('#address').val(address);
-                        $('#phone').val(phone);
-                        $('#status').val(status);
-                        $('.modal-title').html("<i class='fa fa-minus'></i> Delete Record");
-                        $('#action').val('DELETE');
-                        $('#save').val('Confirm Delete');
                     }
                 },
                 error: function (response) {
