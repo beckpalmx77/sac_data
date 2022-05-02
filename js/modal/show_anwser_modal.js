@@ -30,7 +30,7 @@ $(document).ready(function () {
     });
 });
 
-$("#TablePGList").on('click', '.select', function () {
+$("#TableAnwserList").on('click', '.select', function () {
     let data = this.id.split('@');
     $('#faq_anwser_id').val(data[0]);
     $('#faq_anwser').val(data[1]);
