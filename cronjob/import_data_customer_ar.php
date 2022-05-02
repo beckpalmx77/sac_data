@@ -28,7 +28,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
         $sql = "UPDATE ims_customer_ar SET tax_id=:tax_id,f_name=:f_name,credit=:credit,
-        phone=:phone,address=:address,tumbol=:tumbol,amphure=:amphure,province=:province,zipcode=:zipcode,ARCD_NAME=:ARCD_NAME
+        phone=:phone,address=:address,tumbol=:tumbol,amphure=:amphure,province=:province,zipcode=:zipcode,ARCD_NAME=:ARCD_NAME,
         sale_name=:sale_name
         WHERE customer_id = :customer_id ";
         echo "Update Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . "\n\r";
