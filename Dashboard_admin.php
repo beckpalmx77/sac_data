@@ -174,7 +174,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <button type="button" id="BtnSale" name="BtnSale" class="btn btn-info mb-3">แสดง
-                                                    Chart ยอดขายยางแต่ละยี่ห้อ ตามเดือน
+                                                    Chart ยอดขายยางแต่ละยี่ห้อ ตามเดือน Click
                                                 </button>
                                             </div>
                                         </div>
