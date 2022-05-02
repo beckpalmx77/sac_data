@@ -221,7 +221,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                             </div>
                                         </div>
 
-
                                         <div class="modal fade" id="SearchCusCrmModal">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
