@@ -24,7 +24,8 @@ $return_arr = array();
 
 while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
-    $contact_name = $result_sqlsvr["CT_INTL"] . " " . $result_sqlsvr["CT_NAME"] . " " . $result_sqlsvr["CT_SURNME"];
+    $contact_name = $result_sqlsvr["CT_INTL"] . " " . $result_sqlsvr["CT_NAME"] . " "
+                  . $result_sqlsvr["CT_SURNME"] . " - " . $result_sqlsvr["CT_JOBTITLE"];
 
     $sql_find = "SELECT * FROM ims_customer_ar WHERE customer_id = '" . $result_sqlsvr["AR_CODE"] . "'";
     $nRows = $conn->query($sql_find)->fetchColumn();
