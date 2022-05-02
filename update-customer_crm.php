@@ -458,15 +458,34 @@ if (strlen($_SESSION['alogin']) == "") {
             $("#main_menu").html(queryString["main_menu"]);
             $("#sub_menu").html(queryString["sub_menu"]);
             $('#action').val(queryString["action"]);
+            $('#id').val(queryString["id"]);
 
             $('#save_status').val("before");
 
-            if (queryString["action"] === 'ADD') {
-                let KeyData = generate_token(15);
-                $('#KeyAddData').val(KeyData + ":" + Date.now());
-                $('#save_status').val("add");
-            }
+            let formData = {action: "GET_DATA", id: queryString["id"]};
 
+            $.ajax({
+                type: "POST",
+                url: 'model/manage_customer_crm_process.php',
+                dataType: "json",
+                data: formData,
+                success: function (response) {
+                    let len = response.length;
+                    for (let i = 0; i < len; i++) {
+                        let id = response[i].id;
+                        let customer_id = response[i].customer_id;
+                        let customer_name = response[i].customer_name;
+                        $('#id').val(id);
+                        $('#customer_detail_id').val(customer_id);
+                        $('#customer_id').val(customer_id);
+                        $('#f_name').val(customer_name);
+                        Load_Answer();
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
         });
     </script>
 

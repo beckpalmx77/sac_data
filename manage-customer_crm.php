@@ -43,10 +43,10 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         <div class="col-md-12 col-md-offset-2">
                                             <label for="supplier_name"
-                                                   class="control-label"><b>เพิ่ม-แก้ไข <?php echo urldecode($_GET['s']) ?></b></label>
+                                                   class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
 
                                             <button type='button' name='btnAdd' id='btnAdd'
-                                                    class='btn btn-primary btn-xs'>Add - Edit
+                                                    class='btn btn-primary btn-xs'>Add
                                             </button>
                                         </div>
 
@@ -327,7 +327,7 @@ if (strlen($_SESSION['alogin']) == "") {
             let sub_menu = document.getElementById("sub_menu").value;
             let url = "update-customer_crm?title=แบบสอบถามลูกค้า"
                 + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu
-                + '&action=UPDATE';
+                + '&action=UPDATE' + '&id=' + id;
             OpenPopupCenter(url, "", "");
         });
 
