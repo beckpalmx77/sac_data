@@ -361,6 +361,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         let credit = response[i].credit;
                         let ARCD_NAME = response[i].ARCD_NAME;
                         let province = response[i].province;
+                        let contact_name = response[i].contact_name;
                         let sale_name = response[i].sale_name;
                         let amphure = response[i].amphure;
                         let tumbol = response[i].tumbol;
@@ -378,6 +379,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#phone').val(phone);
                         $('#credit').val(credit);
                         $('#ARCD_NAME').val(ARCD_NAME);
+                        $('#contact_name').val(contact_name);
                         $('#sale_name').val(sale_name);
                         $('#province').val(province);
                         $('#amphure').val(amphure);
