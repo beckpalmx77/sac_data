@@ -580,7 +580,6 @@ if (strlen($_SESSION['alogin']) == "") {
                 event.preventDefault();
                 $('#save').attr('disabled', 'disabled');
                 let formData = $(this).serialize();
-                alert(formData);
                 $.ajax({
                     url: 'model/manage_customer_crm_process.php',
                     method: "POST",
