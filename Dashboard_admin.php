@@ -6,6 +6,14 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
+    $sql_curr_month = " SELECT * FROM ims_month where month = '" . date("n") . "'";
+    $stmt_curr_month = $conn->prepare($sql_curr_month);
+    $stmt_curr_month->execute();
+    $MonthCurr = $stmt_curr_month->fetchAll();
+    foreach ($MonthCurr as $row_curr) {
+        $month_name = $row_curr["month_name"];
+    }
+
     ?>
 
     <!DOCTYPE html>
@@ -88,7 +96,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                 <div class="card-header">
                                     สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา เดือน
-                                    <?php echo date("n") . " " . date("Y"); ?>
+                                    <?php echo $month_name . " " . date("Y"); ?>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
@@ -134,7 +142,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <?php } ?>
 
                                         </tbody>
-                                        <?php echo "ยอดขายรวมทุกสาขา เดือน " . date("n") . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
+                                        <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
                                     </table>
                                 </div>
 
