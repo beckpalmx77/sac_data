@@ -44,7 +44,7 @@ if (strlen($_SESSION['alogin']) == "") {
                             <div class="card">
                                 <div class="card-header">
                                     สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา วันที่
-                                    <?php echo date("d-m-Y"); ?>
+                                    <?php echo date("d/m/Y"); ?>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
