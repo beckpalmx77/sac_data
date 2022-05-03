@@ -1,1 +1,0 @@
-SELECT *,ims_faq_master.faq_desc as  faq_desc FROM ims_faq_anwser  LEFT JOIN ims_faq_master ON ims_faq_master.faq_id = ims_faq_anwser.faq_id  WHERE ims_faq_anwser.id = 1

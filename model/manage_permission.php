@@ -75,14 +75,17 @@ if ($_POST["action"] === 'SAVE') {
     $main_list_value = $_POST["main_list_value"];
     $sub_list_value = $_POST["sub_list_value"];
 
-    if ($permission_id !=="" && $permission_detail !=="" && $main_list_value !=="" && $sub_list_value !=="") {
+    //$myfile = fopen("permission-param.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $permission_id  . " | " . $permission_detail . " | " . $dashboard_page
+        //. " | " . $main_list_value . " | " . $sub_list_value );
+    //fclose($myfile);
 
+    if ($permission_id !=="" && $permission_detail !=="" && $main_list_value !=="" && $sub_list_value !=="") {
         $sql_find = "SELECT * FROM ims_permission WHERE permission_id = '" . $permission_id . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows <= 0) {
-
-            $sql = "INSERT INTO ims_permission(permission_id,permission_detail,dashboard_page,main_list_value,sub_list_value) 
-                    VALUES (:permission_id,:permission_detail,:dashboard_page,:main_menu,:sub_menu)";
+            $sql = "INSERT INTO ims_permission(permission_id,permission_detail,dashboard_page,main_menu,sub_menu) 
+                    VALUES (:permission_id,:permission_detail,:dashboard_page,:main_list_value,:sub_list_value)";
             $query = $conn->prepare($sql);
             $query->bindParam(':permission_id', $permission_id, PDO::PARAM_STR);
             $query->bindParam(':permission_detail', $permission_detail, PDO::PARAM_STR);
