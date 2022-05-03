@@ -37,7 +37,8 @@ if ($_POST["action"] === 'ADD') {
 
         $email = $_POST["email"];
         $user_id = $_POST["email"];
-        $password = password_hash($password, PASSWORD_DEFAULT);
+        //$password = password_hash($password, PASSWORD_DEFAULT);
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         $first_name = $_POST["first_name"];
         $last_name = $_POST["last_name"];
         $account_type = $_POST["account_type"];
