@@ -32,7 +32,7 @@ include("config/connect_db.php");
 <body onload="DisplayGraph_Monthly();">
 <div class="card">
     <div class="card-header bg-success text-white">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i>กราฟ <?php echo urldecode($_GET['s']) ?>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i> กราฟแสดงยอดขายยาง
         <?php echo " ปี " . $_POST["year"]; ?>
     </div>
 
