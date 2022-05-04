@@ -1,19 +1,5 @@
 {
-  "authors": [
-    {
-      "name": "Beck Dave",
-      "email": "beckpalmx@gmail.com",
-      "homepage": "http://www.tester.com",
-      "role": "Developer"
+    "require": {
+        "mobiledetect/mobiledetectlib": "^2.8"
     }
-  ],
-  "require-dev": {
-    "ext-json": "*"
-  },
-  "require": {
-    "ttskch/select2-bootstrap4-theme": "^1.5",
-    "mpdf/mpdf": "^8.0",
-    "setasign/fpdi": "^2.0",
-    "mobiledetect/mobiledetectlib": "^2.8",
-  }
 }
