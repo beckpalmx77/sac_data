@@ -171,21 +171,17 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script>
-
         $("#BtnSale").click(function () {
             show();
         });
-
     </script>
 
     <script>
-
         $(document).keyup(function (event) {
             if (event.which === 13) {
                 show();
             }
         });
-
     </script>
 
     <script>
