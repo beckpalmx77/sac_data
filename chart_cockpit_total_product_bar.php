@@ -1,5 +1,5 @@
 <?php
-
+include('includes/Header.php');
 include("config/connect_db.php");
 
 ?>
