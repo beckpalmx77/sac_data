@@ -6,7 +6,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -83,27 +83,30 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                         <form id="myform" name="myform" method="post">
 
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                                <label for="year">เลือกปี :</label>
-                                                                                <select name="year" id="year" class="form-control" required>
-                                                                                    <?php foreach ($YearRecords as $row) { ?>
-                                                                                        <option value="<?php echo $row["DI_YEAR"]; ?>">
-                                                                                            <?php echo $row["DI_YEAR"]; ?>
-                                                                                        </option>
-                                                                                    <?php } ?>
-                                                                                </select>
-                                                                                <br>
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-12">
-                                                                                        <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">แสดง
-                                                                                            Chart ยอดขายยางแต่ละยี่ห้อ
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <label for="year">เลือกปี :</label>
+                                                                    <select name="year" id="year" class="form-control"
+                                                                            required>
+                                                                        <?php foreach ($YearRecords as $row) { ?>
+                                                                            <option value="<?php echo $row["DI_YEAR"]; ?>">
+                                                                                <?php echo $row["DI_YEAR"]; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnSale"
+                                                                                    name="BtnSale"
+                                                                                    class="btn btn-primary mb-3">แสดง
+                                                                                Chart ยอดขายยางแต่ละยี่ห้อ
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
+
                                                                 </div>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -170,12 +173,28 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
 
         $("#BtnSale").click(function () {
+            show();
+        });
+
+    </script>
+
+    <script>
+
+        $(document).keyup(function (event) {
+            if (event.which === 13) {
+                show();
+            }
+        });
+
+    </script>
+
+    <script>
+        function show() {
             document.forms['myform'].action = 'chart_cockpit_total_product_bar';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
-        });
-
+        }
     </script>
 
     </body>
