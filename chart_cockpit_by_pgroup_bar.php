@@ -37,6 +37,11 @@ foreach ($BranchRecords as $rows) {
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="fontawesome/css/font-awesome.css">
+
+    <link href='vendor/calendar/main.css' rel='stylesheet'/>
+    <script src='vendor/calendar/main.js'></script>
+    <script src='vendor/calendar/locales/th.js'></script>
+
     <title>สงวนออโต้คาร์</title>
     <style>
 
@@ -71,12 +76,147 @@ foreach ($BranchRecords as $rows) {
             <canvas id="graphCanvas_P1_Monthly"></canvas>
         </div>
 
+        <div class="card-body">
+            <table id="example" class="display table table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                <?php
+                $date = date("d/m/Y");
+                $total = 0;
+                $sql_daily = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ FROM ims_product_sale_cockpit 
+ WHERE DI_YEAR = '" . $_POST["year"] . "'   
+ AND BRANCH like '%" . $_POST["branch"] . "'
+ AND PGROUP like '%P1'
+ GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
+ ORDER BY DI_MONTH" ;
+
+                $statement_daily = $conn->query($sql_daily);
+                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($results_daily
+
+                as $row_daily) { ?>
+
+                <tr>
+                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
+                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
+                    <?php } ?>
+
+                </tbody>
+                <?php echo "ยอดขาย ยาง รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
+            </table>
+        </div>
+
         <div id="chart-container">
             <canvas id="graphCanvas_P2_Monthly"></canvas>
         </div>
 
+        <div class="card-body">
+            <table id="example" class="display table table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                <?php
+                $date = date("d/m/Y");
+                $total = 0;
+                $sql_daily = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ FROM ims_product_sale_cockpit 
+ WHERE DI_YEAR = '" . $_POST["year"] . "'   
+ AND BRANCH like '%" . $_POST["branch"] . "'
+ AND PGROUP like '%P2'
+ GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
+ ORDER BY DI_MONTH" ;
+
+                $statement_daily = $conn->query($sql_daily);
+                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($results_daily
+
+                as $row_daily) { ?>
+
+                <tr>
+                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
+                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
+                    <?php } ?>
+
+                </tbody>
+                <?php echo "ยอดขาย อะไหล่ รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
+            </table>
+        </div>
+
         <div id="chart-container">
             <canvas id="graphCanvas_P3_Monthly"></canvas>
+        </div>
+
+        <div class="card-body">
+            <table id="example" class="display table table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>เดือน</th>
+                    <th>ยอดขาย</th>
+                </tr>
+                </tfoot>
+                <tbody>
+                <?php
+                $date = date("d/m/Y");
+                $total = 0;
+                $sql_daily = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ FROM ims_product_sale_cockpit 
+ WHERE DI_YEAR = '" . $_POST["year"] . "'   
+ AND BRANCH like '%" . $_POST["branch"] . "'
+ AND PGROUP like '%P3'
+ GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
+ ORDER BY DI_MONTH" ;
+
+                $statement_daily = $conn->query($sql_daily);
+                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($results_daily
+
+                as $row_daily) { ?>
+
+                <tr>
+                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
+                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
+                    <?php } ?>
+
+                </tbody>
+                <?php echo "ยอด ค่าแรง-บริการ รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
+            </table>
         </div>
 
     </div>
@@ -136,7 +276,8 @@ foreach ($BranchRecords as $rows) {
                 let total = [];
                 for (let i in data) {
                     month.push(data[i].DI_MONTH_NAME);
-                    total.push(data[i].TRD_G_KEYIN);
+                    //total.push(data[i].TRD_G_KEYIN);
+                    total.push(parseFloat(data[i].TRD_G_KEYIN).toFixed(2));
                 }
 
                 let chartdata = {

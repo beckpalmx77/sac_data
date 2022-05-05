@@ -33,7 +33,7 @@ foreach ($results as $result) {
 }
 
 //$myfile = fopen("bar-qry_file1" . $PGROUP . ".txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $sql_get);
+//fwrite($myfile, $total);
 //fclose($myfile);
 
 echo json_encode($return_arr);
