@@ -33,7 +33,7 @@ foreach ($BranchRecords as $rows) {
     <meta date="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <script src="js/jquery-3.6.0.js"></script>
-    <script src="js/chartjs-2.9.0.js"></script>
+    <!--script src="js/chartjs-2.9.0.js"></script-->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="fontawesome/css/font-awesome.css">
@@ -41,6 +41,10 @@ foreach ($BranchRecords as $rows) {
     <link href='vendor/calendar/main.css' rel='stylesheet'/>
     <script src='vendor/calendar/main.js'></script>
     <script src='vendor/calendar/locales/th.js'></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
 
     <title>สงวนออโต้คาร์</title>
     <style>
