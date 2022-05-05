@@ -52,7 +52,7 @@ foreach ($BranchRecords as $rows) {
     </style>
 </head>
 
-<body onload="showGraph_Data_Monthly();">
+<body onload="showGraph_Data_Monthly(1);showGraph_Data_Monthly(2);showGraph_Data_Monthly(3);">
 <div class="card">
     <div class="card-header bg-success text-white">
         <i class="fa fa-bar-chart" aria-hidden="true"></i> แสดง Chart ยอดขายเปรียบเทียบ
@@ -75,12 +75,16 @@ foreach ($BranchRecords as $rows) {
             <canvas id="graphCanvas_P2_Monthly"></canvas>
         </div>
 
+        <div id="chart-container">
+            <canvas id="graphCanvas_P3_Monthly"></canvas>
+        </div>
+
     </div>
 </div>
 
 
 <script>
-    function showGraph_Data_Monthly() {
+    function showGraph_Data_Monthly(p_group) {
         {
 
             let month = $("#month").val();
@@ -89,11 +93,44 @@ foreach ($BranchRecords as $rows) {
 
             let backgroundColor = '#bd58fa';
             let borderColor = '#46d5f1';
-
             let hoverBackgroundColor = '#a2a1a3';
             let hoverBorderColor = '#a2a1a3';
 
-            $.post("engine/chart_data_monthly.php", {month: month, year: year, branch: branch}, function (data) {
+            let graphTarget = '';
+            let graphlabel = '';
+
+            //alert(p_group);
+
+            if (p_group===1) {
+                PGROUP = 'P1';
+                graphTarget = $('#graphCanvas_P1_Monthly');
+                graphlabel = 'ยอดขาย ยาง รายเดือน รวม VAT (Monthly)';
+                backgroundColor = '#bd58fa';
+                borderColor = '#46d5f1';
+                hoverBackgroundColor = '#a2a1a3';
+                hoverBorderColor = '#a2a1a3';
+                //alert("L1 = " + p_group);
+            } else if (p_group===2) {
+                PGROUP = 'P2';
+                graphTarget = $('#graphCanvas_P2_Monthly');
+                graphlabel = 'ยอดขาย อะไหล่ รายเดือน รวม VAT (Monthly)';
+                backgroundColor = '#07b65c';
+                borderColor = '#b0fcc1';
+                hoverBackgroundColor = '#a2a1a3';
+                hoverBorderColor = '#a2a1a3';
+            } else if (p_group===3) {
+                PGROUP = 'P3';
+                graphTarget = $('#graphCanvas_P3_Monthly');
+                graphlabel = 'ยอดค่าแรง-ค่าบริการ รายเดือน รวม VAT (Monthly)';
+                backgroundColor = '#013b82';
+                borderColor = '#80caf3';
+                hoverBackgroundColor = '#a2a1a3';
+                hoverBorderColor = '#a2a1a3';
+            }
+
+            //alert(graphTarget);
+
+            $.post("engine/chart_data_by_pgroup_monthly.php", {month: month, year: year, branch: branch ,PGROUP: PGROUP}, function (data) {
                 console.log(data);
                 let month = [];
                 let total = [];
@@ -105,7 +142,7 @@ foreach ($BranchRecords as $rows) {
                 let chartdata = {
                     labels: month,
                     datasets: [{
-                        label: 'ยอดขายรายเดือน รวม VAT (Monthly)',
+                        label: graphlabel,
                         backgroundColor: backgroundColor,
                         borderColor: borderColor,
                         hoverBackgroundColor: hoverBackgroundColor,
@@ -113,7 +150,7 @@ foreach ($BranchRecords as $rows) {
                         data: total
                     }]
                 };
-                let graphTarget = $('#graphCanvas_Monthly');
+
                 let barGraph = new Chart(graphTarget, {
                     type: 'bar',
                     data: chartdata
