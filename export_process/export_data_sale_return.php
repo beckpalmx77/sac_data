@@ -25,9 +25,7 @@ for ($loop = 1; $loop <= 2; $loop++) {
         //fwrite($my_file, $String_Sql);
         //fclose($my_file);
 
-        $data = "DI_REF,DI_DATE,AR_CODE,AR_NAME
-        ,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,BRN_NAME
-        ,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,TRD_B_AMT,WL_CODE,ARCD_NAME\n";
+        $data = "DI_REF,DI_DATE,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,BRN_NAME,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,TRD_B_AMT,WL_CODE,ARCD_NAME\n";
 
     } else {
 
