@@ -246,9 +246,9 @@ foreach ($BranchRecords as $rows) {
                 graphTarget = $('#graphCanvas_P1_Monthly');
                 graphlabel = 'ยอดขาย ยาง รายเดือน รวม VAT (Monthly)';
                 backgroundColor = '#bd58fa';
-                borderColor = '#46d5f1';
-                hoverBackgroundColor = '#a2a1a3';
-                hoverBorderColor = '#a2a1a3';
+                borderColor = '#dca9ea';
+                hoverBackgroundColor = 'rgba(241,157,252,0.78)';
+                hoverBorderColor = '#dca9ea';
                 //alert("L1 = " + p_group);
             } else if (p_group===2) {
                 PGROUP = 'P2';
@@ -256,16 +256,16 @@ foreach ($BranchRecords as $rows) {
                 graphlabel = 'ยอดขาย อะไหล่ รายเดือน รวม VAT (Monthly)';
                 backgroundColor = '#07b65c';
                 borderColor = '#b0fcc1';
-                hoverBackgroundColor = '#a2a1a3';
-                hoverBorderColor = '#a2a1a3';
+                hoverBackgroundColor = '#b0fcc1';
+                hoverBorderColor = '#b0fcc1';
             } else if (p_group===3) {
                 PGROUP = 'P3';
                 graphTarget = $('#graphCanvas_P3_Monthly');
                 graphlabel = 'ยอดค่าแรง-ค่าบริการ รายเดือน รวม VAT (Monthly)';
                 backgroundColor = '#013b82';
                 borderColor = '#80caf3';
-                hoverBackgroundColor = '#a2a1a3';
-                hoverBorderColor = '#a2a1a3';
+                hoverBackgroundColor = '#80caf3';
+                hoverBorderColor = '#80caf3';
             }
 
             //alert(graphTarget);
@@ -288,6 +288,7 @@ foreach ($BranchRecords as $rows) {
                         borderColor: borderColor,
                         hoverBackgroundColor: hoverBackgroundColor,
                         hoverBorderColor: hoverBorderColor,
+                        position: 'top',
                         data: total
                     }]
                 };
