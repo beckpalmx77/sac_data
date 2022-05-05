@@ -56,7 +56,7 @@ foreach ($BranchRecords as $rows) {
 <div class="card">
     <div class="card-header bg-success text-white">
         <i class="fa fa-bar-chart" aria-hidden="true"></i> แสดง Chart ยอดขายเปรียบเทียบ
-        <?php echo $branch_name . " เดือน " . $month_name . " ปี " . $_POST["year"]; ?>
+        <?php echo $branch_name . " ปี " . $_POST["year"]; ?>
     </div>
     <input type="hidden" name="month" id="month" value="<?php echo $_POST["month"]; ?>">
     <!--input type="text" name="month_name" id="month_name" class="form-control" value="<?php echo $month_name; ?>"-->
