@@ -5,9 +5,7 @@ error_reporting(~0);
 
 include("../config/connect_sqlserver.php");
 include("../config/connect_db.php");
-
 include("../cond_file/query-product-price-main.php");
-
 
 $sql_sqlsvr = $select_query . $sql_cond . $sql_order;
 

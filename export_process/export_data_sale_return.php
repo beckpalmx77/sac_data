@@ -32,9 +32,9 @@ for ($loop = 1; $loop <= 2; $loop++) {
         $String_Sql = $select_query_return . $sql_cond_return . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
             . $sql_order_return;
 
-        //$my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
-        //fwrite($my_file, $String_Sql);
-        //fclose($my_file);
+        $my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, $String_Sql);
+        fclose($my_file);
 
     }
 
