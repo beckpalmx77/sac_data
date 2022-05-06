@@ -12,12 +12,10 @@ $PGROUP = $_POST["PGROUP"];
 //fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch );
 //fclose($myfile);
 
-$sql_get = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+$sql_get = " SELECT BRANCH,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $year . "'   
- AND BRANCH like '%" . $branch . "'
- AND PGROUP like '%" . $PGROUP . "'
- GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
+ WHERE DI_YEAR = '" . $year . "' 
+ GROUP BY  BRANCH,DI_MONTH,DI_MONTH_NAME 
  ORDER BY DI_MONTH
 ";
 
