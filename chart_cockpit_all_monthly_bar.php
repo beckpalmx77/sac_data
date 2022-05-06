@@ -86,6 +86,7 @@ foreach ($MonthRecords as $row) {
                 $sql_daily = " SELECT BRANCH,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $_POST["year"] . "' 
+ AND DI_MONTH = '" . $_POST["month"] . "'
  GROUP BY  BRANCH,DI_MONTH,DI_MONTH_NAME 
  ORDER BY DI_MONTH" ;
 
@@ -97,13 +98,14 @@ foreach ($MonthRecords as $row) {
                 as $row_daily) { ?>
 
                 <tr>
+                    <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                     <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
                     <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
                     <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                     <?php } ?>
 
                 </tbody>
-                <?php echo "ยอดขาย ยาง รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
+                <?php echo "ยอดขายปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
             </table>
         </div>
 

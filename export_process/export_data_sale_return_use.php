@@ -21,9 +21,9 @@ for ($loop = 1; $loop <= 2; $loop++) {
         $String_Sql = $select_query_sale . $sql_cond_sale . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
             . $sql_order_sale;
 
-        $my_file = fopen("sac_str1.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, $String_Sql);
-        fclose($my_file);
+        //$my_file = fopen("sac_str1.txt", "w") or die("Unable to open file!");
+        //fwrite($my_file, $String_Sql);
+        //fclose($my_file);
 
         $data = "DI_REF,DI_DATE,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,BRN_NAME,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_G_KEYIN,TRD_G_SELL,TRD_G_VAT,TRD_B_AMT,WL_CODE,ARCD_NAME\n";
 
@@ -32,9 +32,9 @@ for ($loop = 1; $loop <= 2; $loop++) {
         $String_Sql = $select_query_return . $sql_cond_return . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
             . $sql_order_return;
 
-        $my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
-        fwrite($my_file, $String_Sql);
-        fclose($my_file);
+        //$my_file = fopen("sac_str2.txt", "w") or die("Unable to open file!");
+        //fwrite($my_file, $String_Sql);
+        //fclose($my_file);
 
     }
 
