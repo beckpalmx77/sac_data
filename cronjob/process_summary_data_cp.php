@@ -10,8 +10,7 @@ include("../config/connect_db.php");
 
 for ($month = 1; $month <= 12; $month++) {
 
-    //$year = date("Y");
-    $year = '2022';
+    $year = date("Y");
 
     $sql_get = " SELECT BRANCH,DI_MONTH,DI_MONTH_NAME,DI_YEAR
  ,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY
