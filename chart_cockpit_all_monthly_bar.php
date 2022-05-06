@@ -104,7 +104,7 @@ foreach ($MonthRecords as $row) {
 </div>
 
 
-
+<div class="card-body">
             <table id="example" class="display table table-striped table-bordered"
                    cellspacing="0" width="100%">
                 <thead>
@@ -249,7 +249,7 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
 
                 </tbody>
             </table>
-
+</div>
 
 <div class="card">
     <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
