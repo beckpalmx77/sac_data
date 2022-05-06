@@ -2,9 +2,15 @@
 
 include("config/connect_db.php");
 
+//$month = $_POST["month"];
+//$year = $_POST["year"];
+
+$month = "4";
+$year = "2022";
+
 $month_name = "";
 
-$sql_month = " SELECT * FROM ims_month where month = '" . $_POST["month"] . "'";
+$sql_month = " SELECT * FROM ims_month where month = '" . $month . "'";
 $stmt_month = $conn->prepare($sql_month);
 $stmt_month->execute();
 $MonthRecords = $stmt_month->fetchAll();
@@ -13,7 +19,7 @@ foreach ($MonthRecords as $row) {
 }
 
 //$myfile = fopen("param_post.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $_POST["month"] . "| month_name " . $month_name . "| branch = " . $_POST["branch"] . "| Branch Name = "
+//fwrite($myfile, $month . "| month_name " . $month_name . "| branch = " . $_POST["branch"] . "| Branch Name = "
 //    . $branch_name . " | " . $sql_month . " | " . $sql_branch);
 //fclose($myfile);
 
@@ -39,29 +45,18 @@ foreach ($MonthRecords as $row) {
 
 
     <title>สงวนออโต้คาร์</title>
-    <style>
 
-        body {
-            width: 620px;
-            margin: 3rem auto;
-        }
-
-        #chart-container {
-            width: 100%;
-            height: auto;
-        }
-    </style>
 </head>
 
 <body onload="showGraph_Data_Monthly(1);showGraph_Data_Monthly(2);showGraph_Data_Monthly(3);">
+
 <div class="card">
     <div class="card-header bg-success text-white">
-        <i class="fa fa-bar-chart" aria-hidden="true"></i> แสดง Chart ยอดขายเปรียบเทียบ
-        <?php echo " ปี " . $_POST["year"]; ?>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>ยอดขายเปรียบเทียบ
+        <?php echo "เดือน" . $month_name . " ปี " . $year; ?>
     </div>
-    <input type="hidden" name="month" id="month" value="<?php echo $_POST["month"]; ?>">
-    <!--input type="text" name="month_name" id="month_name" class="form-control" value="<?php echo $month_name; ?>"-->
-    <input type="hidden" name="year" id="year" class="form-control" value="<?php echo $_POST["year"]; ?>">
+    <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
+    <input type="hidden" name="year" id="year" class="form-control" value="<?php echo $year; ?>">
     <div class="card-body">
 
         <div class="card-body">
@@ -69,25 +64,23 @@ foreach ($MonthRecords as $row) {
                    cellspacing="0" width="100%">
                 <thead>
                 <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
+                    <th>สาขา</th>
+                    <th>ยอดขาย ยาง</th>
+                    <th>ยอดขาย อะไหล่</th>
+                    <th>ยอด ค่าแรง-ค่าบริการ</th>
+                    <th>ยอดรวม</th>
                 </tr>
                 </thead>
                 <tfoot>
-                <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
-                </tr>
                 </tfoot>
                 <tbody>
                 <?php
                 $date = date("d/m/Y");
                 $total = 0;
-                $sql_daily = " SELECT BRANCH,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $_POST["year"] . "' 
- AND DI_MONTH = '" . $_POST["month"] . "'
- GROUP BY  BRANCH,DI_MONTH,DI_MONTH_NAME 
+                $sql_daily = " SELECT *
+ FROM ims_report_product_sale_summary 
+ WHERE DI_YEAR = '" . $year . "' 
+ AND DI_MONTH = '" . $month . "'
  ORDER BY DI_MONTH" ;
 
                 $statement_daily = $conn->query($sql_daily);
@@ -99,111 +92,222 @@ foreach ($MonthRecords as $row) {
 
                 <tr>
                     <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
-                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['tires_total_amt'], 2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['part_total_amt'], 2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['svr_total_amt'], 2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['total_amt'], 2)); ?></p></td>
                     <?php } ?>
-
                 </tbody>
-                <?php echo "ยอดขายปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
             </table>
         </div>
-
-
-
-        <div class="card-body">
-            <table id="example" class="display table table-striped table-bordered"
-                   cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
-                </tr>
-                </tfoot>
-                <tbody>
-                <?php
-                $date = date("d/m/Y");
-                $total = 0;
-                $sql_daily = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $_POST["year"] . "'   
- AND BRANCH like '%" . $_POST["branch"] . "'
- AND PGROUP like '%P2'
- GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
- ORDER BY DI_MONTH" ;
-
-                $statement_daily = $conn->query($sql_daily);
-                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
-
-                foreach ($results_daily
-
-                as $row_daily) { ?>
-
-                <tr>
-                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
-                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
-                    <?php } ?>
-
-                </tbody>
-                <?php echo "ยอดขาย อะไหล่ รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
-            </table>
-        </div>
-
-        <div class="card-body">
-            <table id="example" class="display table table-striped table-bordered"
-                   cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                    <th>เดือน</th>
-                    <th>ยอดขาย</th>
-                </tr>
-                </tfoot>
-                <tbody>
-                <?php
-                $date = date("d/m/Y");
-                $total = 0;
-                $sql_daily = " SELECT PGROUP,DI_MONTH,DI_MONTH_NAME,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
- FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $_POST["year"] . "'   
- AND BRANCH like '%" . $_POST["branch"] . "'
- AND PGROUP like '%P3'
- GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
- ORDER BY DI_MONTH" ;
-
-                $statement_daily = $conn->query($sql_daily);
-                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
-
-                foreach ($results_daily
-
-                as $row_daily) { ?>
-
-                <tr>
-                    <td><?php echo htmlentities($row_daily['DI_MONTH_NAME']); ?></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
-                    <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
-                    <?php } ?>
-
-                </tbody>
-                <?php echo "ยอด ค่าแรง-บริการ รวม ปี " . $_POST["year"] . " = " . number_format($total, 2) . " บาท " ?>
-            </table>
-        </div>
-
     </div>
+</div>
+
+
+
+            <table id="example" class="display table table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>สาขา</th>
+                    <th>BS</th>
+                    <th>BS</th>
+                    <th>FS</th>
+                    <th>FS</th>
+                    <th>DL</th>
+                    <th>DL</th>
+                    <th>LLIT</th>
+                    <th>LLIT</th>
+                    <th>DS</th>
+                    <th>DS</th>
+                    <th>DT</th>
+                    <th>DT</th>
+                    <th>ML</th>
+                    <th>ML</th>
+                    <th>PL</th>
+                    <th>PL</th>
+                    <th>AT</th>
+                    <th>AT</th>
+                    <th>CT</th>
+                    <th>CT</th>
+                    <th>GY</th>
+                    <th>GY</th>
+                    <th>LE</th>
+                    <th>LE</th>
+                    <th>YK</th>
+                    <th>YK</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                    <th>(เส้น)</th>
+                    <th>(บาท)</th>
+                </tr>
+                </tr>
+                </thead>
+                <tfoot>
+                </tfoot>
+                <tbody>
+                <?php
+                $date = date("d/m/Y");
+                $total = 0;
+                $sql_daily = " 
+SELECT
+BRANCH,
+SUM(IF(BRN_CODE='BS',TRD_QTY,0)) AS BS_QTY,
+SUM(IF(BRN_CODE='BS',TRD_G_KEYIN,0)) AS BS_AMT,
+SUM(IF(BRN_CODE='FS',TRD_QTY,0)) AS FS_QTY,
+SUM(IF(BRN_CODE='FS',TRD_G_KEYIN,0)) AS FS_AMT,
+SUM(IF(BRN_CODE='DL',TRD_QTY,0)) AS DL_QTY,
+SUM(IF(BRN_CODE='DL',TRD_G_KEYIN,0)) AS DL_AMT,
+SUM(IF(BRN_CODE='LLIT',TRD_QTY,0)) AS LLIT_QTY,
+SUM(IF(BRN_CODE='LLIT',TRD_G_KEYIN,0)) AS LLIT_AMT,
+SUM(IF(BRN_CODE='DS',TRD_QTY,0)) AS DS_QTY,
+SUM(IF(BRN_CODE='DS',TRD_G_KEYIN,0)) AS DS_AMT,
+SUM(IF(BRN_CODE='DT',TRD_QTY,0)) AS DT_QTY,
+SUM(IF(BRN_CODE='DT',TRD_G_KEYIN,0)) AS DT_AMT,
+SUM(IF(BRN_CODE='ML',TRD_QTY,0)) AS ML_QTY,
+SUM(IF(BRN_CODE='ML',TRD_G_KEYIN,0)) AS ML_AMT,
+SUM(IF(BRN_CODE='PL',TRD_QTY,0)) AS PL_QTY,
+SUM(IF(BRN_CODE='PL',TRD_G_KEYIN,0)) AS PL_AMT,
+SUM(IF(BRN_CODE='AT',TRD_QTY,0)) AS AT_QTY,
+SUM(IF(BRN_CODE='AT',TRD_G_KEYIN,0)) AS AT_AMT,
+SUM(IF(BRN_CODE='CT',TRD_QTY,0)) AS CT_QTY,
+SUM(IF(BRN_CODE='CT',TRD_G_KEYIN,0)) AS CT_AMT,
+SUM(IF(BRN_CODE='GY',TRD_QTY,0)) AS GY_QTY,
+SUM(IF(BRN_CODE='GY',TRD_G_KEYIN,0)) AS GY_AMT,
+SUM(IF(BRN_CODE='LE',TRD_QTY,0)) AS LE_QTY,
+SUM(IF(BRN_CODE='LE',TRD_G_KEYIN,0)) AS LE_AMT,
+SUM(IF(BRN_CODE='YK',TRD_QTY,0)) AS YK_QTY,
+SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT                
+ FROM ims_product_sale_cockpit 
+ WHERE DI_YEAR = '" . $year . "' 
+ AND PGROUP like '%P1'
+ GROUP BY BRANCH 
+ ORDER BY DI_MONTH" ;
+
+                $statement_daily = $conn->query($sql_daily);
+                $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($results_daily
+
+                as $row_daily) { ?>
+
+                <tr>
+                    <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['BS_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['BS_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['FS_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['FS_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DL_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DL_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['LLIT_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['LLIT_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DS_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DS_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DT_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['DT_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['ML_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['ML_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['PL_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['PL_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['AT_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['AT_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['CT_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['CT_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['GY_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['GY_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['LE_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['LE_AMT'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['YK_QTY'] ,2)); ?></p></td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_daily['YK_AMT'] ,2)); ?></p></td>
+                    <?php } ?>
+
+                </tbody>
+            </table>
+
+
+<div class="card">
+    <div class="card-header bg-success text-white">
+    </div>
+    <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
+    <input type="hidden" name="year" id="year" value="<?php echo $year; ?>">
+    <div class="card-body">
+        <div id="chart-container">
+            <canvas id="graphCanvas_Part_Monthly"></canvas>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <table id="example" class="display table table-striped table-bordered"
+               cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>อะไหล่</th>
+                <th>ยอดขาย</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <th>อะไหล่</th>
+                <th>ยอดขาย</th>
+            </tr>
+            </tfoot>
+            <tbody>
+            <?php
+            $total = 0;
+            $total_sale = 0;
+            $sql_brand = " SELECT SKU_CAT,ICCAT_NAME,sum(CAST(TRD_QTY AS DECIMAL(10,2))) as  TRD_QTY,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+ FROM ims_product_sale_cockpit
+ WHERE PGROUP = 'P2'
+ AND DI_YEAR = '" . $year . "'
+ AND DI_MONTH = '" . $month . "'
+ GROUP BY SKU_CAT,ICCAT_NAME
+ ORDER BY SKU_CAT ";
+
+            $statement_brand = $conn->query($sql_brand);
+            $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results_brand
+
+            as $row_brand) { ?>
+
+            <tr>
+                <td><?php echo htmlentities($row_brand['ICCAT_NAME']); ?></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'], 2)); ?></p></td>
+
+                <?php } ?>
+
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 
 </body>
 </html>
+
