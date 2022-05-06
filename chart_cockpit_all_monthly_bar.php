@@ -269,7 +269,7 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
             </tr>
             </thead>
             <tfoot>
-            <tr>
+            <!--tr>
                 <th>สาขา</th>
                 <th>อะไหล่ยางใหญ่</th>
                 <th>อะไหล่นอก ยางใหญ่</th>
@@ -277,7 +277,7 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
                 <th>อะไหล่นอก ยางเล็ก</th>
                 <th>น้ำมันเครื่อง</th>
                 <th>อะไหล่</th>
-            </tr>
+            </tr-->
             </tfoot>
             <tbody>
             <?php
