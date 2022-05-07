@@ -81,7 +81,7 @@ foreach ($MonthRecords as $row) {
  FROM ims_report_product_sale_summary 
  WHERE DI_YEAR = '" . $year . "' 
  AND DI_MONTH = '" . $month . "'
- ORDER BY BRANCH" ;
+ ORDER BY BRANCH";
 
                 $statement_total = $conn->query($sql_total);
                 $results_total = $statement_total->fetchAll(PDO::FETCH_ASSOC);
@@ -92,10 +92,16 @@ foreach ($MonthRecords as $row) {
 
                 <tr>
                     <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p></td>
+                    <td>
+                        <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
+                    </td>
+                    <td>
+                        <p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p>
+                    </td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
+                    </td>
+                    <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
+                    </td>
                     <?php } ?>
                 </tbody>
             </table>
@@ -103,78 +109,78 @@ foreach ($MonthRecords as $row) {
     </div>
 </div>
 
-
-<div class="card-body">
-            <table id="example" class="display table table-striped table-bordered"
-                   cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>สาขา</th>
-                    <th>BS
-                    <th>BS</th>
-                    <th>FS</th>
-                    <th>FS</th>
-                    <th>DL</th>
-                    <th>DL</th>
-                    <th>LLIT</th>
-                    <th>LLIT</th>
-                    <th>DS</th>
-                    <th>DS</th>
-                    <th>DT</th>
-                    <th>DT</th>
-                    <th>ML</th>
-                    <th>ML</th>
-                    <th>PL</th>
-                    <th>PL</th>
-                    <th>AT</th>
-                    <th>AT</th>
-                    <th>CT</th>
-                    <th>CT</th>
-                    <th>GY</th>
-                    <th>GY</th>
-                    <th>LE</th>
-                    <th>LE</th>
-                    <th>YK</th>
-                    <th>YK</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                    <th>(เส้น)</th>
-                    <th>(บาท)</th>
-                </tr>
-                </tr>
-                </thead>
-                <tfoot>
-                </tfoot>
-                <tbody>
-                <?php
-                $date = date("d/m/Y");
-                $total = 0;
-                $sql_brand = " 
+<div class="card">
+    <div class="card-body">
+        <table id="example" class="display table table-striped table-bordered"
+               cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>สาขา</th>
+                <th>BS
+                <th>BS</th>
+                <th>FS</th>
+                <th>FS</th>
+                <th>DL</th>
+                <th>DL</th>
+                <th>LLIT</th>
+                <th>LLIT</th>
+                <th>DS</th>
+                <th>DS</th>
+                <th>DT</th>
+                <th>DT</th>
+                <th>ML</th>
+                <th>ML</th>
+                <th>PL</th>
+                <th>PL</th>
+                <th>AT</th>
+                <th>AT</th>
+                <th>CT</th>
+                <th>CT</th>
+                <th>GY</th>
+                <th>GY</th>
+                <th>LE</th>
+                <th>LE</th>
+                <th>YK</th>
+                <th>YK</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+                <th>(เส้น)</th>
+                <th>(บาท)</th>
+            </tr>
+            </tr>
+            </thead>
+            <tfoot>
+            </tfoot>
+            <tbody>
+            <?php
+            $date = date("d/m/Y");
+            $total = 0;
+            $sql_brand = " 
 SELECT
 BRANCH,
 SUM(IF(BRN_CODE='BS',TRD_QTY,0)) AS BS_QTY,
@@ -208,47 +214,48 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
  AND DI_MONTH = '" . $month . "'  
  AND PGROUP like '%P1'
  GROUP BY BRANCH 
- ORDER BY BRANCH" ;
+ ORDER BY BRANCH";
 
-                $statement_brand = $conn->query($sql_brand);
-                $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
+            $statement_brand = $conn->query($sql_brand);
+            $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach ($results_brand
+            foreach ($results_brand
 
-                as $row_brand) { ?>
+            as $row_brand) { ?>
 
-                <tr>
-                    <td><?php echo htmlentities($row_brand['BRANCH']); ?></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_QTY'] ,2)); ?></p></td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_AMT'] ,2)); ?></p></td>
-                    <?php } ?>
+            <tr>
+                <td><?php echo htmlentities($row_brand['BRANCH']); ?></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_QTY'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_AMT'], 2)); ?></p></td>
+                <?php } ?>
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="card">
@@ -295,7 +302,7 @@ SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
  AND DI_MONTH = '" . $month . "'
  AND PGROUP like '%P2'
  GROUP BY BRANCH 
- ORDER BY BRANCH" ;
+ ORDER BY BRANCH";
 
             $statement_part = $conn->query($sql_part);
             $results_part = $statement_part->fetchAll(PDO::FETCH_ASSOC);
