@@ -250,6 +250,12 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src='vendor/calendar/main.js'></script>
     <script src='vendor/calendar/locales/th.js'></script>
 
+    <script>
+        myVar = setInterval(function () {
+            window.location.reload(true);
+        }, 100000);
+    </script>
+
 
     <script>
 
