@@ -252,8 +252,11 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         myVar = setInterval(function () {
-            window.location.reload(true);
-        }, 100000);
+            //window.location.reload(true);
+            showGraph_Cockpit_Daily();
+            showGraph_Cockpit_Monthly();
+            showGraph_Tires_Brand();
+        }, 300);
     </script>
 
 
