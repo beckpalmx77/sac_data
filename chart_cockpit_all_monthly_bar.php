@@ -2,11 +2,11 @@
 
 include("config/connect_db.php");
 
-//$month = $_POST["month"];
-//$year = $_POST["year"];
+$month = $_POST["month"];
+$year = $_POST["year"];
 
-$month = "4";
-$year = "2022";
+//$month = "4";
+//$year = "2022";
 
 $month_name = "";
 
