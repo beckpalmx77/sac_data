@@ -9,7 +9,8 @@ if ($_POST["action"] === 'GET_DATA') {
 
     //$product_id = 'DS2157016-HT603';
 
-    $sql_main = $select_query_stock . $sql_cond_stock . " AND SKU_CODE = '" . $product_id . "' " . $sql_group_stock . $sql_order_stock;
+    //$sql_main = $select_query_stock . $sql_cond_stock . " AND SKU_CODE = '" . $product_id . "' " . $sql_group_stock . $sql_order_stock;
+    $sql_main = $select_query_stock . $sql_cond_stock . $sql_group_stock . $sql_order_stock;
 
     //$my_file = fopen("sql_getsql.txt", "w") or die("Unable to open file!");
     //fwrite($my_file,$sql_main);
