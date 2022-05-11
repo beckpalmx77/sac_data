@@ -5,7 +5,7 @@ include('../cond_file/query_product_stock.php');
 
 if ($_POST["action"] === 'GET_DATA') {
 
-    $product_id = $_POST["product_id"];
+    //$product_id = $_POST["product_id"];
 
     //$product_id = 'DS2157016-HT603';
 
