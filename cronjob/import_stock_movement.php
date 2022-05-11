@@ -3,7 +3,7 @@ include('../config/connect_db.php');
 include('../config/connect_sqlserver.php');
 include('../cond_file/query_product_stock.php');
 
-if ($_POST["action"] === 'GET_DATA') {
+//if ($_POST["action"] === 'GET_DATA') {
 
     //$product_id = $_POST["product_id"];
 
@@ -65,6 +65,6 @@ if ($_POST["action"] === 'GET_DATA') {
         }
 
     }
-}
+//}
 
 
