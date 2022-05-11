@@ -26,3 +26,8 @@ function getDay2Digits(date) {
     return day;
 }
 
+function PrintPage() {
+    window.print();
+}
+
+

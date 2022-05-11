@@ -43,6 +43,7 @@ foreach ($MonthRecords as $row) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
+    <script src='js/util.js'></script>
 
     <title>สงวนออโต้คาร์</title>
 
@@ -50,62 +51,66 @@ foreach ($MonthRecords as $row) {
 
 <body onload="showGraph_Data_Monthly(1);showGraph_Data_Monthly(2);showGraph_Data_Monthly(3);">
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <i class="fa fa-signal" aria-hidden="true"></i> ยอดขายเปรียบเทียบ
-        <?php echo " เดือน " . $month_name . " ปี " . $year; ?>
-    </div>
-    <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
-    <input type="hidden" name="year" id="year" class="form-control" value="<?php echo $year; ?>">
-    <div class="card-body">
+<p class="card">
+<div class="card-header bg-primary text-white">
+    <i class="fa fa-signal" aria-hidden="true"></i> ยอดขายเปรียบเทียบ
+    <?php echo " เดือน " . $month_name . " ปี " . $year; ?>
+</div>
+<input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
+<input type="hidden" name="year" id="year" class="form-control" value="<?php echo $year; ?>">
 
-        <div class="card-body">
-            <table id="example" class="display table table-striped table-bordered"
-                   cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>สาขา</th>
-                    <th>ยอดขาย ยาง</th>
-                    <th>ยอดขาย อะไหล่</th>
-                    <th>ยอด ค่าแรง-ค่าบริการ</th>
-                    <th>ยอดรวม</th>
-                </tr>
-                </thead>
-                <tfoot>
-                </tfoot>
-                <tbody>
-                <?php
-                $date = date("d/m/Y");
-                $total = 0;
-                $sql_total = " SELECT *
+<div class="card-body">
+    <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
+</div>
+
+<div class="card-body">
+
+    <div class="card-body">
+        <table id="example" class="display table table-striped table-bordered"
+               cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>สาขา</th>
+                <th>ยอดขาย ยาง</th>
+                <th>ยอดขาย อะไหล่</th>
+                <th>ยอด ค่าแรง-ค่าบริการ</th>
+                <th>ยอดรวม</th>
+            </tr>
+            </thead>
+            <tfoot>
+            </tfoot>
+            <tbody>
+            <?php
+            $date = date("d/m/Y");
+            $total = 0;
+            $sql_total = " SELECT *
  FROM ims_report_product_sale_summary 
  WHERE DI_YEAR = '" . $year . "' 
  AND DI_MONTH = '" . $month . "'
  ORDER BY BRANCH";
 
-                $statement_total = $conn->query($sql_total);
-                $results_total = $statement_total->fetchAll(PDO::FETCH_ASSOC);
+            $statement_total = $conn->query($sql_total);
+            $results_total = $statement_total->fetchAll(PDO::FETCH_ASSOC);
 
-                foreach ($results_total
+            foreach ($results_total
 
-                as $row_total) { ?>
+            as $row_total) { ?>
 
-                <tr>
-                    <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
-                    <td>
-                        <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
-                    </td>
-                    <td>
-                        <p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p>
-                    </td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
-                    </td>
-                    <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
-                    </td>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </div>
+            <tr>
+                <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
+                <td>
+                    <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
+                </td>
+                <td>
+                    <p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p>
+                </td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
+                </td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
+                </td>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -326,8 +331,8 @@ SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
         </table>
     </div>
 
-</div>
 
+</div>
 
 </body>
 </html>
