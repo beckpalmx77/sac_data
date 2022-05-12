@@ -84,7 +84,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                                            <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
+                                            <td>
+                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+                                            </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
@@ -137,7 +139,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                                            <td><p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p></td>
+                                            <td>
+                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+                                            </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
@@ -178,14 +182,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </tfoot>
                                         <tbody>
                                         <form id="myform" name="myform" method="post">
-                                        <input type="hidden" name="year" id="year" class="form-control" value="<?php echo date("Y"); ?>">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <button type="button" id="BtnSale" name="BtnSale" class="btn btn-info mb-3">แสดง
-                                                    Chart ยอดขายยางแต่ละยี่ห้อ ตามเดือน Click
-                                                </button>
+                                            <input type="hidden" name="year" id="year" class="form-control"
+                                                   value="<?php echo date("Y"); ?>">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <button type="button" id="BtnSale" name="BtnSale"
+                                                            class="btn btn-info mb-3">แสดง
+                                                        Chart ยอดขายยางแต่ละยี่ห้อ ตามเดือน Click
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
                                         </form>
                                         <br>
                                         <?php
@@ -213,7 +219,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <td><?php echo htmlentities($row_brand['BRN_NAME']); ?></td>
                                             <td><?php echo htmlentities(number_format($row_brand['TRD_QTY'], 2)); ?></td>
                                             <?php $total = $total + $row_brand['TRD_QTY']; ?>
-                                            <td><p class="number"><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'], 2)); ?></p></td>
+                                            <td>
+                                                <p class="number"><?php echo htmlentities(number_format($row_brand['TRD_G_KEYIN'], 2)); ?></p>
+                                            </td>
                                             <?php $total_sale = $total_sale + $row_brand['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
@@ -365,11 +373,57 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 //let data_date = $("#data_date").val();
 
-                let backgroundColor = '#0a4dd3';
-                let borderColor = '#46d5f1';
+                let d = new Date();
+                let day = d.getDay();
+                let backgroundColor = '';
+                let borderColor = '';
+                let hoverBackgroundColor = '';
+                let hoverBorderColor = '';
 
-                let hoverBackgroundColor = '#072195';
-                let hoverBorderColor = '#a2a1a3';
+                switch (day) {
+                    case 0:
+                        backgroundColor = '#ff1f40';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#d0052e';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 1:
+                        backgroundColor = '#e9e207';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#d0ca05';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 2:
+                        backgroundColor = '#d56efa';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#e435f8';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 3:
+                        backgroundColor = '#41f31c';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#28d904';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 4:
+                        backgroundColor = '#f3941f';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#ef8502';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 5:
+                        backgroundColor = '#24c9f1';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#04a4cb';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                    case 6:
+                        backgroundColor = '#8341fd';
+                        borderColor = '#46d5f1';
+                        hoverBackgroundColor = '#6110fa';
+                        hoverBorderColor = '#a2a1a3';
+                        break;
+                }
 
                 $.post("engine/chart_data_cockpit_daily.php", {date: "2"}, function (data) {
                     console.log(data);
@@ -408,10 +462,10 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 //let data_date = $("#data_date").val();
 
-                let backgroundColor = '#d32dfc';
+                let backgroundColor = '#285bfa';
                 let borderColor = '#46d5f1';
 
-                let hoverBackgroundColor = '#a109c6';
+                let hoverBackgroundColor = '#062ee8';
                 let hoverBorderColor = '#a2a1a3';
 
                 $.post("engine/chart_data_cockpit_monthly.php", {date: "2"}, function (data) {
