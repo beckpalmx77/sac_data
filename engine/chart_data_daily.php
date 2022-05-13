@@ -12,11 +12,11 @@ $branch = $_POST["branch"];
 //fclose($myfile);
 
 $sql_get = "
- SELECT BRANCH,DAY(STR_TO_DATE(DI_DATE,'%d/%m/%Y')) as DI_DATE,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
+ SELECT BRANCH,DAY(STR_TO_DATE(DI_DATE,'%d/%m/%Y')) as DI_DATE,DATE(STR_TO_DATE(DI_DATE,'%d/%m/%Y')) as D_DI_DATE,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'   AND DI_MONTH = '" . $month . "'
  and BRANCH like '%" . $branch . "'
- GROUP BY  BRANCH,DI_DATE
+ GROUP BY  BRANCH,DI_DATE,D_DI_DATE
  ORDER BY STR_TO_DATE(DI_DATE,'%d/%m/%Y')
 ";
 
@@ -27,6 +27,7 @@ $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($results as $result) {
   $return_arr[] = array("DI_DATE" => $result['DI_DATE'],
+      "D_DI_DATE" => $result['D_DI_DATE'],
       "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 
