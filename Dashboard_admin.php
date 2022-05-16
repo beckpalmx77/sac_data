@@ -268,19 +268,21 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
 
         $(document).ready(function () {
+        /*
 
+        GET_DATA("ims_order_master", "1");
+        GET_DATA("ims_product", "2");
+        GET_DATA("ims_customer_ar", "3");
+        GET_DATA("ims_supplier", "4");
+
+        setInterval(function () {
             GET_DATA("ims_order_master", "1");
             GET_DATA("ims_product", "2");
             GET_DATA("ims_customer_ar", "3");
             GET_DATA("ims_supplier", "4");
-
-            setInterval(function () {
-                GET_DATA("ims_order_master", "1");
-                GET_DATA("ims_product", "2");
-                GET_DATA("ims_customer_ar", "3");
-                GET_DATA("ims_supplier", "4");
-            }, 3000);
-        });
+        }, 3000);
+    });
+         */
 
     </script>
 
