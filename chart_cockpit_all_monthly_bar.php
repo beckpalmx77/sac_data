@@ -66,6 +66,7 @@ foreach ($MonthRecords as $row) {
 <div class="card-body">
 
     <div class="card-body">
+        <h4><span class="badge bg-success">ยอดขาย ยาง อะไหล่ ค่าแรง-ค่าบริการ</span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
@@ -116,6 +117,7 @@ foreach ($MonthRecords as $row) {
 
 <div class="card">
     <div class="card-body">
+        <h4><span class="badge bg-success">ยอดขาย ยางตามยี่ห้อ</span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
@@ -267,6 +269,7 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
     <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
     <input type="hidden" name="year" id="year" value="<?php echo $year; ?>">
     <div class="card-body">
+        <h4><span class="badge bg-success">ยอดขาย อะไหล่ต่างๆ</span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
