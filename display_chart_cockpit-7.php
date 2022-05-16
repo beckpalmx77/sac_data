@@ -76,11 +76,11 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="myform" name="myform" action="engine/chart_data_daily.php" method="post">
-
+                                                            <input type="hidden" id="month" name="month" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
 
-                                                                    <label for="month">เลือกเดือน :</label>
+                                                                    <!--label for="month">เลือกเดือน :</label>
                                                                     <select name="month" id="month" class="form-control" required>
                                                                         <option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option>
                                                                         <?php foreach ($MonthRecords as $row) { ?>
@@ -88,7 +88,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 <?php echo $row["month_name"]; ?>
                                                                             </option>
                                                                         <?php } ?>
-                                                                    </select>
+                                                                    </select-->
                                                                     <label for="year">เลือกปี :</label>
                                                                     <select name="year" id="year" class="form-control" required>
                                                                         <?php foreach ($YearRecords as $row) { ?>

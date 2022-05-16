@@ -66,5 +66,10 @@
       <path value="$PROJECT_DIR$/vendor/mobiledetect/mobiledetectlib" />
     </include_path>
   </component>
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="localhost" id="6038bd59-d7f8-4acf-b64d-80db5124b1e1" name="localhost" use_path_mappings="true" />
+    </servers>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4" />
 </project>

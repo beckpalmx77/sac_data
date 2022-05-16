@@ -63,64 +63,31 @@ foreach ($MonthRecords as $row) {
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
 
-<div class="card-body">
+<?php for($loop=1;$loop<=4;$loop++) {
 
-    <div class="card-body">
-        <table id="example" class="display table table-striped table-bordered"
-               cellspacing="0" width="100%">
-            <thead>
-            <tr>
-                <th>สาขา</th>
-                <th>ยอดขาย ยาง</th>
-                <th>ยอดขาย อะไหล่</th>
-                <th>ยอด ค่าแรง-ค่าบริการ</th>
-                <th>ยอดรวม</th>
-            </tr>
-            </thead>
-            <tfoot>
-            </tfoot>
-            <tbody>
-            <?php
-            $date = date("d/m/Y");
-            $total = 0;
-            $sql_total = " SELECT *
- FROM ims_report_product_sale_summary 
- WHERE DI_YEAR = '" . $year . "' 
- AND DI_MONTH = '" . $month . "'
- ORDER BY BRANCH";
-
-            $statement_total = $conn->query($sql_total);
-            $results_total = $statement_total->fetchAll(PDO::FETCH_ASSOC);
-
-            foreach ($results_total
-
-            as $row_total) { ?>
-
-            <tr>
-                <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
-                <td>
-                    <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
-                </td>
-                <td>
-                    <p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p>
-                </td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
-                </td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
-                </td>
-                <?php } ?>
-            </tbody>
-        </table>
-    </div>
-</div>
+switch ($loop) {
+    case 1:
+        $BRANCH = "CP-340";
+        break;
+    case 2:
+        $BRANCH = "CP-BB";
+        break;
+    case 3:
+        $BRANCH = "CP-BY";
+        break;
+    case 4:
+        $BRANCH = "CP-RP";
+        break;
+} ?>
 
 <div class="card">
     <div class="card-body">
+        <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?> </span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
             <tr>
-                <th>สาขา</th>
+                <th>ปี</th>
                 <th>มกราคม</th>
                 <th>กุมภาพันธ์</th>
                 <th>มีนาคม</th>
@@ -143,7 +110,7 @@ foreach ($MonthRecords as $row) {
             $date = date("d/m/Y");
             $total = 0;
             $sql_brand = " 
-SELECT BRANCH,
+SELECT DI_YEAR,
 SUM(IF(DI_MONTH='1',TRD_QTY,0)) AS 1_QTY,
 SUM(IF(DI_MONTH='1',TRD_G_KEYIN,0)) AS 1_AMT,
 SUM(IF(DI_MONTH='2',TRD_QTY,0)) AS 2_QTY,
@@ -169,10 +136,9 @@ SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
  FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $year . "' 
- AND PGROUP like '%P1'
- GROUP BY BRANCH 
- ORDER BY BRANCH ";
+ WHERE PGROUP like '%P1' AND BRANCH = '" . $BRANCH . "'" . "
+ GROUP BY DI_YEAR 
+ ORDER BY DI_YEAR ";
 
             $statement_brand = $conn->query($sql_brand);
             $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
@@ -182,7 +148,7 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
             as $row_brand) { ?>
 
             <tr>
-                <td><?php echo htmlentities($row_brand['BRANCH']); ?></td>
+                <td><?php echo htmlentities($row_brand['DI_YEAR']); ?></td>
                 <td><p class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p></td>
                 <td><p class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p></td>
                 <td><p class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p></td>
@@ -202,76 +168,100 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
     </div>
 </div>
 
+<?php } ?>
+
+
 <div class="card">
-    <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
-    <input type="hidden" name="year" id="year" value="<?php echo $year; ?>">
     <div class="card-body">
+        <h4><span class="badge bg-success">ยอดขายยางรวมทุกสาขา</span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
             <tr>
-                <th>สาขา</th>
-                <th>อะไหล่ยางใหญ่</th>
-                <th>อะไหล่นอก ยางใหญ่</th>
-                <th>อะไหล่ยางเล็ก</th>
-                <th>อะไหล่นอก ยางเล็ก</th>
-                <th>น้ำมันเครื่อง</th>
-                <th>อะไหล่</th>
+                <th>ปี</th>
+                <th>มกราคม</th>
+                <th>กุมภาพันธ์</th>
+                <th>มีนาคม</th>
+                <th>เมษายน</th>
+                <th>พฤษภาคม</th>
+                <th>มิถุนายน</th>
+                <th>กรกฎาคม</th>
+                <th>สิงหาคม</th>
+                <th>กันยายน</th>
+                <th>ตุลาคม</th>
+                <th>พฤศจิกายน</th>
+                <th>ธันวาคม</th>
+            </tr>
             </tr>
             </thead>
             <tfoot>
-            <!--tr>
-                <th>สาขา</th>
-                <th>อะไหล่ยางใหญ่</th>
-                <th>อะไหล่นอก ยางใหญ่</th>
-                <th>อะไหล่ยางเล็ก</th>
-                <th>อะไหล่นอก ยางเล็ก</th>
-                <th>น้ำมันเครื่อง</th>
-                <th>อะไหล่</th>
-            </tr-->
             </tfoot>
             <tbody>
             <?php
+            $date = date("d/m/Y");
             $total = 0;
-            $total_sale = 0;
-            $sql_part = " SELECT BRANCH,
-SUM(IF(SKU_CAT='8BTCA01-001',TRD_G_KEYIN,0)) AS PART_1,
-SUM(IF(SKU_CAT='8BTCA01-002',TRD_G_KEYIN,0)) AS PART_2,
-SUM(IF(SKU_CAT='8CPA01-001',TRD_G_KEYIN,0)) AS PART_3,
-SUM(IF(SKU_CAT='8CPA01-002',TRD_G_KEYIN,0)) AS PART_4,
-SUM(IF(SKU_CAT='8SAC11',TRD_G_KEYIN,0)) AS PART_5,
-SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
- FROM ims_product_sale_cockpit 
- WHERE DI_YEAR = '" . $year . "' 
- AND DI_MONTH = '" . $month . "'
- AND PGROUP like '%P2'
- GROUP BY BRANCH 
- ORDER BY BRANCH";
+            $sql_brand = "
+SELECT 
+DI_YEAR,
+SUM(IF(DI_MONTH='1',TRD_QTY,0)) AS 1_QTY,
+SUM(IF(DI_MONTH='1',TRD_G_KEYIN,0)) AS 1_AMT,
+SUM(IF(DI_MONTH='2',TRD_QTY,0)) AS 2_QTY,
+SUM(IF(DI_MONTH='2',TRD_G_KEYIN,0)) AS 2_AMT,
+SUM(IF(DI_MONTH='3',TRD_QTY,0)) AS 3_QTY,
+SUM(IF(DI_MONTH='3',TRD_G_KEYIN,0)) AS 3_AMT,
+SUM(IF(DI_MONTH='4',TRD_QTY,0)) AS 4_QTY,
+SUM(IF(DI_MONTH='4',TRD_G_KEYIN,0)) AS 4_AMT,
+SUM(IF(DI_MONTH='5',TRD_QTY,0)) AS 5_QTY,
+SUM(IF(DI_MONTH='5',TRD_G_KEYIN,0)) AS 5_AMT,
+SUM(IF(DI_MONTH='6',TRD_QTY,0)) AS 6_QTY,
+SUM(IF(DI_MONTH='6',TRD_G_KEYIN,0)) AS 6_AMT,
+SUM(IF(DI_MONTH='7',TRD_QTY,0)) AS 7_QTY,
+SUM(IF(DI_MONTH='7',TRD_G_KEYIN,0)) AS 7_AMT,
+SUM(IF(DI_MONTH='8',TRD_QTY,0)) AS 8_QTY,
+SUM(IF(DI_MONTH='8',TRD_G_KEYIN,0)) AS 8_AMT,
+SUM(IF(DI_MONTH='9',TRD_QTY,0)) AS 9_QTY,
+SUM(IF(DI_MONTH='9',TRD_G_KEYIN,0)) AS 9_AMT,
+SUM(IF(DI_MONTH='10',TRD_QTY,0)) AS 10_QTY,
+SUM(IF(DI_MONTH='10',TRD_G_KEYIN,0)) AS 10_AMT,
+SUM(IF(DI_MONTH='11',TRD_QTY,0)) AS 11_QTY,
+SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
+SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
+SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
+ FROM ims_product_sale_cockpit  
+ WHERE PGROUP like '%P1' 
+ GROUP BY DI_YEAR ";
 
-            $statement_part = $conn->query($sql_part);
-            $results_part = $statement_part->fetchAll(PDO::FETCH_ASSOC);
+            //WHERE DI_YEAR = '" . $year . "'
 
-            foreach ($results_part
+            $statement_brand = $conn->query($sql_brand);
+            $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-            as $row_part) { ?>
+            foreach ($results_brand
+
+            as $row_brand) { ?>
 
             <tr>
-                <td><?php echo htmlentities($row_part['BRANCH']); ?></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_1'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_2'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_3'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_4'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_5'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_6'], 2)); ?></p></td>
-
+                <td><p class="number"><?php echo htmlentities($row_brand['DI_YEAR']);?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['4_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['5_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['6_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['7_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['8_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['9_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['10_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['11_AMT'], 2)); ?></p></td>
+                <td><p class="number"><?php echo htmlentities(number_format($row_brand['12_AMT'], 2)); ?></p></td>
                 <?php } ?>
 
             </tbody>
         </table>
     </div>
-
-
 </div>
+
+
 
 </body>
 </html>
