@@ -80,67 +80,26 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <input type="hidden" id="year" name="year" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-
-                                                                    <!--label for="month">เลือกเดือน :</label>
-                                                                    <select name="month" id="month" class="form-control" required>
-                                                                        <option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option>
-                                                                        <?php foreach ($MonthRecords as $row) { ?>
-                                                                            <option value="<?php echo $row["month"]; ?>">
-                                                                                <?php echo $row["month_name"]; ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                    </select-->
-                                                                    <!--label for="year">เลือกปี :</label>
-                                                                    <select name="year" id="year" class="form-control" required>
-                                                                        <?php foreach ($YearRecords as $row) { ?>
-                                                                            <option value="<?php echo $row["DI_YEAR"]; ?>">
-                                                                                <?php echo $row["DI_YEAR"]; ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                    </select-->
-                                                                    <!--label for="branch">เลือกสาขา :</label>
-                                                                    <select name="branch" id="branch" class="form-control" required>
-                                                                        <?php foreach ($BranchRecords as $row) { ?>
-                                                                            <option value="<?php echo $row["branch"]; ?>">
-                                                                                <?php echo $row["branch_name"]; ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                    </select-->
-                                                                    <br>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">แสดงข้อมูลยอดขายเปรียบเทียบ
                                                                             </button>
                                                                         </div>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- /.col-md-8 col-md-offset-2 -->
                                         </div>
-                                        <!-- /.row -->
-
                                     </section>
-
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
-                    <!--Row-->
-
-                    <!-- Row -->
 
                 </div>
-
-                <!---Container Fluid-->
 
             </div>
 
