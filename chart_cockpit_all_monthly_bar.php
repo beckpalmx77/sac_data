@@ -98,15 +98,15 @@ foreach ($MonthRecords as $row) {
 
             <tr>
                 <td><?php echo htmlentities($row_total['BRANCH']); ?></td>
-                <td>
+                <td align="right">
                     <p class="number"><?php echo htmlentities(number_format($row_total['tires_total_amt'], 2)); ?></p>
                 </td>
-                <td>
+                <td align="right">
                     <p class="number"><?php echo htmlentities(number_format($row_total['part_total_amt'], 2)); ?></p>
                 </td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_total['svr_total_amt'], 2)); ?></p>
                 </td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_total['total_amt'], 2)); ?></p>
                 </td>
                 <?php } ?>
             </tbody>
@@ -230,32 +230,32 @@ SUM(IF(BRN_CODE='YK',TRD_G_KEYIN,0)) AS YK_AMT
 
             <tr>
                 <td><?php echo htmlentities($row_brand['BRANCH']); ?></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['BS_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['FS_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DL_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DS_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['DT_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['ML_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['PL_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['CT_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['GY_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_QTY'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_brand['YK_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['BS_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['BS_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['FS_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['FS_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DL_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DL_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LLIT_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DS_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DS_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DT_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['DT_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['ML_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['ML_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['PL_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['PL_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['AT_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['CT_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['CT_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['GY_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['GY_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['LE_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['YK_QTY'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['YK_AMT'], 2)); ?></p></td>
                 <?php } ?>
 
             </tbody>
@@ -318,12 +318,12 @@ SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
 
             <tr>
                 <td><?php echo htmlentities($row_part['BRANCH']); ?></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_1'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_2'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_3'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_4'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_5'], 2)); ?></p></td>
-                <td><p class="number"><?php echo htmlentities(number_format($row_part['PART_6'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_1'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_2'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_3'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_4'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_5'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_part['PART_6'], 2)); ?></p></td>
 
                 <?php } ?>
 
