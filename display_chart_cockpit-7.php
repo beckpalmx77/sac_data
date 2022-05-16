@@ -77,6 +77,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                         <form id="myform" name="myform" action="engine/chart_data_daily.php" method="post">
                                                             <input type="hidden" id="month" name="month" value="">
+                                                            <input type="hidden" id="year" name="year" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
 
@@ -89,14 +90,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             </option>
                                                                         <?php } ?>
                                                                     </select-->
-                                                                    <label for="year">เลือกปี :</label>
+                                                                    <!--label for="year">เลือกปี :</label>
                                                                     <select name="year" id="year" class="form-control" required>
                                                                         <?php foreach ($YearRecords as $row) { ?>
                                                                             <option value="<?php echo $row["DI_YEAR"]; ?>">
                                                                                 <?php echo $row["DI_YEAR"]; ?>
                                                                             </option>
                                                                         <?php } ?>
-                                                                    </select>
+                                                                    </select-->
                                                                     <!--label for="branch">เลือกสาขา :</label>
                                                                     <select name="branch" id="branch" class="form-control" required>
                                                                         <?php foreach ($BranchRecords as $row) { ?>

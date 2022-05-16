@@ -53,8 +53,7 @@ foreach ($MonthRecords as $row) {
 
 <p class="card">
 <div class="card-header bg-primary text-white">
-    <i class="fa fa-signal" aria-hidden="true"></i> ยอดขายเปรียบเทียบ
-    <?php echo " เดือน " . $month_name . " ปี " . $year; ?>
+    <i class="fa fa-signal" aria-hidden="true"></i> ยอดขายเปรียบเทียบ เดือน/ปี
 </div>
 <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
 <input type="hidden" name="year" id="year" class="form-control" value="<?php echo $year; ?>">
