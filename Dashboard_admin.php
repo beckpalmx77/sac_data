@@ -281,8 +281,10 @@ if (strlen($_SESSION['alogin']) == "") {
             GET_DATA("ims_customer_ar", "3");
             GET_DATA("ims_supplier", "4");
         }, 3000);
-    });
+
          */
+    });
+
 
     </script>
 

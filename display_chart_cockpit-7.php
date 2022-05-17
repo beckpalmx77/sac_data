@@ -140,6 +140,17 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
+        $(document).ready(function () {
+            document.forms['myform'].action = 'data_tires_cockpit_year';
+            document.forms['myform'].target = '_blank';
+            document.forms['myform'].submit();
+            return true;
+        });
+
+    </script>
+
+    <script>
+
         $("#BtnSale").click(function () {
             document.forms['myform'].action = 'data_tires_cockpit_year';
             document.forms['myform'].target = '_blank';
