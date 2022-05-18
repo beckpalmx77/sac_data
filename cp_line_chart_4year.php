@@ -30,8 +30,8 @@ include ('engine/get_data_chart_4year.php');
         labels: labels,
         datasets: [{
                 label: <?php echo $label1?>,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(250,42,86)',
+                borderColor: 'rgb(246,44,86)',
                 data: <?php echo $data1?>,
             },
             {
