@@ -19,7 +19,7 @@ $sql_get = "
  and BRN_NAME = '" . $brn_name . "'
  GROUP BY  BRN_NAME,DI_MONTH,DI_MONTH_NAME 
  ORDER BY DI_MONTH
-";
+ ";
 
 $return_arr = array();
 
