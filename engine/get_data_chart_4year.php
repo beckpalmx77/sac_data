@@ -45,19 +45,19 @@ for ($x = 0; $x <= 3; $x++) {
 
     switch ($x) {
         case 0:
-            $label1= "ปี " . $year;
+            $label1=$year;
             $data1=$str_return;
             break;
         case 1:
-            $label2= "ปี " . $year;
+            $label2=$year;
             $data2=$str_return;
             break;
         case 2:
-            $label3= "ปี " . $year;
+            $label3=$year;
             $data3=$str_return;
             break;
         case 3:
-            $label4= "ปี " . $year;
+            $label4=$year;
             $data4=$str_return;
             break;
     }
