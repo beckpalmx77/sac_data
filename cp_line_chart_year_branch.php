@@ -89,6 +89,10 @@ include ('engine/get_data_chart_year_branch.php');
     <i class="fa fa-signal" aria-hidden="true"></i> ยอดขายเปรียบเทียบ สาขา : <?php echo $BRANCH ?>
 </div>
 
+<div class="card-body">
+    <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
+</div>
+
 <div>
     <canvas id="myChart"></canvas>
 </div>
