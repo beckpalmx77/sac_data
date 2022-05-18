@@ -47,6 +47,12 @@ foreach ($MonthRecords as $row) {
 
     <title>สงวนออโต้คาร์</title>
 
+    <script>
+        function Chart_Page(page) {
+            alert("OK = " + page);
+        }
+    </script>
+
 </head>
 
 <body onload="">
@@ -81,7 +87,10 @@ switch ($loop) {
 
 <div class="card">
     <div class="card-body">
-        <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?> </span></h4>
+        <div class="card-body">
+            <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?></span></h4>
+            <a id="myChartLink" href="#" onclick="Chart_Page('<?php echo $BRANCH ?>');"><button type="button" class="btn btn-outline-primary">ดู Graph</button></a>
+        </div>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
