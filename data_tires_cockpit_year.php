@@ -48,8 +48,21 @@ foreach ($MonthRecords as $row) {
     <title>สงวนออโต้คาร์</title>
 
     <script>
-        function Chart_Page(page) {
-            alert("OK = " + page);
+        function Chart_Page(branch) {
+            PageAction = "";
+            switch (branch) {
+                case 'CP-340':
+                    PageAction = 'cp_line_chart_year_branch';
+                    break;
+                default :
+                    PageAction = "cp_line_chart_year_branch2";
+                    break;
+            }
+            $('#branch').val(branch);
+            document.forms['myform'].action = PageAction;
+            document.forms['myform'].target = '_blank';
+            document.forms['myform'].submit();
+            return true;
         }
     </script>
 
@@ -68,56 +81,61 @@ foreach ($MonthRecords as $row) {
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
 
-<?php for($loop=1;$loop<=4;$loop++) {
+<?php for ($loop = 1; $loop <= 4; $loop++) {
 
-switch ($loop) {
-    case 1:
-        $BRANCH = "CP-340";
-        break;
-    case 2:
-        $BRANCH = "CP-BB";
-        break;
-    case 3:
-        $BRANCH = "CP-BY";
-        break;
-    case 4:
-        $BRANCH = "CP-RP";
-        break;
-} ?>
+    switch ($loop) {
+        case 1:
+            $BRANCH = "CP-340";
+            break;
+        case 2:
+            $BRANCH = "CP-BB";
+            break;
+        case 3:
+            $BRANCH = "CP-BY";
+            break;
+        case 4:
+            $BRANCH = "CP-RP";
+            break;
+    } ?>
 
-<div class="card">
-    <div class="card-body">
+    <div class="card">
         <div class="card-body">
-            <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?></span></h4>
-            <a id="myChartLink" href="#" onclick="Chart_Page('<?php echo $BRANCH ?>');"><button type="button" class="btn btn-outline-primary">ดู Graph</button></a>
-        </div>
-        <table id="example" class="display table table-striped table-bordered"
-               cellspacing="0" width="100%">
-            <thead>
-            <tr>
-                <th>ปี</th>
-                <th>มกราคม</th>
-                <th>กุมภาพันธ์</th>
-                <th>มีนาคม</th>
-                <th>เมษายน</th>
-                <th>พฤษภาคม</th>
-                <th>มิถุนายน</th>
-                <th>กรกฎาคม</th>
-                <th>สิงหาคม</th>
-                <th>กันยายน</th>
-                <th>ตุลาคม</th>
-                <th>พฤศจิกายน</th>
-                <th>ธันวาคม</th>
-            </tr>
-            </tr>
-            </thead>
-            <tfoot>
-            </tfoot>
-            <tbody>
-            <?php
-            $date = date("d/m/Y");
-            $total = 0;
-            $sql_brand = " 
+            <form id="myform" name="myform" method="post">
+                <input type="hidden" id="branch" name="branch">
+            <div class="card-body">
+                <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?></span></h4>
+                <a id="myChartLink" href="#" onclick="Chart_Page('<?php echo $BRANCH ?>');">
+                    <button type="button" class="btn btn-outline-primary">ดู Graph</button>
+                </a>
+            </div>
+            </form>
+            <table id="example" class="display table table-striped table-bordered"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>ปี</th>
+                    <th>มกราคม</th>
+                    <th>กุมภาพันธ์</th>
+                    <th>มีนาคม</th>
+                    <th>เมษายน</th>
+                    <th>พฤษภาคม</th>
+                    <th>มิถุนายน</th>
+                    <th>กรกฎาคม</th>
+                    <th>สิงหาคม</th>
+                    <th>กันยายน</th>
+                    <th>ตุลาคม</th>
+                    <th>พฤศจิกายน</th>
+                    <th>ธันวาคม</th>
+                </tr>
+                </tr>
+                </thead>
+                <tfoot>
+                </tfoot>
+                <tbody>
+                <?php
+                $date = date("d/m/Y");
+                $total = 0;
+                $sql_brand = " 
 SELECT DI_YEAR,
 SUM(IF(DI_MONTH='1',TRD_QTY,0)) AS 1_QTY,
 SUM(IF(DI_MONTH='1',TRD_G_KEYIN,0)) AS 1_AMT,
@@ -148,33 +166,57 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
  GROUP BY DI_YEAR 
  ORDER BY DI_YEAR ";
 
-            $statement_brand = $conn->query($sql_brand);
-            $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
+                $statement_brand = $conn->query($sql_brand);
+                $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($results_brand
+                foreach ($results_brand
 
-            as $row_brand) { ?>
+                as $row_brand) { ?>
 
-            <tr>
-                <td><?php echo htmlentities($row_brand['DI_YEAR']); ?></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['4_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['5_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['6_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['7_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['8_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['9_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['10_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['11_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['12_AMT'], 2)); ?></p></td>
-                <?php } ?>
+                <tr>
+                    <td><?php echo htmlentities($row_brand['DI_YEAR']); ?></td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['4_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['5_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['6_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['7_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['8_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['9_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['10_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['11_AMT'], 2)); ?></p>
+                    </td>
+                    <td align="right"><p
+                                class="number"><?php echo htmlentities(number_format($row_brand['12_AMT'], 2)); ?></p>
+                    </td>
+                    <?php } ?>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 <?php } ?>
 
@@ -183,7 +225,7 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
     <div class="card-body">
         <h4><span class="badge bg-success">ยอดขายยางรวมทุกสาขา</span></h4>
 
-        <?php include ('cp_line_chart_4year.php');?>
+        <?php include('cp_line_chart_4year.php'); ?>
 
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
@@ -252,19 +294,31 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
             as $row_brand) { ?>
 
             <tr>
-                <td align="right"><p class="number"><?php echo htmlentities($row_brand['DI_YEAR']);?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['4_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['5_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['6_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['7_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['8_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['9_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['10_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['11_AMT'], 2)); ?></p></td>
-                <td align="right"><p class="number"><?php echo htmlentities(number_format($row_brand['12_AMT'], 2)); ?></p></td>
+                <td align="right"><p class="number"><?php echo htmlentities($row_brand['DI_YEAR']); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['1_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['2_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['3_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['4_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['5_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['6_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['7_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['8_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['9_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['10_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['11_AMT'], 2)); ?></p></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities(number_format($row_brand['12_AMT'], 2)); ?></p></td>
                 <?php } ?>
 
             </tbody>
@@ -275,7 +329,6 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
 <div class="card-body">
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
-
 
 
 </body>
