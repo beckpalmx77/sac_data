@@ -29,25 +29,25 @@ include ('engine/get_data_chart_4year.php');
     const data = {
         labels: labels,
         datasets: [{
-            label: <?php echo "ปี : " . $label1?>,
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: <?php echo $data1?>,
-        },
+                label: <?php echo $label1?>,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: <?php echo $data1?>,
+            },
             {
-                label: <?php echo "ปี : " . $label2?>,
+                label: <?php echo $label2?>,
                 backgroundColor: 'rgb(243,87,4)',
                 borderColor: 'rgb(248,117,85)',
                 data: <?php echo $data2?>,
             },
             {
-                label: <?php echo "ปี : " . $label3?>,
+                label: <?php echo $label3?>,
                 backgroundColor: 'rgb(16,241,46)',
                 borderColor: 'rgb(135,245,88)',
                 data: <?php echo $data3?>,
             },
             {
-                label: <?php echo "ปี : " . $label4?>,
+                label: <?php echo $label4?>,
                 backgroundColor: 'rgb(6,107,215)',
                 borderColor: 'rgb(88,141,245)',
                 data: <?php echo $data4?>,
