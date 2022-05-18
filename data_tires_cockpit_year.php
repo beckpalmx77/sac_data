@@ -49,7 +49,7 @@ foreach ($MonthRecords as $row) {
 
 </head>
 
-<body onload="showGraph_Data_Monthly(1);showGraph_Data_Monthly(2);showGraph_Data_Monthly(3);">
+<body onload="">
 
 <p class="card">
 <div class="card-header bg-primary text-white">
@@ -261,6 +261,10 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="card-body">
+    <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
 
 
