@@ -82,7 +82,18 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="col-sm-12">
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">แสดงข้อมูลยอดขายเปรียบเทียบ
+                                                                            <button type="button" id="BtnSaleTires" name="BtnSaleTires" class="btn btn-primary btn-block">แสดงข้อมูลยอดขาย ยาง เปรียบเทียบ
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnSalePart" name="BtnSalePart" class="btn btn-primary btn-block">แสดงข้อมูลยอดขาย อะไหล่ เปรียบเทียบ
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -140,18 +151,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $(document).ready(function () {
-            document.forms['myform'].action = 'data_tires_cockpit_year';
-            document.forms['myform'].target = '_blank';
-            document.forms['myform'].submit();
-            return true;
-        });
-
-    </script>
-
-    <script>
-
-        $("#BtnSale").click(function () {
+        $("#BtnSaleTires").click(function () {
             document.forms['myform'].action = 'data_tires_cockpit_year';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
