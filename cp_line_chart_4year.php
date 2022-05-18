@@ -36,14 +36,14 @@ include ('engine/get_data_chart_4year.php');
             },
             {
                 label: <?php echo $label2?>,
-                backgroundColor: 'rgb(243,87,4)',
-                borderColor: 'rgb(248,117,85)',
+                backgroundColor: 'rgb(248,92,9)',
+                borderColor: 'rgb(217,96,66)',
                 data: <?php echo $data2?>,
             },
             {
                 label: <?php echo $label3?>,
-                backgroundColor: 'rgb(16,241,46)',
-                borderColor: 'rgb(135,245,88)',
+                backgroundColor: 'rgb(5,179,29)',
+                borderColor: 'rgb(71,213,13)',
                 data: <?php echo $data3?>,
             },
             {
