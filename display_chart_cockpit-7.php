@@ -6,7 +6,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -75,14 +75,18 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="myform" name="myform" action="engine/chart_data_daily.php" method="post">
+                                                        <form id="myform" name="myform"
+                                                              action="engine/chart_data_daily.php" method="post">
                                                             <input type="hidden" id="month" name="month" value="">
                                                             <input type="hidden" id="year" name="year" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="button" id="BtnSaleTires" name="BtnSaleTires" class="btn btn-primary btn-block">แสดงข้อมูลยอดขาย ยาง เปรียบเทียบ
+                                                                            <button type="button" id="BtnSaleTires"
+                                                                                    name="BtnSaleTires"
+                                                                                    class="btn btn-primary btn-block">
+                                                                                แสดงข้อมูลยอดขาย ยาง เปรียบเทียบ
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -93,7 +97,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="col-sm-12">
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="button" id="BtnSalePart" name="BtnSalePart" class="btn btn-primary btn-block">แสดงข้อมูลยอดขาย อะไหล่ เปรียบเทียบ
+                                                                            <button type="button" id="BtnSalePart"
+                                                                                    name="BtnSalePart"
+                                                                                    class="btn btn-primary btn-block">
+                                                                                แสดงข้อมูลยอดขาย อะไหล่ เปรียบเทียบ
                                                                             </button>
                                                                         </div>
                                                                     </div>
