@@ -398,9 +398,9 @@ if (strlen($_SESSION['alogin']) == "") {
                         hoverBorderColor = '#a2a1a3';
                         break;
                     case 2:
-                        backgroundColor = '#d56efa';
+                        backgroundColor = '#fc53f3';
                         borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#e435f8';
+                        hoverBackgroundColor = '#e933ff';
                         hoverBorderColor = '#a2a1a3';
                         break;
                     case 3:

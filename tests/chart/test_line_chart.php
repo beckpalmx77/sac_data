@@ -1,55 +1,84 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 <script>
 
-    const labels = [
-        'มกราคม',
-        'กุมภาพันธ์',
-        'มีนาคม',
-        'เมษายน',
-        'พฤษภาคม',
-        'มิถุนายน',
-        'กรกฎาคม',
-        'สิงหาคม',
-        'กันยายน',
-        'พฤศจิกายน',
-        'ธันวาคม',
-    ];
-
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
-        },
-            {
-                label: 'My First dataset',
-                backgroundColor: 'rgb(243,87,4)',
-                borderColor: 'rgb(248,117,85)',
-                data: [10, 12, 15, 12, 20, 25, 35],
+    $(document).ready(function () {
+        alert("66");
+        $.ajax({
+            type: "POST",
+            url: 'get_data.php',
+            dataType: "json",
+            data: formData,
+            success: function (response) {
+                alert(response);
             },
-            {
-                label: 'My First dataset',
-                backgroundColor: 'rgb(16,241,46)',
-                borderColor: 'rgb(135,245,88)',
-                data: [0, 0, 15, 18, 23, 45, 25],
-            },
-            {
-                label: 'My First dataset',
-                backgroundColor: 'rgb(6,107,215)',
-                borderColor: 'rgb(88,141,245)',
-                data: [20, 22, 35, 32, 10, 45, 55],
+            error: function (response) {
+                alertify.error("error : " + response);
             }
-        ]
-    };
+        });
+    });
 
-    const config = {
-        type: 'line',
-        data: data,
-        options: {}
-    };
+</script>
+
+
+<script>
+
+
+        let data1 = [0, 10, 5, 2, 20, 30, 45];
+        let data2 = [5, 15, 25, 32, 25, 35, 55];
+        let data3 = [5, 25, 45, 52, 45, 35, 55];
+        let data4 = [5, 35, 15, 22, 35, 15, 35];
+
+        const labels = [
+            'มกราคม',
+            'กุมภาพันธ์',
+            'มีนาคม',
+            'เมษายน',
+            'พฤษภาคม',
+            'มิถุนายน',
+            'กรกฎาคม',
+            'สิงหาคม',
+            'กันยายน',
+            'พฤศจิกายน',
+            'ธันวาคม',
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'My 1 dataset',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: data1,
+            },
+                {
+                    label: 'My 2 dataset',
+                    backgroundColor: 'rgb(243,87,4)',
+                    borderColor: 'rgb(248,117,85)',
+                    data: data2,
+                },
+                {
+                    label: 'My 3 dataset',
+                    backgroundColor: 'rgb(16,241,46)',
+                    borderColor: 'rgb(135,245,88)',
+                    data: data3,
+                },
+                {
+                    label: 'My 4 dataset',
+                    backgroundColor: 'rgb(6,107,215)',
+                    borderColor: 'rgb(88,141,245)',
+                    data: data4,
+                }
+            ]
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+
 </script>
 
 <style>
@@ -64,6 +93,7 @@
         height: auto;
     }
 </style>
+
 
 <div>
     <canvas id="myChart"></canvas>
