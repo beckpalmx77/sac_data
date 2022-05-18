@@ -13,7 +13,9 @@ $data3 = '' ;
 $data4 = '' ;
 $i = 1 ;
 
-$BRANCH = "CP-340";
+
+$BRANCH = $_POST["branch"];
+//$BRANCH = "CP-340";
 
 for ($x = 0; $x <= 3; $x++) {
 
