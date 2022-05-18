@@ -173,6 +173,9 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
 <div class="card">
     <div class="card-body">
         <h4><span class="badge bg-success">ยอดขายยางรวมทุกสาขา</span></h4>
+
+        <?php include ('cp_line_chart_4year.php');?>
+
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
