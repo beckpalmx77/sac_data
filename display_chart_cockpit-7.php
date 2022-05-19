@@ -79,6 +79,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                               action="engine/chart_data_daily.php" method="post">
                                                             <input type="hidden" id="month" name="month" value="">
                                                             <input type="hidden" id="year" name="year" value="">
+                                                            <input type="hidden" id="product_group" name="product_group" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <div class="row">
@@ -101,6 +102,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                     name="BtnSalePart"
                                                                                     class="btn btn-primary btn-block">
                                                                                 แสดงข้อมูลยอดขาย อะไหล่ เปรียบเทียบ
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnService"
+                                                                                    name="BtnSalePart"
+                                                                                    class="btn btn-primary btn-block">
+                                                                                แสดงข้อมูลยอด ค่าแรง-ค่าบริการ เปรียบเทียบ
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -157,15 +172,35 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script>
-
         $("#BtnSaleTires").click(function () {
+            $('#product_group').val("P1");
+            SubMitForm();
+        });
+    </script>
+
+    <script>
+        $("#BtnSalePart").click(function () {
+            $('#product_group').val("P2");
+            SubMitForm();
+        });
+    </script>
+
+    <script>
+        $("#BtnService").click(function () {
+            $('#product_group').val("P3");
+            SubMitForm();
+        });
+    </script>
+
+    <script>
+        function SubMitForm() {
             document.forms['myform'].action = 'data_tires_cockpit_year';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
-        });
-
+        }
     </script>
+
 
     </body>
 

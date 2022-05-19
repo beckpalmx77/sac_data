@@ -28,7 +28,7 @@ for ($x = 0; $x <= 1; $x++) {
 
     $sql_get = " SELECT DI_YEAR,DI_MONTH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
  FROM ims_product_sale_cockpit 
- WHERE PGROUP like '%P1' AND DI_YEAR = '" . $year . "' AND BRANCH = '" . $BRANCH . "' 
+ WHERE PGROUP = '" . $product_group . "' AND DI_YEAR = '" . $year . "' AND BRANCH = '" . $BRANCH . "' 
  GROUP BY DI_MONTH,DI_YEAR 
  ORDER BY CAST(DI_MONTH AS UNSIGNED) ";
 

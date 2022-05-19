@@ -4,6 +4,22 @@ include("config/connect_db.php");
 
 $month = $_POST["month"];
 $year = $_POST["year"];
+$product_group = $_POST["product_group"];
+
+switch ($product_group) {
+    case 'P1' :
+        $product_group_name = "ยาง";
+        break;
+    case 'P2' :
+        $product_group_name = "อะไหล่";
+        break;
+    case 'P3' :
+        $product_group_name = "ค่าแรง-ค่าบริการ";
+        break;
+    case 'P4' :
+        $product_group_name = "อื่นๆ";
+        break;
+}
 
 //$month = "4";
 //$year = "2022";
@@ -76,7 +92,6 @@ foreach ($MonthRecords as $row) {
 </div>
 <input type="hidden" name="month" id="month" value="<?php echo $month; ?>">
 <input type="hidden" name="year" id="year" class="form-control" value="<?php echo $year; ?>">
-
 <div class="card-body">
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
@@ -102,8 +117,11 @@ foreach ($MonthRecords as $row) {
         <div class="card-body">
             <form id="myform" name="myform" method="post">
                 <input type="hidden" id="branch" name="branch">
+                <input type="hidden" name="product_group" id="product_group" class="form-control" value="<?php echo $product_group; ?>">
+                <input type="hidden" name="product_group_name" id="product_group_name" class="form-control" value="<?php echo $product_group_name; ?>">
+
             <div class="card-body">
-                <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?></span></h4>
+                <h4><span class="badge bg-success">ยอดขาย <?php echo $product_group_name; ?> สาขา : <?php echo $BRANCH ?></span></h4>
                 <a id="myChartLink" href="#" onclick="Chart_Page('<?php echo $BRANCH ?>');">
                     <button type="button" class="btn btn-outline-primary">ดู Graph</button>
                 </a>
@@ -162,7 +180,7 @@ SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
  FROM ims_product_sale_cockpit 
- WHERE PGROUP like '%P1' AND BRANCH = '" . $BRANCH . "'" . "
+ WHERE PGROUP = '" . $product_group . "' AND BRANCH = '" . $BRANCH . "'" . "
  GROUP BY DI_YEAR 
  ORDER BY DI_YEAR ";
 
@@ -223,7 +241,7 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
 
 <div class="card">
     <div class="card-body">
-        <h4><span class="badge bg-success">ยอดขายยางรวมทุกสาขา</span></h4>
+        <h4><span class="badge bg-success">ยอดขาย <?php echo $product_group_name; ?> รวมทุกสาขา</span></h4>
 
         <?php include('cp_line_chart_4year.php'); ?>
 
@@ -281,7 +299,7 @@ SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
  FROM ims_product_sale_cockpit  
- WHERE PGROUP like '%P1' 
+ WHERE PGROUP = '" . $product_group . "'
  GROUP BY DI_YEAR ";
 
             //WHERE DI_YEAR = '" . $year . "'

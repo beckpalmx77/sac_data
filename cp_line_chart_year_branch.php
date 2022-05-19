@@ -27,6 +27,9 @@
 
 <?php
 
+$product_group = $_POST["product_group"];
+$product_group_name = $_POST["product_group_name"];
+
 include ('engine/get_data_chart_year_branch.php');
 
 ?>
@@ -110,7 +113,7 @@ include ('engine/get_data_chart_year_branch.php');
 
 <div class="card">
     <div class="card-body">
-        <h4><span class="badge bg-success">ยอดขายยาง สาขา : <?php echo $BRANCH ?> </span></h4>
+        <h4><span class="badge bg-success">ยอดขาย <?php echo $product_group_name; ?> สาขา : <?php echo $BRANCH ?> </span></h4>
         <table id="example" class="display table table-striped table-bordered"
                cellspacing="0" width="100%">
             <thead>
