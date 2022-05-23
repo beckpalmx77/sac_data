@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '80c5b587402f15432449c7bb96797e12d9c209f5',
+        'reference' => 'be356b3ab5fb33a981713897eb76f01206c66b9c',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '80c5b587402f15432449c7bb96797e12d9c209f5',
+            'reference' => 'be356b3ab5fb33a981713897eb76f01206c66b9c',
             'dev_requirement' => false,
         ),
         'mobiledetect/mobiledetectlib' => array(
