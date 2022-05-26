@@ -8,20 +8,8 @@ include("../config/connect_db.php");
 
 include('../cond_file/doc_info_sale_daily_cp.php');
 
-$month_arr = array(
-    "1" => "มกราคม",
-    "2" => "กุมภาพันธ์",
-    "3" => "มีนาคม",
-    "4" => "เมษายน",
-    "5" => "พฤษภาคม",
-    "6" => "มิถุนายน",
-    "7" => "กรกฎาคม",
-    "8" => "สิงหาคม",
-    "9" => "กันยายน",
-    "10" => "ตุลาคม",
-    "11" => "พฤศจิกายน",
-    "12" => "ธันวาคม"
-);
+include('../util/month_util.php');
+
 
 $str1 = "30 CS4 CS5 DS4 IS3 IS4 ISC3 ISC4";
 $str2 = "CS.8 CS.9 IC.3 IC.4 IS.3 IS.4 S.5 S.6";
@@ -40,7 +28,7 @@ $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS
 
 $query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 //$query_year = " AND DI_DATE BETWEEN '2017/01/01' AND '2021/12/31'";
-$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
+//$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
 
@@ -166,7 +154,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
         $update_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " | ";
 
-        echo " UPDATE DATA " . $update_data;
+        //echo " UPDATE DATA " . $update_data;
 
         //$myfile = fopen("update_chk.txt", "w") or die("Unable to open file!");
         //fwrite($myfile, $update_data);
