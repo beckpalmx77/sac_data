@@ -9,11 +9,20 @@ include("../config/connect_db.php");
 include('../cond_file/doc_info_sale_daily_cp.php');
 include('../util/month_util.php');
 
+//$str1 = "30 CS4 CS5 DS4 IS3 IS4 ISC3 ISC4";
+//$str2 = "CS.8 CS.9 IC.3 IC.4 IS.3 IS.4 S.5 S.6";
+//$str3 = "CS.6 CS.7 IC.1 IC.2 IS.1 IS.2 S.1 S.2";
+//$str4 = "CS.2 CS.3 IC.5 IC.6 IS.5 IS.6 S.3 S.4";
 
 $str_doc1 = array("30", "CS4", "CS5", "DS4", "IS3", "IS4", "ISC3", "ISC4");
 $str_doc2 = array("CS.8", "CS.9", "IC.3", "IC.4", "IS.3", "IS.4", "S.5", "S.6");
 $str_doc3 = array("CS.6", "CS.7", "IC.1", "IC.2", "IS.1", "IS.2", "S.1", "S.2");
 $str_doc4 = array("CS.2", "CS.3", "IC.5", "IC.6", "IS.5", "IS.6", "S.3", "S.4");
+
+//$branch = "CP-340";
+//$branch = "CP-BY";
+//$branch = "CP-RP";
+//$branch = "CP-BB";
 
 $group1 = "6SAC08 2SAC01 2SAC09 2SAC11 2SAC02 2SAC06 2SAC05 2SAC04 2SAC03 2SAC12 2SAC07 2SAC08 2SAC10 2SAC13 2SAC14 2SAC15 3SAC03 1SAC10";
 $group2 = "5SAC02 8SAC11 5SAC01 TA01-001 8SAC09 TA01-003 8CPA01-002 8BTCA01-002 8CPA01-001 8BTCA01-001";
@@ -55,6 +64,30 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
 
     $branch = "";
+
+/*
+
+    if ($DT_DOCCODE==='30' || $DT_DOCCODE==='CS4' || $DT_DOCCODE==='CS5' || $DT_DOCCODE==='DS4' || $DT_DOCCODE==='IS3'
+                         || $DT_DOCCODE==='IS4' || $DT_DOCCODE==='ISC3' || $DT_DOCCODE==='ISC4') {
+        $branch = "CP-340";
+    }
+
+    if ($DT_DOCCODE==='CS.8' || $DT_DOCCODE==='CS.9' || $DT_DOCCODE==='IC.3' || $DT_DOCCODE==='IC.4' || $DT_DOCCODE==='IS.3'
+                        || $DT_DOCCODE==='IS.4' || $DT_DOCCODE==='S.5' || $DT_DOCCODE==='S.6') {
+        $branch = "CP-BY";
+    }
+
+    if ($DT_DOCCODE==='CS.6' || $DT_DOCCODE==='CS.7' || $DT_DOCCODE==='IC.1' || $DT_DOCCODE==='IC.2' || $DT_DOCCODE==='IS.1'
+                        || $DT_DOCCODE==='IS.2' || $DT_DOCCODE==='S.1' || $DT_DOCCODE==='S.2') {
+        $branch = "CP-RP";
+    }
+
+    if ($DT_DOCCODE==='CS.2' || $DT_DOCCODE==='CS.3' || $DT_DOCCODE==='IC.5' || $DT_DOCCODE==='IC.6' || $DT_DOCCODE==='IS.5'
+                        || $DT_DOCCODE==='IS.6' || $DT_DOCCODE==='S.3' || $DT_DOCCODE==='S.4') {
+        $branch = "CP-BB";
+    }
+
+*/
 
     if (in_array($DT_DOCCODE, $str_doc1))
     {
