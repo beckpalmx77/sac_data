@@ -36,7 +36,7 @@ $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS
 
 $query_year = " AND DI_DATE BETWEEN '" . date("Y/m/d", strtotime("yesterday")) . "' AND '" . date("Y/m/d") . "'";
 //$query_year = " AND DI_DATE BETWEEN '2017/01/01' AND '2021/12/31'";
-//$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
+$query_year = " AND DI_DATE BETWEEN '2022/05/15' AND '" . date("Y/m/d") . "'";
 
 $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond_ext . $query_year . $select_query_daily_order;
 
@@ -66,6 +66,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $branch = "";
 
 /*
+
     if ($DT_DOCCODE==='30' || $DT_DOCCODE==='CS4' || $DT_DOCCODE==='CS5' || $DT_DOCCODE==='DS4' || $DT_DOCCODE==='IS3'
                          || $DT_DOCCODE==='IS4' || $DT_DOCCODE==='ISC3' || $DT_DOCCODE==='ISC4') {
         $branch = "CP-340";
@@ -85,6 +86,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
                         || $DT_DOCCODE==='IS.6' || $DT_DOCCODE==='S.3' || $DT_DOCCODE==='S.4') {
         $branch = "CP-BB";
     }
+
 */
 
     if (in_array($DT_DOCCODE, $str_doc1))
