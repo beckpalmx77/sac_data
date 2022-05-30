@@ -9,7 +9,6 @@ include("../config/connect_db.php");
 include('../cond_file/doc_info_sale_daily_cp.php');
 include('../util/month_util.php');
 
-
 $str_doc1 = array("30", "CS4", "CS5", "DS4", "IS3", "IS4", "ISC3", "ISC4");
 $str_doc2 = array("CS.8", "CS.9", "IC.3", "IC.4", "IS.3", "IS.4", "S.5", "S.6");
 $str_doc3 = array("CS.6", "CS.7", "IC.1", "IC.2", "IS.1", "IS.2", "S.1", "S.2");
@@ -19,6 +18,11 @@ $group1 = "6SAC08 2SAC01 2SAC09 2SAC11 2SAC02 2SAC06 2SAC05 2SAC04 2SAC03 2SAC12
 $group2 = "5SAC02 8SAC11 5SAC01 TA01-001 8SAC09 TA01-003 8CPA01-002 8BTCA01-002 8CPA01-001 8BTCA01-001";
 $group3 = "9SA01 999-13 999-07 999-08 TATA-004";
 $group4 = "TATA-003 SAC08 10SAC12";
+
+$str_group1 = array("6SAC08","2SAC01","2SAC09","2SAC11","2SAC02","2SAC06","2SAC05","2SAC04","2SAC03","2SAC12","2SAC07","2SAC08","2SAC10","2SAC13","2SAC14","2SAC15","3SAC03","1SAC10");
+$str_group2 = array("5SAC02","8SAC11","5SAC01","TA01-001","8SAC09","TA01-003","8CPA01-002","8BTCA01-002","8CPA01-001","8BTCA01-001");
+$str_group3 = array("9SA01","999-13","999-07","999-08","TATA-004");
+$str_group4 = array("TATA-003","SAC08","10SAC12");
 
 echo "Today is " . date("Y/m/d");
 echo "\n\r" . date("Y/m/d", strtotime("yesterday"));
@@ -56,33 +60,30 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     $branch = "";
 
-    if (in_array($DT_DOCCODE, $str_doc1))
-    {
+    if (in_array($DT_DOCCODE, $str_doc1)) {
         $branch = "CP-340";
     }
 
-    if (in_array($DT_DOCCODE, $str_doc2))
-    {
+    if (in_array($DT_DOCCODE, $str_doc2)) {
         $branch = "CP-BY";
     }
 
-    if (in_array($DT_DOCCODE, $str_doc3))
-    {
+    if (in_array($DT_DOCCODE, $str_doc3)) {
         $branch = "CP-RP";
     }
 
-    if (in_array($DT_DOCCODE, $str_doc4))
-    {
+    if (in_array($DT_DOCCODE, $str_doc4)) {
         $branch = "CP-BB";
     }
 
-    echo "[ " . $DT_DOCCODE . " | " . $branch . " ]" . "\n\r" ;
+    echo "[ " . $DT_DOCCODE . " | " . $branch . " ]" . "\n\r";
 
     $res = $res . $result_sqlsvr["DI_REF"] . "  *** " . $result_sqlsvr["DT_DOCCODE"] . " *** " . "\n\r";
 
     //$myfile = fopen("sql_get_DATA.txt", "w") or die("Unable to open file!");
     //fwrite($myfile, "[" . $res) ;
     //fclose($myfile);
+
 
     $p_group = "";
 
