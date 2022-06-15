@@ -16,6 +16,9 @@ if (strlen($_SESSION['alogin']) == "") {
         $month_name = $row_curr["month_name"];
     }
 
+    $sale_point = 1500000;
+    $sale_point_text = '1,500,000 บาท';
+
     ?>
 
     <!DOCTYPE html>
@@ -106,6 +109,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-header">
                                     สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา เดือน
                                     <?php echo $month_name . " " . date("Y"); ?>
+                                    เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
@@ -147,13 +151,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                                             <td>
-                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+                                                <?php $precent_sale = ($row_daily['TRD_G_KEYIN']/$sale_point)*100; ?>
+                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)) ; ?></p>
+                                                <p class="number"><?php echo htmlentities(number_format($precent_sale, 2)) . " % " ; ?></p>
                                             </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
                                         </tbody>
                                         <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
+                                        เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
                                     </table>
                                 </div>
 
