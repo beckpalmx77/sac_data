@@ -151,9 +151,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                                             <td>
-                                                <?php $precent_sale = ($row_daily['TRD_G_KEYIN']/$sale_point)*100; ?>
-                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)) ; ?></p>
-                                                <p class="number">คิดเป็น <?php echo htmlentities(number_format($precent_sale, 2)) . " % จากเป้ายอดขาย" ; ?></p>
+                                                <?php $precent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
+                                                $data = "style='width: " . $precent_sale . "%'";
+                                                ?>
+                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" <?php echo $data ?> aria-valuenow="<?php echo $precent_sale ?>" aria-valuemin="0"
+                                                         aria-valuemax="100"><?php echo htmlentities(number_format($precent_sale,2)) . "%" ?>
+                                                    </div>
+                                                </div>
+
+                                                <p class="number">
+                                                    คิดเป็น <?php echo htmlentities(number_format($precent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
+
                                             </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
@@ -167,8 +178,7 @@ if (strlen($_SESSION['alogin']) == "") {
                             </div>
                         </div>
 
-                        <?php include('display_chart_tires_brand_admin.php');
-                        ?>
+                        <?php include('display_chart_tires_brand_admin.php'); ?>
 
                     </div>
 
@@ -207,22 +217,22 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
 
         $(document).ready(function () {
-        /*
+            /*
 
-        GET_DATA("ims_order_master", "1");
-        GET_DATA("ims_product", "2");
-        GET_DATA("ims_customer_ar", "3");
-        GET_DATA("ims_supplier", "4");
-
-        setInterval(function () {
             GET_DATA("ims_order_master", "1");
             GET_DATA("ims_product", "2");
             GET_DATA("ims_customer_ar", "3");
             GET_DATA("ims_supplier", "4");
-        }, 3000);
 
-         */
-    });
+            setInterval(function () {
+                GET_DATA("ims_order_master", "1");
+                GET_DATA("ims_product", "2");
+                GET_DATA("ims_customer_ar", "3");
+                GET_DATA("ims_supplier", "4");
+            }, 3000);
+
+             */
+        });
 
 
     </script>
