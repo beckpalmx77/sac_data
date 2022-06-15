@@ -153,7 +153,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <td>
                                                 <?php $precent_sale = ($row_daily['TRD_G_KEYIN']/$sale_point)*100; ?>
                                                 <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)) ; ?></p>
-                                                <p class="number"><?php echo htmlentities(number_format($precent_sale, 2)) . " % " ; ?></p>
+                                                <p class="number"><?php echo htmlentities(number_format($precent_sale, 2)) . " %" ; ?></p>
                                             </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
