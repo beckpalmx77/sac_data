@@ -159,17 +159,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
 
                                                 <div class="progress">
-                                                    <div class="progress-bar" role="progressbar" <?php echo $data ?> aria-valuenow="<?php echo $precent_sale ?>" aria-valuemin="0"
-                                                         aria-valuemax="100"><?php echo htmlentities(number_format($precent_sale,2)) . "%" ?>
+                                                    <div class="progress-bar bg-success" role="progressbar" <?php echo $data ?>
+                                                         aria-valuenow="<?php echo $precent_sale ?>" aria-valuemin="0"
+                                                         aria-valuemax="100"><?php echo htmlentities(number_format($precent_sale, 2)) . "%" ?>
                                                     </div>
+                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
 
                                                 <p class="number">
                                                     คิดเป็น <?php echo htmlentities(number_format($precent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
 
                                                 <p class="number">
-                                                    เป้ายอดขายที่ต้องทำเพิ่ม คือ <?php echo htmlentities(number_format($total_remain, 2))
-                                                    . " หรือ " . htmlentities(number_format($precent_total_remain, 2)) . " %" ; ?> </p>
+                                                    เป้ายอดขายที่ต้องทำเพิ่ม
+                                                    คือ <?php echo htmlentities(number_format($total_remain, 2))
+                                                        . " หรือ " . htmlentities(number_format($precent_total_remain, 2)) . " %"; ?> </p>
 
                                             </td>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
