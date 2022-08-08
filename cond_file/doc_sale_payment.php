@@ -19,4 +19,4 @@ left join CHEQUEIN on CHEQUEIN.CQIN_DI = DOC2.DI_KEY
 left join BANKFILE on BANKFILE.BANK_KEY = CHEQUEIN.CQIN_BANK 
 left join ARCONDITION on ARCONDITION.ARCD_KEY = v_sale_payment.ARD_ARCD ";
 
-$select_query_daily_order = " order by BUY_DATE ";
+$select_query_daily_order = " order by DI_KEY1, BUY_DATE  ";
