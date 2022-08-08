@@ -18,9 +18,9 @@ $doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_da
 $String_Sql = $select_query_sale . " WHERE " . $table_filed_where . " BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $select_query_daily_order;
 
-$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
-fwrite($my_file, $String_Sql);
-fclose($my_file);
+//$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
+//fwrite($my_file, $String_Sql);
+//fclose($my_file);
 
 $data = "BUY_DATE,AR_NAME,BUY_DATE,BUY_REF,BUY_AMOUNT,ARCD_TERM,DUE_DATE_REF\n";
 
