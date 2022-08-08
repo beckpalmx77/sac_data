@@ -37,6 +37,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= str_replace(",", "^", $row['ARCD_TERM']) . ",";
     $data .= str_replace(",", "^", $row['DUE_DATE_REF']) . ",";
 
+    $data .= " " . "," . "\n";
 
 
 }
