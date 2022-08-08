@@ -29,7 +29,7 @@ $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
-    $data .= str_replace(",", "^", $row['BUY_DATE']) . ",";
+    $data .= str_replace(",", "^", $row['DI_DATE']) . ",";
     $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
     $data .= str_replace(",", "^", $row['BUY_DATE']) . ",";
     $data .= str_replace(",", "^", $row['BUY_REF']) . ",";
