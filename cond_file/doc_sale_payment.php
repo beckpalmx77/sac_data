@@ -11,7 +11,7 @@ v_sale_payment.*
 ,ARCONDITION.ARCD_NAME
 ,ARCONDITION.ARCD_TERM
 ,FORMAT(DUE_DATE, 'dd/MM/yyyy ') AS DUE_DATE_REF
-,FORMAT(BUY_DATE, 'dd/MM/yyyy ') AS DBUY_DATE_REF
+,FORMAT(BUY_DATE, 'dd/MM/yyyy ') AS BUY_DATE_REF
 from v_sale_payment 
 left join ARPAYMENT on ARPAYMENT.ARP_ARD=v_sale_payment.ARD_KEY
 left join DOCINFO DOC2 on DOC2.DI_KEY=   ARPAYMENT.ARP_DI
