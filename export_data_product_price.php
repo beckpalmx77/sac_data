@@ -54,30 +54,17 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
 
-                                                                        <div class="col-sm-3">
-                                                                            <label for="doc_date_start"
-                                                                                   class="control-label">จากวันที่</label>
-                                                                            <i class="fa fa-calendar"
-                                                                               aria-hidden="true"></i>
-                                                                            <input type="text" class="form-control"
-                                                                                   id="doc_date_start"
-                                                                                   name="doc_date_start"
-                                                                                   required="required"
-                                                                                   readonly="true"
-                                                                                   placeholder="จากวันที่">
-                                                                        </div>
-
-                                                                        <div class="col-sm-3">
-                                                                            <label for="doc_date_to"
-                                                                                   class="control-label">ถึงวันที่</label>
-                                                                            <i class="fa fa-calendar"
-                                                                               aria-hidden="true"></i>
-                                                                            <input type="text" class="form-control"
-                                                                                   id="doc_date_to"
-                                                                                   name="doc_date_to"
-                                                                                   required="required"
-                                                                                   readonly="true"
-                                                                                   placeholder="ถึงวันที่">
+                                                                        <div class="form-group">
+                                                                            <label for="price_code"
+                                                                                   class="control-label">Select price_code</label>
+                                                                            <select id="price_code" name="price_code"
+                                                                                    class="form-control"
+                                                                                    data-live-search="true"
+                                                                                    title="Please select">
+                                                                                <!--option>SAC</option>
+                                                                                <option>COCKPIT</option-->
+                                                                                <option>ALL</option>
+                                                                            </select>
                                                                         </div>
 
 
