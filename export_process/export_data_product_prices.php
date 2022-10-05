@@ -12,7 +12,23 @@ include('../cond_file/query-product-price-main.php');
 
 $price_code = $_POST['price_code'];
 
-$String_Sql = $select_query . $sql_cond . $sql_order;
+    switch ($price_code) {
+        case "SAC":
+            $sql_cond_ext = " AND (ARPRB_CODE not like 'BTC%' AND ARPRB_CODE not like 'CP%') " ;
+            break;
+        case "BTC":
+            $sql_cond_ext = " AND (ARPRB_CODE like 'BTC%') " ;
+            break;
+        case "COCKPIT":
+            $sql_cond_ext = " AND (ARPRB_CODE like 'CP%') " ;
+            break;
+        default:
+            $sql_cond_ext = "";
+            break;
+    }
+
+
+$String_Sql = $select_query . $sql_cond . $sql_cond_ext . $sql_order;
 
 //$my_file = fopen("D-sac_str1.txt", "w") or die("Unable to open file!");
 //fwrite($my_file, $String_Sql);
