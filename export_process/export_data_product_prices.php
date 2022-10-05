@@ -12,20 +12,20 @@ include('../cond_file/query-product-price-main.php');
 
 $price_code = $_POST['price_code'];
 
-    switch ($price_code) {
-        case "SAC":
-            $sql_cond_ext = " AND (ARPRB_CODE not like 'BTC%' AND ARPRB_CODE not like 'CP%') " ;
-            break;
-        case "BTC":
-            $sql_cond_ext = " AND (ARPRB_CODE like 'BTC%') " ;
-            break;
-        case "COCKPIT":
-            $sql_cond_ext = " AND (ARPRB_CODE like 'CP%') " ;
-            break;
-        default:
-            $sql_cond_ext = "";
-            break;
-    }
+switch ($price_code) {
+    case "SAC":
+        $sql_cond_ext = " AND (ARPRB_CODE not like 'BTC%' AND ARPRB_CODE not like 'CP%') ";
+        break;
+    case "BTC":
+        $sql_cond_ext = " AND (ARPRB_CODE like 'BTC%') ";
+        break;
+    case "COCKPIT":
+        $sql_cond_ext = " AND (ARPRB_CODE like 'CP%') ";
+        break;
+    default:
+        $sql_cond_ext = "";
+        break;
+}
 
 
 $String_Sql = $select_query . $sql_cond . $sql_cond_ext . $sql_order;
@@ -39,7 +39,7 @@ $data = "No.,SKU_CODE,SKU_NAME,UTQ_NAME,ARPLU_U_PRC,ARPRB_CODE,ARPRB_NAME\n";
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
 
-$loop = 0 ;
+$loop = 0;
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
@@ -60,7 +60,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
     //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
-        //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
+    //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
     //fclose($my_file);
 
     $data .= str_replace(",", "^", $row['ARPRB_NAME']) . "\n";
