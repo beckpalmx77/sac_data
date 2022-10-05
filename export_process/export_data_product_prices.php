@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
-$filename = "Data_Sale_Return-Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
+$filename = "Data_Product_Price-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
 @header('Content-Encoding: UTF-8');
