@@ -169,22 +169,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <p class="number">
                                                     คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
 
-                                                <?php if (number_format($total_remain, 2) <= 0) { ?>
-
-                                                    <p class="number">
-                                                        เกินจากเป้ายอดขาย
-                                                        คือ <?php echo htmlentities(number_format(abs($total_remain), 2))
-                                                            . " หรือ " . htmlentities(number_format(abs($percent_total_remain), 2)) . " %"; ?> </p>
-
-                                                <?php } else { ?>
+                                                <?php if (number_format($total_remain, 2) <= 0) {
+                                                    $text1 = "เกินจากเป้ายอดขาย คือ " ; $text2 = " หรือ " ;
+                                                    $num1 = number_format(abs($total_remain), 2); $num2 = number_format(abs($percent_total_remain), 2);                                                ?>
+                                                <?php } else {
+                                                    $text1 = "เป้ายอดขายที่ต้องทำเพิ่ม คือ " ; $text2 = " หรือ " ;
+                                                    $num1 = number_format(($total_remain), 2); $num2 = number_format(($percent_total_remain), 2);
+                                                } ?>
 
                                                 <p class="number">
-                                                    เป้ายอดขายที่ต้องทำเพิ่ม
-                                                    คือ <?php echo htmlentities(number_format($total_remain, 2))
-                                                        . " หรือ " . htmlentities(number_format($percent_total_remain, 2)) . " %"; ?> </p>
+                                                    <?php echo $text1 .$num1
+                                                        . $text2 . $num2 . " %"; ?> </p>
 
                                             </td>
-                                            <?php } ?>
+
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
 
