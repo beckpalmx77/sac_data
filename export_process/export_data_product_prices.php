@@ -47,7 +47,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     $data .= $loop . ",";
 
-
     //$DI_DATE = str_replace("\\r\ ", "", $row['DI_DATE']);
     //$data .= $DI_DATE . ",";
 

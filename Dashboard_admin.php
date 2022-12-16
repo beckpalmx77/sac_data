@@ -151,32 +151,43 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                                             <td>
-                                                <?php $precent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
+                                                <?php $percent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
                                                 $total_remain = $sale_point - $row_daily['TRD_G_KEYIN'];
-                                                $precent_total_remain = ($total_remain / $sale_point) * 100;
-                                                $data = "style='width: " . $precent_sale . "%'";
+                                                $percent_total_remain = ($total_remain / $sale_point) * 100;
+                                                $data = "style='width: " . $percent_sale . "%'";
                                                 ?>
                                                 <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
 
                                                 <div class="progress">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated"
                                                          role="progressbar" <?php echo $data ?>
-                                                         aria-valuenow="<?php echo $precent_sale ?>" aria-valuemin="0"
-                                                         aria-valuemax="100"><?php echo htmlentities(number_format($precent_sale, 2)) . "%" ?>
+                                                         aria-valuenow="<?php echo $percent_sale ?>" aria-valuemin="0"
+                                                         aria-valuemax="100"><?php echo htmlentities(number_format($percent_sale, 2)) . "%" ?>
                                                     </div>
                                                 </div>
 
                                                 <p class="number">
-                                                    คิดเป็น <?php echo htmlentities(number_format($precent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
+                                                    คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
+
+                                                <?php if (number_format($total_remain, 2) <=0) { ?>
+
+                                                <p class="number">
+                                                    เกินจากเป้ายอดขาย
+                                                    คือ <?php echo htmlentities(number_format(abs($total_remain), 2))
+                                                        . " หรือ " . htmlentities(number_format(abs($percent_total_remain), 2)) . " %"; ?> </p>
+
+                                                <?php } else {  ?>
 
                                                 <p class="number">
                                                     เป้ายอดขายที่ต้องทำเพิ่ม
                                                     คือ <?php echo htmlentities(number_format($total_remain, 2))
-                                                        . " หรือ " . htmlentities(number_format($precent_total_remain, 2)) . " %"; ?> </p>
+                                                        . " หรือ " . htmlentities(number_format($percent_total_remain, 2)) . " %"; ?> </p>
 
                                             </td>
+                                            <?php } ?>
                                             <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
                                             <?php } ?>
+
 
                                         </tbody>
                                         <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
