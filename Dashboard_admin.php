@@ -169,14 +169,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <p class="number">
                                                     คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
 
-                                                <?php if (number_format($total_remain, 2) <=0) { ?>
+                                                <?php if (number_format($total_remain, 2) <= 0) { ?>
 
-                                                <p class="number">
-                                                    เกินจากเป้ายอดขาย
-                                                    คือ <?php echo htmlentities(number_format(abs($total_remain), 2))
-                                                        . " หรือ " . htmlentities(number_format(abs($percent_total_remain), 2)) . " %"; ?> </p>
+                                                    <p class="number">
+                                                        เกินจากเป้ายอดขาย
+                                                        คือ <?php echo htmlentities(number_format(abs($total_remain), 2))
+                                                            . " หรือ " . htmlentities(number_format(abs($percent_total_remain), 2)) . " %"; ?> </p>
 
-                                                <?php } else {  ?>
+                                                <?php } else { ?>
 
                                                 <p class="number">
                                                     เป้ายอดขายที่ต้องทำเพิ่ม
