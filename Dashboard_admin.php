@@ -170,16 +170,15 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
 
                                                 <?php if (number_format($total_remain, 2) <= 0) {
-                                                    $text1 = "เกินจากเป้ายอดขาย คือ " ; $text2 = " หรือ " ;
-                                                    $num1 = number_format(abs($total_remain), 2); $num2 = number_format(abs($percent_total_remain), 2);                                                ?>
-                                                <?php } else {
-                                                    $text1 = "เป้ายอดขายที่ต้องทำเพิ่ม คือ " ; $text2 = " หรือ " ;
-                                                    $num1 = number_format(($total_remain), 2); $num2 = number_format(($percent_total_remain), 2);
+                                                    $text1 = "เกินจากเป้ายอดขาย คือ " . number_format(abs($total_remain), 2);
+                                                    $text2 = " หรือ " . number_format(abs($percent_total_remain), 2) . " % ";
+                                                } else {
+                                                    $text1 = "เป้ายอดขายที่ต้องทำเพิ่ม คือ " . number_format($total_remain, 2);
+                                                    $text2 = " หรือ " . number_format($percent_total_remain, 2) . " % ";
                                                 } ?>
 
                                                 <p class="number">
-                                                    <?php echo $text1 .$num1
-                                                        . $text2 . $num2 . " %"; ?> </p>
+                                                    <?php echo $text1 . $text2; ?> </p>
 
                                             </td>
 
