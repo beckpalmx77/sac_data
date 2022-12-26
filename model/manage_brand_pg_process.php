@@ -163,13 +163,14 @@ if ($_POST["action"] === 'GET_BRAND') {
     fwrite($myfile, $stmt);
     fclose($myfile);
 
-*/
+
 
     $myfile = fopen("sql_sac_pg_data.txt", "w") or die("Unable to open file!");
     fwrite($myfile, $query_str);
     //fwrite($myfile, $query_str . " | limit =  " . (int)$row . " offset = " . (int)$rowperpage);
     fclose($myfile);
 
+*/
 
 
 // Bind values
