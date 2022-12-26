@@ -1,0 +1,1 @@
+SELECT * FROM sac_brands WHERE id <> 0   ORDER BY id asc OFFSET :offset limit :limit

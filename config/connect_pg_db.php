@@ -13,9 +13,11 @@ header("Access-Control-Max-Age: 3600");
 
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+$dsn = "pgsql:host=$host;$port;dbname=$dbname;user=$dbuser;password=$dbpass";
+
 try {
     // If you change db server system, change this too!
-    $conn = new PDO("pgsql:host=$host port=5432 dbname=$dbname", $dbuser, $dbpass);
+    $conn = new PDO($dsn);
     
 } catch (PDOException $e) {
     echo $e->getMessage();
