@@ -23,7 +23,8 @@ if (strlen($_SESSION['alogin']) == "") {
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page']?>">Home</a></li>
+                            <li class="breadcrumb-item"><a href="<?php echo $_SESSION['dashboard_page'] ?>">Home</a>
+                            </li>
                             <li class="breadcrumb-item"><?php echo urldecode($_GET['m']) ?></li>
                             <li class="breadcrumb-item active"
                                 aria-current="page"><?php echo urldecode($_GET['s']) ?></li>
@@ -192,12 +193,10 @@ if (strlen($_SESSION['alogin']) == "") {
     include('includes/Footer.php');
     ?>
 
-
     <!-- Scroll to top -->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
 
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -234,6 +233,7 @@ if (strlen($_SESSION['alogin']) == "") {
             top: 30%;
         }
     </style>
+
     <script>
         $(document).ready(function () {
             $(".icon-input-btn").each(function () {

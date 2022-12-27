@@ -153,24 +153,24 @@ if ($_POST["action"] === 'GET_BRAND') {
 
     $query_str = "SELECT * FROM sac_brands WHERE id <> 0 " . $searchQuery
         . " ORDER BY " . $columnName . " " . $columnSortOrder . " OFFSET :offset limit :limit";
-        //. " ORDER BY " . $columnName . " " . $columnSortOrder . " ";
+    //. " ORDER BY " . $columnName . " " . $columnSortOrder . " ";
 
 ## Fetch records
     $stmt = $conn->prepare($query_str);
 
-/*
-    $myfile = fopen("sql_sac_pg_conn.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $stmt);
-    fclose($myfile);
+    /*
+        $myfile = fopen("sql_sac_pg_conn.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $stmt);
+        fclose($myfile);
 
 
 
-    $myfile = fopen("sql_sac_pg_data.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $query_str);
-    //fwrite($myfile, $query_str . " | limit =  " . (int)$row . " offset = " . (int)$rowperpage);
-    fclose($myfile);
+        $myfile = fopen("sql_sac_pg_data.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $query_str);
+        //fwrite($myfile, $query_str . " | limit =  " . (int)$row . " offset = " . (int)$rowperpage);
+        fclose($myfile);
 
-*/
+    */
 
 
 // Bind values
