@@ -20,9 +20,11 @@ $sql_get = "
  ORDER BY sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) DESC 
 ";
 
-//$myfile = fopen("param-brn2.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, "sql_get = " . $sql_get);
-//fclose($myfile);
+/*
+$myfile = fopen("param-brn2.txt", "w") or die("Unable to open file!");
+fwrite($myfile, "sql_get = " . $sql_get);
+fclose($myfile);
+*/
 
 $return_arr = array();
 

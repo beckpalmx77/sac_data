@@ -105,7 +105,7 @@ foreach ($BranchRecords as $rows) {
  AND BRANCH like '%" . $_POST["branch"] . "'
  AND PGROUP like '%P1'
  GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
- ORDER BY DI_MONTH" ;
+ ORDER BY DI_MONTH ASC " ;
 
                 $statement_daily = $conn->query($sql_daily);
                 $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
@@ -154,7 +154,7 @@ foreach ($BranchRecords as $rows) {
  AND BRANCH like '%" . $_POST["branch"] . "'
  AND PGROUP like '%P2'
  GROUP BY  PGROUP,DI_MONTH,DI_MONTH_NAME 
- ORDER BY DI_MONTH" ;
+ ORDER BY DI_MONTH ASC " ;
 
                 $statement_daily = $conn->query($sql_daily);
                 $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
