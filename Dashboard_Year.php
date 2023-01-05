@@ -8,16 +8,7 @@ if (strlen($_SESSION['alogin']) == "") {
     require_once 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
     $detect = new Mobile_Detect;
 
-    $sql_curr_month = " SELECT * FROM ims_month where month = '" . date("n") . "'";
-    $stmt_curr_month = $conn->prepare($sql_curr_month);
-    $stmt_curr_month->execute();
-    $MonthCurr = $stmt_curr_month->fetchAll();
-    foreach ($MonthCurr as $row_curr) {
-        $month_name = $row_curr["month_name"];
-    }
-
-    $sale_point = 1500000;
-    $sale_point_text = '1,500,000 บาท';
+    $year = $_POST["year"];
 
     ?>
 
@@ -37,7 +28,7 @@ if (strlen($_SESSION['alogin']) == "") {
         }
     </style>
 
-    <body id="page-top" onload="showGraph_Cockpit_Daily();showGraph_Cockpit_Monthly();showGraph_Tires_Brand();">
+    <body id="page-top" onload="showGraph_Cockpit_Year();showGraph_Tires_Brand();">
     <div id="wrapper">
         <?php
         include('includes/Side-Bar.php');
@@ -53,67 +44,13 @@ if (strlen($_SESSION['alogin']) == "") {
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา วันที่
-                                    <?php echo date("d/m/Y"); ?>
+                                    สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                                    <?php echo $year; ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
-                                    <canvas id="myChartDaily" width="200" height="200"></canvas>
-                                </div>
-                                <div class="card-body">
-                                    <table id="example" class="display table table-striped table-bordered"
-                                           cellspacing="0" width="100%">
-                                        <thead>
-                                        <tr>
-                                            <th>สาขา</th>
-                                            <th>ยอดขาย</th>
-                                        </tr>
-                                        </thead>
-                                        <tfoot>
-                                        <tr>
-                                            <th>สาขา</th>
-                                            <th>ยอดขาย</th>
-                                        </tr>
-                                        </tfoot>
-                                        <tbody>
-                                        <?php
-                                        $date = date("d/m/Y");
-                                        $total = 0;
-                                        $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
-                                                      FROM ims_product_sale_cockpit 
-                                                      WHERE DI_DATE = '" . $date . "'
-                                                      GROUP BY  BRANCH
-                                                      ORDER BY BRANCH";
-
-                                        $statement_daily = $conn->query($sql_daily);
-                                        $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
-
-                                        foreach ($results_daily
-
-                                        as $row_daily) { ?>
-
-                                        <tr>
-                                            <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
-                                            <td>
-                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
-                                            </td>
-                                            <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
-                                            <?php } ?>
-
-                                        </tbody>
-                                        <?php echo "ยอดขายรวมทุกสาขา วันที่ " . $date . " = " . number_format($total, 2) . " บาท " ?>
-                                    </table>
-                                </div>
-
-
-                                <div class="card-header">
-                                    สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา เดือน
-                                    <?php echo $month_name . " " . date("Y"); ?>
-                                    เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
-                                    <canvas id="myChartMonthly" width="200" height="200"></canvas>
+                                    <input type="hidden" name="year" id="year" value="<?php echo $year; ?>">
+                                    <h5 class="card-title">ปี <?php echo $year; ?></h5>
+                                    <canvas id="myChartYear" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
                                     <table id="example" class="display table table-striped table-bordered"
@@ -132,13 +69,12 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                        $date = date("d/m/Y");
+
                                         $total = 0;
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
-                                                      WHERE DI_MONTH = '" . date("n") . "'
-                                                      AND DI_YEAR = '" . date("Y") . "'
-                                                      GROUP BY  BRANCH
+                                                      WHERE DI_YEAR = '" . $year . "'                                                      
+                                                      GROUP BY  BRANCH , DI_YEAR
                                                       ORDER BY BRANCH";
 
                                         $statement_daily = $conn->query($sql_daily);
@@ -151,51 +87,22 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
                                             <td>
-                                                <?php $percent_sale = ($row_daily['TRD_G_KEYIN'] / $sale_point) * 100;
-                                                $total_remain = $sale_point - $row_daily['TRD_G_KEYIN'];
-                                                $percent_total_remain = ($total_remain / $sale_point) * 100;
-                                                $data = "style='width: " . $percent_sale . "%'";
-                                                ?>
                                                 <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
 
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                         role="progressbar" <?php echo $data ?>
-                                                         aria-valuenow="<?php echo $percent_sale ?>" aria-valuemin="0"
-                                                         aria-valuemax="100"><?php echo htmlentities(number_format($percent_sale, 2)) . "%" ?>
-                                                    </div>
-                                                </div>
 
-                                                <p class="number">
-                                                    คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
-
-                                                <?php if (number_format($total_remain, 2) <= 0) {
-                                                    $text1 = "เกินจากเป้ายอดขาย คือ " . number_format(abs($total_remain), 2);
-                                                    $text2 = " หรือ " . number_format(abs($percent_total_remain), 2) . " % ";
-                                                } else {
-                                                    $text1 = "เป้ายอดขายที่ต้องทำเพิ่ม คือ " . number_format($total_remain, 2);
-                                                    $text2 = " หรือ " . number_format($percent_total_remain, 2) . " % ";
-                                                } ?>
-
-                                                <p class="number">
-                                                    <?php echo $text1 . $text2; ?> </p>
-
-                                            </td>
-
-                                            <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
-                                            <?php } ?>
+                                                <?php $total = $total + $row_daily['TRD_G_KEYIN']; ?>
+                                                <?php } ?>
 
 
                                         </tbody>
-                                        <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
-                                        เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
+                                        <?php echo "ยอดขายรวมทุกสาขา " . number_format($total, 2) . " บาท " ?>
                                     </table>
                                 </div>
 
                             </div>
                         </div>
 
-                        <?php include('display_chart_tires_brand_admin.php'); ?>
+                        <?php include('display_chart_tires_brand_admin_year.php'); ?>
 
                     </div>
 
@@ -225,60 +132,10 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src='vendor/calendar/locales/th.js'></script>
 
     <script>
-        myVar = setInterval(function () {
-            window.location.reload(true);
-        }, 100000);
-    </script>
-
-
-    <script>
-
-        $(document).ready(function () {
-            /*
-
-            GET_DATA("ims_order_master", "1");
-            GET_DATA("ims_product", "2");
-            GET_DATA("ims_customer_ar", "3");
-            GET_DATA("ims_supplier", "4");
-
-            setInterval(function () {
-                GET_DATA("ims_order_master", "1");
-                GET_DATA("ims_product", "2");
-                GET_DATA("ims_customer_ar", "3");
-                GET_DATA("ims_supplier", "4");
-            }, 3000);
-
-             */
-        });
-
-
-    </script>
-
-    <script>
-
-        function GET_DATA(table_name, idx) {
-            let input_text = document.getElementById("Text" + idx);
-            let action = "GET_COUNT_RECORDS";
-            let formData = {action: action, table_name: table_name};
-            $.ajax({
-                type: "POST",
-                url: 'model/manage_general_data.php',
-                data: formData,
-                success: function (response) {
-                    input_text.innerHTML = response;
-                },
-                error: function (response) {
-                    alertify.error("error : " + response);
-                }
-            });
-        }
-
-    </script>
-
-    <script>
 
         function showGraph_Tires_Brand() {
             {
+                let year = $("#year").val();
 
                 let barColors = [
                     "#0a4dd3",
@@ -300,7 +157,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     "#fa6ae4"
                 ];
 
-                $.post("engine/chart_data_pie_tires_brand.php", {doc_date: "1", branch: "2"}, function (data) {
+                $.post("engine/chart_data_pie_tires_brand_year.php", {year: year, branch: "2"}, function (data) {
                     console.log(data);
                     let label = [];
                     let label_name = [];
@@ -338,107 +195,18 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-        function showGraph_Cockpit_Daily() {
+        function showGraph_Cockpit_Year() {
             {
 
-                //let data_date = $("#data_date").val();
+                let year = $("#year").val();
 
-                let d = new Date();
-                let day = d.getDay();
-                let backgroundColor = '';
-                let borderColor = '';
-                let hoverBackgroundColor = '';
-                let hoverBorderColor = '';
-
-                switch (day) {
-                    case 0:
-                        backgroundColor = '#ff1f40';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#d0052e';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 1:
-                        backgroundColor = '#e9e207';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#d0ca05';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 2:
-                        backgroundColor = '#fc53f3';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#e933ff';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 3:
-                        backgroundColor = '#41f31c';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#28d904';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 4:
-                        backgroundColor = '#f3941f';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#ef8502';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 5:
-                        backgroundColor = '#24c9f1';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#04a4cb';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                    case 6:
-                        backgroundColor = '#8341fd';
-                        borderColor = '#46d5f1';
-                        hoverBackgroundColor = '#6110fa';
-                        hoverBorderColor = '#a2a1a3';
-                        break;
-                }
-
-                $.post("engine/chart_data_cockpit_daily.php", {date: "2"}, function (data) {
-                    console.log(data);
-                    let branch = [];
-                    let total = [];
-                    for (let i in data) {
-                        branch.push(data[i].BRANCH);
-                        total.push(parseFloat(data[i].TRD_G_KEYIN).toFixed(2));
-                    }
-
-                    let chartdata = {
-                        labels: branch,
-                        datasets: [{
-                            label: 'ยอดขายรายวัน รวม VAT (Daily)',
-                            backgroundColor: backgroundColor,
-                            borderColor: borderColor,
-                            hoverBackgroundColor: hoverBackgroundColor,
-                            hoverBorderColor: hoverBorderColor,
-                            data: total
-                        }]
-                    };
-                    let graphTarget = $('#myChartDaily');
-                    let barGraph = new Chart(graphTarget, {
-                        type: 'bar',
-                        data: chartdata
-                    })
-                })
-            }
-        }
-
-    </script>
-
-    <script>
-        function showGraph_Cockpit_Monthly() {
-            {
-
-                //let data_date = $("#data_date").val();
-
-                let backgroundColor = '#285bfa';
+                let backgroundColor = '#7058f8';
                 let borderColor = '#46d5f1';
 
-                let hoverBackgroundColor = '#062ee8';
+                let hoverBackgroundColor = '#4a36a5';
                 let hoverBorderColor = '#a2a1a3';
 
-                $.post("engine/chart_data_cockpit_monthly.php", {date: "2"}, function (data) {
+                $.post("engine/chart_data_cockpit_year.php", {year: year}, function (data) {
                     console.log(data);
                     let branch = [];
                     let total = [];
@@ -450,7 +218,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     let chartdata = {
                         labels: branch,
                         datasets: [{
-                            label: 'ยอดขายรายเดือน รวม VAT (Daily)',
+                            label: 'ยอดขายรายรวม',
                             backgroundColor: backgroundColor,
                             borderColor: borderColor,
                             hoverBackgroundColor: hoverBackgroundColor,
@@ -458,7 +226,7 @@ if (strlen($_SESSION['alogin']) == "") {
                             data: total
                         }]
                     };
-                    let graphTarget = $('#myChartMonthly');
+                    let graphTarget = $('#myChartYear');
                     let barGraph = new Chart(graphTarget, {
                         type: 'bar',
                         data: chartdata
@@ -469,16 +237,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </script>
 
-    <script>
 
-        $("#BtnSale").click(function () {
-            document.forms['myform'].action = 'chart_cockpit_total_product_bar';
-            document.forms['myform'].target = '_blank';
-            document.forms['myform'].submit();
-            return true;
-        });
-
-    </script>
 
     </body>
 

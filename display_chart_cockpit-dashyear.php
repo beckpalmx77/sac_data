@@ -186,8 +186,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
         function show() {
-            document.forms['myform'].action = 'chart_cockpit_total_product_bar';
-            document.forms['myform'].target = '_blank';
+            document.forms['myform'].action = 'Dashboard_Year';
+            document.forms['myform'].target = '_self';
             document.forms['myform'].submit();
             return true;
         }
