@@ -1,14 +1,16 @@
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
 
 <?php
 
-include ('engine/get_data_chart_4year.php');
+//include("config/connect_db.php");
+
+include ('engine/get_data_chart_dash_year.php');
+
+//echo $data1;
 
 ?>
 
 <script>
-
 
     const labels = [
         'มกราคม',
@@ -61,8 +63,6 @@ include ('engine/get_data_chart_4year.php');
     };
 
 </script>
-
-
 
 <div>
     <canvas id="myChart"></canvas>

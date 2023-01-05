@@ -112,6 +112,23 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </div>
 
+    <!--div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <div>
+                <div class="card-header">
+                    สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                    <?php echo $year; ?>
+                </div>
+                <div class="card-body">
+
+                    <?php include('cp_line_chart_dash_year.php'); ?>
+
+                </div>
+            </div>
+        </div>
+    </div-->
+
+
     <?php
     include('includes/Modal-Logout.php');
     include('includes/Footer.php');
@@ -125,7 +142,8 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="js/myadmin.min.js"></script>
-    <script src="js/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+    <!--script src="js/chart.js"></script-->
 
     <link href='vendor/calendar/main.css' rel='stylesheet'/>
     <script src='vendor/calendar/main.js'></script>
@@ -236,7 +254,6 @@ if (strlen($_SESSION['alogin']) == "") {
         }
 
     </script>
-
 
 
     </body>

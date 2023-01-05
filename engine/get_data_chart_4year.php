@@ -63,14 +63,14 @@ for ($x = 0; $x <= 3; $x++) {
     }
 
 
-    //echo "x = " . $x . "\n\r";
-    //echo "i = " . $i . "\n\r";
     $i++;
-    /*
-    echo $data1 ;
-    echo $data2 ;
-    echo $data3 ;
-    echo $data4 ; */
-    //echo $year . " ";
-
 }
+
+/*
+echo $data1 . "<br>";
+echo $data2 . "<br>";
+echo $data3 . "<br>";
+echo $data4 . "<br>";
+echo $year  .  "<br>";
+*/
+
