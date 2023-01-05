@@ -27,9 +27,11 @@ foreach ($results as $result) {
         "TRD_G_KEYIN" => $result['TRD_G_KEYIN']);
 }
 
+/*
 $myfile = fopen("qry_file_pie2.txt", "w") or die("Unable to open file!");
 fwrite($myfile, $sql_get . " | " . $year);
 fclose($myfile);
+*/
 
 echo json_encode($return_arr);
 
