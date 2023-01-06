@@ -99,6 +99,24 @@ if (strlen($_SESSION['alogin']) == "") {
                                     </table>
                                 </div>
 
+
+                                <div id="content-wrapper" class="d-flex flex-column">
+                                    <div id="content">
+                                        <div>
+                                            <div class="card-header">
+                                                สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                                                <?php echo $year; ?>
+                                            </div>
+                                            <div class="card-body">
+
+                                                <?php include('cp_line_chart_dash_year.php'); ?>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
 
@@ -112,21 +130,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </div>
 
-    <!--div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
-            <div>
-                <div class="card-header">
-                    สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
-                    <?php echo $year; ?>
-                </div>
-                <div class="card-body">
 
-                    <?php include('cp_line_chart_dash_year.php'); ?>
-
-                </div>
-            </div>
-        </div>
-    </div-->
 
 
     <?php

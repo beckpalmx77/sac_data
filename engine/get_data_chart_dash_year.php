@@ -1,5 +1,5 @@
 <?php
-$year = '2022';
+//$year = '2022';
 $label1 = '';
 $label2 = '';
 $label3 = '';
@@ -69,6 +69,14 @@ for ($x = 0; $x <= 3; $x++) {
     }
 
 }
+
+/*
+echo $label1 . " ";
+echo $label2 . " ";
+echo $label3 . " ";
+echo $label4 . " ";
+
+*/
 
 /*
 echo $data1 . "<br>";

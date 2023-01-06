@@ -84,6 +84,24 @@
                 </tbody>
                 <?php echo "รวม : ยางทั้งหมด  = " . number_format($total, 2) . " เส้น จำนวนเงินรวม = " . number_format($total_sale, 2) . " บาท " ?>
             </table>
+
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <div>
+                        <div class="card-header">
+                            สถิติ ยอดขาย Cockpit แต่ละสาขา ปี
+                            <?php echo $year; ?>
+                        </div>
+                        <div class="card-body">
+
+                            <?php include('cp_line_chart_dash_year.php'); ?>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
