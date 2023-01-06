@@ -12,23 +12,6 @@ include('engine/get_data_chart_dash_year.php');
 
 <canvas id="myChart" style="width:100%;max-width:800px"></canvas>
 
-<!--
-<div class="col-md-3">
-    <h4 style="color:rgb(93,36,248);"><?php echo $label1; ?></h4>
-</div>
-<div class="col-md-3">
-    <h4 style="color:rgb(70,224,25);"><?php echo $label2; ?></h4>
-</div>
-<div class="col-md-3">
-    <h4 style="color:rgb(236,109,24);"><?php echo $label3; ?></h4>
-</div>
-<div class="col-md-3">
-    <h4 style="color:rgb(88,141,245);"><?php echo $label4; ?></h4>
-</div>
-
--->
-
-
 <script>
 
     const xValues = [
