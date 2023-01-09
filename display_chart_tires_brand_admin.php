@@ -95,6 +95,7 @@
                         <div class="card-body">
 
                             <?php include('cp_line_chart_dash_year.php'); ?>
+                            <?php include('cp_bar_chart_dash_day.php'); ?>
 
                         </div>
                     </div>

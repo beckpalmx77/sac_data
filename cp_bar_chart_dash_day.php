@@ -1,15 +1,14 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div>
-    <div class="chart-container" style="position: relative; width:80vw">
-        <canvas id="myChart"></canvas>
-    </div>
-</div>
+
+<!--canvas id="myChartBar"></canvas-->
+
+<canvas id="myChartBar" style="width:100%;max-width:800px"></canvas>
 
 <?php
 
-    include("../config/connect_db.php");
-    include("../engine/get_data_chart_dash_day.php");
+include("config/connect_db.php");
+include("engine/get_data_chart_dash_day.php");
 
 ?>
 
@@ -17,7 +16,7 @@
 
     //alert("OK" + <?php echo $labels?>);
 
-    const ctx = document.getElementById('myChart');
+    const ctx = document.getElementById('myChartBar');
 
     new Chart(ctx, {
         type: 'bar',
