@@ -3,7 +3,7 @@
 $year = "2022";
 $month = "12";
 
-$d=cal_days_in_month(CAL_GREGORIAN,2,$year);
+$day = cal_days_in_month(CAL_GREGORIAN, 2, $year);
 
 $label1 = '';
 $label2 = '';
@@ -31,51 +31,51 @@ for ($x = 0; $x <= 3; $x++) {
             break;
     }
 
-    $str_return = "[";
+    for ($day_loop = 1; $day_loop <= $day; $day_loop++) {
 
-    $sql_get = "SELECT BRANCH,DI_YEAR,SUBSTR(DI_DATE,1,2) AS DI_DAY,DI_MONTH  ,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
+        $str_return = "[";
+
+        $sql_get = "SELECT BRANCH,DI_YEAR,SUBSTR(DI_DATE,1,2) AS DI_DAY,DI_MONTH  ,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as TRD_G_KEYIN 
 FROM ims_product_sale_cockpit 
-WHERE DI_YEAR = ". $year . " AND DI_MONTH = '". $month . "' AND BRANCH = '". $branch . "' 
+WHERE DI_YEAR = " . $year . " AND DI_MONTH = '" . $month . "' AND BRANCH = '" . $branch . "'  
 GROUP BY BRANCH ,SUBSTR(DI_DATE,1,2)
 ORDER BY CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) ";
 
 
+        $statement = $conn->query($sql_get);
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    $statement = $conn->query($sql_get);
-    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
-    foreach ($results as $result) {
-        if ($result['DI_MONTH'] == 12) {
-            $str_return .= $result['TRD_G_KEYIN'];
-        } else {
-            $str_return .= $result['TRD_G_KEYIN'] . ",";
+        foreach ($results as $result) {
+            if ((int)$result['DI_DAY'] === $day) {
+                $str_return .= $result['TRD_G_KEYIN'];
+            } else {
+                $str_return .= $result['TRD_G_KEYIN'] . ",";
+            }
         }
+
+        $str_return .= "]";
+
+        switch ($x) {
+            case 0:
+                $label1 = "CP-340";
+                $data1 = $str_return;
+                break;
+            case 1:
+                $label2 = "CP-BY";
+                $data2 = $str_return;
+                break;
+            case 2:
+                $label3 = "CP-BB";
+                $data3 = $str_return;
+                break;
+            case 3:
+                $label4 = "CP-RP";
+                $data4 = $str_return;
+                break;
+        }
+
     }
-
-    $str_return .= "]";
-
-
-
-    switch ($x) {
-        case 0:
-            $label1 = "CP-340";
-            $data1 = $str_return;
-            break;
-        case 1:
-            $label2 = "CP-BY";
-            $data2 = $str_return;
-            break;
-        case 2:
-            $label3 = "CP-BB";
-            $data3 = $str_return;
-            break;
-        case 3:
-            $label4 = "CP-RP";
-            $data4 = $str_return;
-            break;
-    }
-
 }
 
 /*
@@ -86,11 +86,11 @@ echo $label4 . " ";
 
 */
 
-/*
+
 echo $data1 . "<br>";
 echo $data2 . "<br>";
 echo $data3 . "<br>";
 echo $data4 . "<br>";
-echo $year  .  "<br>";
-*/
+echo $year . "<br>";
+
 
