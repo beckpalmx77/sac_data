@@ -1,4 +1,5 @@
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--script src="https://cdn.jsdelivr.net/npm/chart.js"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
 
 <!--canvas id="myChartBar"></canvas-->
@@ -24,19 +25,19 @@ include("engine/get_data_chart_dash_day.php");
             labels: <?php echo $labels?>,
             datasets: [{
                 label: "CP-340",
-                fillColor: "#4dc258",
+                backgroundColor: "#6837ee",
                 data: <?php echo $data1?>
             }, {
                 label: "CP-BY",
-                fillColor: "#8830ee",
+                backgroundColor: "#24a326",
                 data: <?php echo $data2?>
             }, {
                 label: "CP-BB",
-                fillColor: "#FC9775",
+                backgroundColor: "#c7522c",
                 data: <?php echo $data3?>
             }, {
                 label: "CP-RP",
-                fillColor: "#5A69A6",
+                backgroundColor: "#3956d2",
                 data: <?php echo $data4?>
             }]
         },
