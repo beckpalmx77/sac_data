@@ -4,6 +4,8 @@ $year = "2023";
 $month = "1";
 
 $day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+$current_day = date("j");
+//$current_day = 31;
 
 $label1 = '';
 $label2 = '';
@@ -16,9 +18,9 @@ $data4 = '';
 
 $str_labels_return = "[";
 
-for ($c_day_loop = 1; $c_day_loop <= $day; $c_day_loop++) {
+for ($c_day_loop = 1; $c_day_loop <= $current_day; $c_day_loop++) {
 
-    if ($c_day_loop === $day) {
+    if ($c_day_loop === $current_day) {
         $str_labels_return .= $c_day_loop;
     } else {
         $str_labels_return .= $c_day_loop . ",";
@@ -46,7 +48,7 @@ for ($x = 0; $x <= 3; $x++) {
             break;
     }
 
-    for ($day_loop = 1; $day_loop <= $day; $day_loop++) {
+    for ($day_loop = 1; $day_loop <= $current_day; $day_loop++) {
 
         $str_return = "[";
 
@@ -60,7 +62,7 @@ for ($x = 0; $x <= 3; $x++) {
 
 
         foreach ($results as $result) {
-            if ((int)$result['day'] === $day) {
+            if ((int)$result['day'] === $current_day) {
                 $str_return .= $result['total'];
             } else {
                 $str_return .= $result['total'] . ",";

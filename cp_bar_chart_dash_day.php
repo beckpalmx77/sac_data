@@ -37,7 +37,7 @@ include("engine/get_data_chart_dash_day.php");
                 data: <?php echo $data3?>
             }, {
                 label: "CP-RP",
-                backgroundColor: "#3956d2",
+                backgroundColor: "#3bc7e0",
                 data: <?php echo $data4?>
             }]
         },
