@@ -30,28 +30,28 @@ include('engine/get_data_chart_dash_year.php');
     ];
 
     new Chart("myChart", {
-        type: "line",
+        type: "bar",
         data: {
             labels: xValues,
             datasets: [{
                 label: 'CP-340',
                 data: <?php echo $data1?>,
-                borderColor: 'rgb(93,36,248)',
+                backgroundColor: "#6837ee",
                 fill: false
             }, {
                 label: 'CP-BY',
                 data: <?php echo $data2?>,
-                borderColor: 'rgb(70,224,25)',
+                backgroundColor: "#24a326",
                 fill: false
             }, {
                 label: 'CP-BB',
                 data: <?php echo $data3?>,
-                borderColor: 'rgb(236,109,24)',
+                backgroundColor: "#c7522c",
                 fill: false
             }, {
                 label: 'CP-RP',
                 data: <?php echo $data4?>,
-                borderColor: 'rgb(74,125,226)',
+                backgroundColor: "#3bc7e0",
                 fill: false
             }]
         },

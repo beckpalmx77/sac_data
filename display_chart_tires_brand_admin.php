@@ -93,7 +93,7 @@
                             <?php echo $year; ?>
                         </div>
                         <div class="card-body">
-                            <?php include('cp_line_chart_dash_year.php'); ?>
+                            <?php include('cp_bar_chart_dash_by_year.php'); ?>
 
                         </div>
                     </div>
