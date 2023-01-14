@@ -1,8 +1,5 @@
 <?php
 
-$year = "2023";
-$month = "1";
-
 $end_day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
 //$end_day = "15";

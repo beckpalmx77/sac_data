@@ -8,7 +8,11 @@ if (strlen($_SESSION['alogin']) == "") {
     require_once 'vendor/mobiledetect/mobiledetectlib/Mobile_Detect.php';
     $detect = new Mobile_Detect;
 
-    $sql_curr_month = " SELECT * FROM ims_month where month = '" . date("n") . "'";
+    $year = date("Y");
+    $month = date("n");
+    $date = date("d/m/Y");
+
+    $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month . "'";
     $stmt_curr_month = $conn->prepare($sql_curr_month);
     $stmt_curr_month->execute();
     $MonthCurr = $stmt_curr_month->fetchAll();
@@ -57,7 +61,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     <?php echo date("d/m/Y"); ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
+                                    <h5 class="card-title">ปี <?php echo $year; ?></h5>
                                     <canvas id="myChartDaily" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
@@ -112,7 +116,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                     เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">ปี <?php echo date("Y"); ?></h5>
+                                    <h5 class="card-title">ปี <?php echo $year; ?></h5>
                                     <canvas id="myChartMonthly" width="200" height="200"></canvas>
                                 </div>
                                 <div class="card-body">
@@ -132,7 +136,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                        $date = date("d/m/Y");
+
                                         $total = 0;
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 

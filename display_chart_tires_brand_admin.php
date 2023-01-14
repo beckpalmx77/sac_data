@@ -35,7 +35,7 @@
                 <tbody>
                 <form id="myform" name="myform" method="post">
                     <input type="hidden" name="year" id="year" class="form-control"
-                           value="<?php echo date("Y"); ?>">
+                           value="<?php echo $year; ?>">
                     <div class="row">
                         <div class="col-sm-12">
                             <button type="button" id="BtnSale" name="BtnSale"
@@ -47,7 +47,7 @@
                 </form>
                 <br>
                 <?php
-                $year = date("Y");
+
                 $total = 0;
                 $total_sale = 0;
 
