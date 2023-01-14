@@ -3,8 +3,12 @@
 $year = "2023";
 $month = "1";
 
-$day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+$end_day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+
+//$end_day = "15";
+
 $current_day = date("j");
+
 //$current_day = 31;
 
 $label1 = '';

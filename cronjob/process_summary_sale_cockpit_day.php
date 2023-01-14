@@ -14,7 +14,7 @@ $str_update = "OK Update";
 
 $day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
-echo $year . " - " . $month . " | " . $day . " Count <br>";
+//echo $year . " - " . $month . " | " . $day . " Count <br>";
 
 for ($x = 0; $x <= 3; $x++) {
 
