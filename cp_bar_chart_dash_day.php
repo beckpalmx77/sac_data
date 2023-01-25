@@ -1,5 +1,5 @@
 <!--script src="https://cdn.jsdelivr.net/npm/chart.js"></script-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
 
 
 <!--canvas id="myChartBar"></canvas-->
@@ -8,7 +8,6 @@
 
 <?php
 
-include("config/connect_db.php");
 include("engine/get_data_chart_dash_day.php");
 
 ?>

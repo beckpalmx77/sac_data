@@ -1,3 +1,6 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<?php include("config/connect_db.php"); ?>
+
 <div class="col-md-6">
     <div class="card">
         <div class="card-header">
@@ -112,7 +115,7 @@
                     </div>
                 </div>
 
-                <!--div id="content">
+                <div id="content">
                     <div>
                         <div class="card-header">
                             สถิติ ยอดขาย Cockpit แต่ละสาขา เดือน <?php echo $month_name ." ปี " . $year; ?>
@@ -123,7 +126,7 @@
 
                         </div>
                     </div>
-                </div-->
+                </div>
 
 
             </div>

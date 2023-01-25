@@ -1,28 +1,23 @@
 <!--script src="https://cdn.jsdelivr.net/npm/chart.js"></script-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script-->
 
-
-<!--canvas id="myChartBar"></canvas-->
 
 <canvas id="myChartBar2" style="width:100%;max-width:800px"></canvas>
 
 <?php
 
-//include("config/connect_db.php");
 include("engine/get_data_chart_dash_day2.php");
 
 ?>
 
 <script>
 
-    //alert("OK" + <?php echo $labels?>);
-
     const ctx = document.getElementById('myChartBar2');
 
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: <?php echo $labels?>,
+            labels: <?php echo $labels_2?>,
             datasets: [{
                 label: "CP-340",
                 backgroundColor: "#6837ee",
@@ -49,6 +44,7 @@ include("engine/get_data_chart_dash_day2.php");
             }
         }
     });
+
 </script>
 
 

@@ -1,10 +1,11 @@
 <?php
 
-$year = "2023";
-$month = "1";
+//include("config/connect_db.php");
 
+//$year = "2023";
+//$month = "1";
 
-$start_day2 = 15;
+$start_day2 = 16;
 $end_day2 = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
 $current_day2 = date("j");
@@ -17,6 +18,7 @@ $data2_1 = '';
 $data2_2 = '';
 $data2_3 = '';
 $data2_4 = '';
+
 
 $str_labels_return2 = "[";
 
@@ -33,9 +35,9 @@ for ($c_day_loop2 = $start_day2; $c_day_loop2 <= $end_day2; $c_day_loop2++) {
 $str_labels_return2 .= "]";
 
 
-for ($xx = 0; $xx <= 3; $xx++) {
+for ($y = 0; $y <= 3; $y++) {
 
-    switch ($xx) {
+    switch ($y) {
         case 0:
             $branch = "CP-340";
             break;
@@ -50,7 +52,7 @@ for ($xx = 0; $xx <= 3; $xx++) {
             break;
     }
 
-    for ($day_loop2 = 1; $day_loop2 <= $current_day2; $day_loop2++) {
+    for ($day_loop2 = $start_day2; $day_loop2 <= $current_day2; $day_loop2++) {
 
         $str_return2 = "[";
 
@@ -58,16 +60,25 @@ for ($xx = 0; $xx <= 3; $xx++) {
         WHERE year = " . $year . " AND month = '" . $month . "' AND BRANCH = '" . $branch . "'                  
         ORDER BY CAST(day AS UNSIGNED) ";
 
+        /*
+        $myfile = fopen("param.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch  . " : " . $sql_get2 );
+        fclose($myfile);
+        */
+
 
         $statement = $conn->query($sql_get2);
-        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $results_2 = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 
-        foreach ($results as $result) {
-            if ((int)$result['day'] === $current_day2) {
-                $str_return2 .= $result['total'];
-            } else {
-                $str_return2 .= $result['total'] . ",";
+        foreach ($results_2 as $result_2) {
+            if ((int)$result_2['day']>=$start_day2) {
+
+                if ((int)$result_2['day'] === $current_day2) {
+                    $str_return2 .= $result_2['total'];
+                } else {
+                    $str_return2 .= $result_2['total'] . ",";
+                }
             }
         }
 
@@ -75,7 +86,7 @@ for ($xx = 0; $xx <= 3; $xx++) {
 
         //echo "str_return = " . $str_return2 . "<br>";
 
-        switch ($xx) {
+        switch ($y) {
             case 0:
                 $label2_1 = "CP-340";
                 $data2_1 = $str_return2;
@@ -98,7 +109,7 @@ for ($xx = 0; $xx <= 3; $xx++) {
 }
 
 
-$labels = $str_labels_return2 ;
+$labels_2 = $str_labels_return2 ;
 
 /*
 echo "labels = " . $labels . "<br>";

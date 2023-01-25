@@ -2,7 +2,7 @@
 
 $end_day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
-//$end_day = "15";
+$end_day = "15";
 
 $current_day = date("j");
 
