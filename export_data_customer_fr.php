@@ -55,9 +55,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="form-group row">
 
                                                                         <div class="form-group">
-                                                                            <label for="price_code"
+                                                                            <label for="com_code"
                                                                                    class="control-label">Select Price Code</label>
-                                                                            <select id="price_code" name="com_code"
+                                                                            <select id="com_code" name="com_code"
                                                                                     class="form-control"
                                                                                     data-live-search="true"
                                                                                     title="Please select">
@@ -157,37 +157,6 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script src="js/util.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            let today = new Date();
-            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
-            $('#doc_date_start').val(doc_date);
-            $('#doc_date_to').val(doc_date);
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_start').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_to').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
-    </script>
 
     </body>
 
