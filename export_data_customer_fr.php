@@ -46,7 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_product_prices.php"
+                                                              action="export_process/export_data_customer.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -55,16 +55,13 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="form-group row">
 
                                                                         <div class="form-group">
-                                                                            <label for="price_code"
-                                                                                   class="control-label">Select Price Code</label>
-                                                                            <select id="price_code" name="price_code"
+                                                                            <label for="com_code"
+                                                                                   class="control-label">Select Company</label>
+                                                                            <select id="com_code" name="com_code"
                                                                                     class="form-control"
                                                                                     data-live-search="true"
                                                                                     title="Please select">
-                                                                                <option>ALL</option>
                                                                                 <option>SAC</option>
-                                                                                <option>BTC</option>
-                                                                                <option>COCKPIT</option>
                                                                             </select>
                                                                         </div>
 
