@@ -46,7 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_customer.php"
+                                                              action="export_process/export_data_product_prices.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
@@ -55,13 +55,16 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="form-group row">
 
                                                                         <div class="form-group">
-                                                                            <label for="com_code"
+                                                                            <label for="price_code"
                                                                                    class="control-label">Select Price Code</label>
-                                                                            <select id="com_code" name="com_code"
+                                                                            <select id="price_code" name="price_code"
                                                                                     class="form-control"
                                                                                     data-live-search="true"
                                                                                     title="Please select">
+                                                                                <option>ALL</option>
                                                                                 <option>SAC</option>
+                                                                                <option>BTC</option>
+                                                                                <option>COCKPIT</option>
                                                                             </select>
                                                                         </div>
 
@@ -70,7 +73,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 </div>
 
 
-                                                             </div>
+                                                            </div>
 
                                                             <div class="modal-footer">
                                                                 <input type="hidden" name="id" id="id"/>
@@ -157,6 +160,37 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script src="js/util.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let today = new Date();
+            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
+            $('#doc_date_start').val(doc_date);
+            $('#doc_date_to').val(doc_date);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#doc_date_start').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#doc_date_to').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
 
     </body>
 
