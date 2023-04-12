@@ -23,6 +23,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     $sql_find = "SELECT * FROM addrbook WHERE ADDB_KEY = '" . $result_sqlsvr["ADDB_KEY"] . "'";
     $nRows = $conn->query($sql_find)->fetchColumn();
     if ($nRows > 0) {
+        echo "Data " . $result_sqlsvr["ADDB_KEY"] . " Already " . "\n\r";
+
         $sql = "UPDATE addrbook SET ADDB_COMPANY=:ADDB_COMPANY,ADDB_TAX_ID=:ADDB_TAX_ID,ADDB_SEARCH=:ADDB_SEARCH,
         ADDB_BRANCH=:ADDB_BRANCH,ADDB_ADDB_1=:ADDB_ADDB_1,ADDB_ADDB_2=:ADDB_ADDB_2,ADDB_ADDB_3=:ADDB_ADDB_3,ADDB_PROVINCE=:ADDB_PROVINCE,ADDB_PHONE=:ADDB_PHONE
         WHERE ADDB_KEY = :ADDB_KEY ";
@@ -41,6 +43,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':ADDB_PHONE', $result_sqlsvr["ADDB_PHONE"], PDO::PARAM_STR);
         $query->bindParam(':ADDB_KEY', $result_sqlsvr["ADDB_KEY"], PDO::PARAM_STR);
         $query->execute();
+
     } else {
 
         echo " Insert Customer : " . $result_sqlsvr["ADDB_KEY"] . " | " . $result_sqlsvr["ADDB_COMPANY"] . " | " . $result_sqlsvr["ADDB_SEARCH"] . "\n\r";

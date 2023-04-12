@@ -62,10 +62,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="modal-body">
                                                     <div class="form-group row">
                                                         <div class="col-sm-2">
-                                                            <label for="doc_no"
+                                                            <label for="car_no"
                                                                    class="control-label">เลขที่เอกสาร</label>
                                                             <input type="text" class="form-control"
-                                                                   id="doc_no" name="doc_no"
+                                                                   id="car_no" name="car_no"
                                                                    readonly="true"
                                                                    placeholder="เลขที่เอกสาร">
                                                         </div>
@@ -115,7 +115,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                     <table cellpadding="0" cellspacing="0" border="0"
                                                            class="display"
-                                                           id="TablePurchaseDetailList"
+                                                           id="TableHistoryCustomerDetailList"
                                                            width="100%">
                                                         <thead>
                                                         <tr>
@@ -183,8 +183,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <input type="hidden" class="form-control"
-                                                                       id="doc_no_detail"
-                                                                       name="doc_no_detail" value="">
+                                                                       id="car_no_detail"
+                                                                       name="car_no_detail" value="">
                                                             </div>
                                                             <div class="col-sm-5">
                                                                 <input type="hidden" class="form-control"
@@ -537,28 +537,27 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#save_status').val("add");
             }
 
-            if (queryString["doc_no"] != null && queryString["supplier_name"] != null) {
+            if (queryString["car_no"] != null && queryString["customer_name"] != null) {
 
-                $('#doc_no').val(queryString["doc_no"]);
-                $('#doc_date').val(queryString["doc_date"]);
-                $('#supplier_id').val(queryString["supplier_id"]);
-                $('#supplier_name').val(queryString["supplier_name"]);
+                $('#car_no').val(queryString["car_no"]);
+                $('#customer_name').val(queryString["customer_name"]);
 
-                Load_Data_Detail(queryString["doc_no"], "v_purchase_detail");
+                Load_Data_Detail(queryString["car_no"],queryString["customer_name"], "history");
             }
         });
     </script>
 
     <script>
-        function Load_Data_Detail(doc_no, table_name) {
+        function Load_Data_Detail(car_no,customer_name, table_name) {
 
             let formData = {
-                action: "GET_PURCHASE_DETAIL",
+                action: "GET_HISTORY_DETAIL",
                 sub_action: "GET_MASTER",
-                doc_no: doc_no,
+                car_no: car_no,
+                customer_name: customer_name,
                 table_name: table_name
             };
-            let dataRecords = $('#TablePurchaseDetailList').DataTable({
+            let dataRecords = $('#TableHistoryCustomerDetailList').DataTable({
                 "paging": false,
                 "ordering": false,
                 'info': false,
@@ -580,7 +579,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 'serverSide': true,
                 'serverMethod': 'post',
                 'ajax': {
-                    'url': 'model/manage_purchase_detail_process.php',
+                    'url': 'model/manage_customer_history_process.php',
                     'data': formData
                 },
                 'columns': [
@@ -605,7 +604,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 } else {
                     $('#recordModal').modal('show');
                     $('#KeyAddDetail').val($('#KeyAddData').val());
-                    $('#doc_no_detail').val($('#doc_no').val());
+                    $('#car_no_detail').val($('#car_no').val());
                     $('#doc_date_detail').val($('#doc_date').val());
                     $('#product_id').val("");
                     $('#name_t').val("");
@@ -622,22 +621,22 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#TablePurchaseDetailList").on('click', '.update', function () {
+        $("#TableHistoryCustomerDetailList").on('click', '.update', function () {
 
             let rec_id = $(this).attr("id");
 
             if ($('#KeyAddData').val() !== '') {
-                doc_no = $('#KeyAddData').val();
+                car_no = $('#KeyAddData').val();
                 table_name = "v_purchase_detail_temp";
             } else {
-                doc_no = $('#doc_no').val();
+                car_no = $('#car_no').val();
                 table_name = "v_purchase_detail";
             }
 
-            let formData = {action: "GET_DATA", id: rec_id, doc_no: doc_no, table_name: table_name};
+            let formData = {action: "GET_DATA", id: rec_id, car_no: car_no, table_name: table_name};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_purchase_detail_process.php',
+                url: 'model/manage_customer_history_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
@@ -656,7 +655,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#recordModal').modal('show');
                         $('#id').val(id);
                         $('#detail_id').val(rec_id);
-                        $('#doc_no_detail').val(doc_no);
+                        $('#car_no_detail').val(car_no);
                         $('#doc_date_detail').val(doc_date);
                         $('#product_id').val(product_id);
                         $('#name_t').val(name_t);
@@ -680,22 +679,22 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#TablePurchaseDetailList").on('click', '.delete', function () {
+        $("#TableHistoryCustomerDetailList").on('click', '.delete', function () {
 
             let rec_id = $(this).attr("id");
 
             if ($('#KeyAddData').val() !== '') {
-                doc_no = $('#KeyAddData').val();
+                car_no = $('#KeyAddData').val();
                 table_name = "v_purchase_detail_temp";
             } else {
-                doc_no = $('#doc_no').val();
+                car_no = $('#car_no').val();
                 table_name = "v_purchase_detail";
             }
 
-            let formData = {action: "GET_DATA", id: rec_id, doc_no: doc_no, table_name: table_name};
+            let formData = {action: "GET_DATA", id: rec_id, car_no: car_no, table_name: table_name};
             $.ajax({
                 type: "POST",
-                url: 'model/manage_purchase_detail_process.php',
+                url: 'model/manage_customer_history_process.php',
                 dataType: "json",
                 data: formData,
                 success: function (response) {
@@ -713,7 +712,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         $('#recordModal').modal('show');
                         $('#id').val(id);
                         $('#detail_id').val(rec_id);
-                        $('#doc_no_detail').val(doc_no);
+                        $('#car_no_detail').val(car_no);
                         $('#product_id').val(product_id);
                         $('#name_t').val(name_t);
                         $('#quantity').val(quantity);
@@ -770,7 +769,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
             let formData = {action: "SAVE_DETAIL", KeyAddData: KeyAddData};
             $.ajax({
-                url: 'model/manage_purchase_detail_process.php',
+                url: 'model/manage_customer_history_process.php',
                 method: "POST",
                 data: formData,
                 success: function (data) {
@@ -789,11 +788,11 @@ if (strlen($_SESSION['alogin']) == "") {
             if (KeyAddData !== '') {
                 $('#KeyAddDetail').val(KeyAddData);
             }
-            let doc_no_detail = $('#doc_no_detail').val();
+            let car_no_detail = $('#car_no_detail').val();
             let formData = $(this).serialize();
 
             $.ajax({
-                url: 'model/manage_purchase_detail_process.php',
+                url: 'model/manage_customer_history_process.php',
                 method: "POST",
                 data: formData,
                 success: function (data) {
@@ -801,12 +800,12 @@ if (strlen($_SESSION['alogin']) == "") {
                     $('#recordForm')[0].reset();
                     $('#recordModal').modal('hide');
 
-                    $('#TablePurchaseDetailList').DataTable().clear().destroy();
+                    $('#TableHistoryCustomerDetailList').DataTable().clear().destroy();
 
                     if (KeyAddData !== '') {
                         Load_Data_Detail(KeyAddData, "v_purchase_detail_temp");
                     } else {
-                        Load_Data_Detail(doc_no_detail, "v_purchase_detail");
+                        Load_Data_Detail(car_no_detail, "v_purchase_detail");
                     }
                 }
             })

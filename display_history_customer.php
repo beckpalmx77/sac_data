@@ -6,7 +6,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -54,6 +54,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
                 <!-- Container Fluid-->
                 <div class="container-fluid" id="container-wrapper">
+                    <input type="hidden" id="main_menu" value="<?php echo urldecode($_GET['m']) ?>">
+                    <input type="hidden" id="sub_menu" value="<?php echo urldecode($_GET['s']) ?>">
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"><?php echo urldecode($_GET['s']) ?></h1>
                         <ol class="breadcrumb">
@@ -77,40 +79,39 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="myform" name="myform" action="engine/chart_data_daily.php" method="post">
-
-                                                                <div class="row">
-                                                                    <br>
-                                                                    <div class="col-sm-12">
-                                                                        <div class="form-group has-success">
-                                                                            <label for="success" class="control-label">ค้นหาตามชื่อลูกค้า</label>
-                                                                            <div class="">
-                                                                                <input type="text" name="customer_name"
-                                                                                       class="form-control"
-                                                                                       id="customer_name">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="form-group has-success">
-                                                                            <label for="success" class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
-                                                                            <div class="">
-                                                                                <input type="text" name="car_no"
-                                                                                       class="form-control"
-                                                                                       id="car_no">
-                                                                            </div>
-                                                                        </div>
-
-                                                                                <br>
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-12">
-                                                                                        <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">ค้นหา
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </div>
-
+                                                        <div class="row">
+                                                            <br>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group has-success">
+                                                                    <label for="success" class="control-label">ค้นหาตามชื่อลูกค้า</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="customer_name"
+                                                                               class="form-control"
+                                                                               id="customer_name">
                                                                     </div>
                                                                 </div>
-                                                        </form>
+
+                                                                <div class="form-group has-success">
+                                                                    <label for="success" class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="car_no"
+                                                                               class="form-control"
+                                                                               id="car_no">
+                                                                    </div>
+                                                                </div>
+
+                                                                <br>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <button type="button" id="BtnSale"
+                                                                                name="BtnSale"
+                                                                                class="btn btn-primary mb-3">ค้นหา
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,13 +174,36 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
+    <script src="js/popup.js"></script>
+
     <script>
 
-        $("#BtnSale").click(function () {
+        $("#BtnSaleBak").click(function () {
             document.forms['myform'].action = 'show_history_customer_data';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
+        });
+
+    </script>
+
+    <script>
+
+        $("#BtnSale").click(function () {
+
+            if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
+                alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
+            } else {
+                let main_menu = document.getElementById("main_menu").value;
+                let sub_menu = document.getElementById("sub_menu").value;
+                let customer_name = document.getElementById("customer_name").value;
+                let car_no = document.getElementById("car_no").value;
+                let url = "show_history_customer_data.php?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
+                    + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
+                    + '&action=QUERY';
+                OpenPopupCenter(url, "", "");
+            }
+
         });
 
     </script>
