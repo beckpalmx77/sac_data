@@ -81,7 +81,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="myform" name="myform" method="post">
+                                                        <form id="from_data" method="post"
+                                                              action="export_process/export_process_data_sale_total_cp.php"
+                                                              enctype="multipart/form-data">
 
                                                             <div class="row">
                                                                 <div class="col-sm-12">
@@ -113,8 +115,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <br>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">แสดง
-                                                                                Chart ยอดขาย รายเดือน
+                                                                            <button type="submit" class="btn btn-success"
+                                                                                    id="btnExport"> Export <i
+                                                                                        class="fa fa-check"></i>
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -184,16 +187,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-    <script>
-
-        $("#BtnSale").click(function () {
-            document.forms['myform'].action = 'chart_cockpit_total_pie-3';
-            document.forms['myform'].target = '_blank';
-            document.forms['myform'].submit();
-            return true;
-        });
-
-    </script>
 
     </body>
 
