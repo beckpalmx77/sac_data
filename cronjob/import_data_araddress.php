@@ -57,23 +57,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
             echo "Error";
         }
 
-/*
-        $return_arr[] = array("customer_id" => $result_sqlsvr['AR_CODE'],
-            "tax_id" => $result_sqlsvr['ARA_AR'],
-            "f_name" => $result_sqlsvr['AR_NAME'],
-            "phone" => $result_sqlsvr['ADDB_PHONE'],
-            "address" => $result_sqlsvr['ARA_LASTUPD'],
-            "tumbol" => $result_sqlsvr['ADDB_ADDB_2'],
-            "amphure" => $result_sqlsvr['ADDB_ADDB_3'],
-            "province" => $result_sqlsvr['ADDB_PROVINCE'],
-            "zipcode" => $result_sqlsvr['ADDB_POST']);
-*/
     }
-/*
-    $customer_data = json_encode($return_arr);
-    file_put_contents("customer_data.json", $customer_data);
-    echo json_encode($return_arr);
-*/
 
 }
 
