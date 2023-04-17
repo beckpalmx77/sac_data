@@ -37,7 +37,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $sql = "UPDATE ardetail SET ARD_AR=:ARD_AR,ARD_DI=:ARD_DI,ARD_ARCD=:ARD_ARCD        
         WHERE ARD_KEY = :ARD_KEY ";
 
-        echo " Update Customer : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
+        echo " Update ardetail : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
 
         $query = $conn->prepare($sql);
         $query->bindParam(':ARD_AR', $result_sqlsvr["ARD_AR"], PDO::PARAM_STR);
@@ -47,7 +47,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->execute();
     } else {
 
-        echo " Insert Customer : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
+        echo " Insert ardetail : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
 
         $sql = "INSERT INTO ardetail(ARD_KEY,ARD_AR,ARD_DI,ARD_ARCD)
         VALUES (:ARD_KEY,:ARD_AR,:ARD_DI,:ARD_ARCD)";
