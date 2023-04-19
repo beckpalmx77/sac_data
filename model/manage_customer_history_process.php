@@ -120,8 +120,8 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
-                "TRD_QTY" => $TRD_QTY,
-                "TRD_B_AMT" => $row['TRD_B_AMT']
+                "TRD_QTY" => number_format($TRD_QTY, 2),
+                "TRD_B_AMT" => number_format($row['TRD_B_AMT'], 2)
             );
         }
     }
