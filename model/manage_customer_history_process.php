@@ -73,16 +73,6 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
 ## Search
     $searchQuery = " ";
-    /*
-        if ($searchValue != '') {
-            $searchQuery = " AND (doc_no LIKE :doc_no or
-            doc_date LIKE : ) ";
-            $searchArray = array(
-                'doc_no' => "%$searchValue%",
-                'doc_date' => "%$searchValue%",
-            );
-        }
-    */
 
 ## Total number of records without filtering
     $totalRecords = $rows;
@@ -104,13 +94,6 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
     $line_no = 0;
 
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-
-        /*
-        $myfile = fopen("data_file.txt", "w") or die("Unable to open file!");
-        $di_ref = $di_ref . $row['DI_REF'];
-        fwrite($myfile, $di_ref);
-        fclose($myfile);
-        */
 
 
         if ($_POST['sub_action'] === "GET_MASTER") {
