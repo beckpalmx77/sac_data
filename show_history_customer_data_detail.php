@@ -285,8 +285,8 @@ if (strlen($_SESSION['alogin']) == "") {
                     {data: 'ADDB_ADDB'},
                     {data: 'SKU_CODE'},
                     {data: 'SKU_NAME'},
-                    {data: 'TRD_QTY'},
-                    {data: 'TRD_B_AMT'}
+                    {data: 'TRD_QTY' ,className: "text-right" },
+                    {data: 'TRD_B_AMT' ,className: "text-right" }
                 ]
             });
         }
