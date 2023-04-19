@@ -77,6 +77,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <th>ยี่ห้อรถ/รุ่น</th>
                                                             <th>รหัสสินค้า</th>
                                                             <th>ชื่อสินค้า</th>
+                                                            <th>จำนวน</th>
                                                             <th>จำนวนเงิน</th>
                                                         </tr>
                                                         </thead>
@@ -284,6 +285,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     {data: 'ADDB_ADDB'},
                     {data: 'SKU_CODE'},
                     {data: 'SKU_NAME'},
+                    {data: 'TRD_QTY'},
                     {data: 'TRD_B_AMT'}
                 ]
             });
