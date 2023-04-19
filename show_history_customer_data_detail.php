@@ -233,7 +233,6 @@ if (strlen($_SESSION['alogin']) == "") {
             $("#sub_menu").html(queryString["sub_menu"]);
             $('#action').val(queryString["action"]);
 
-
             if (queryString["car_no"] != null && queryString["customer_name"] != null) {
 
                 $('#car_no').val(queryString["car_no"]);
