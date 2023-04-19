@@ -54,7 +54,7 @@ ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
 (TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
 
-ORDER BY TRD_KEY  DESC ";
+ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     $stmt = $conn_sqlsvr->prepare($sql_data_select, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
     $stmt->execute();
