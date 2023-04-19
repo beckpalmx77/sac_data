@@ -9,9 +9,11 @@ include('../config/lang.php');
 
 if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
 
-    $str_qry = "
-    
-SELECT 
+    ## Read value
+    $car_no = $_POST['car_no'];
+    $customer_name = $_POST['customer_name'];
+
+    $sql_data_select = " SELECT 
 TRANSTKD.TRD_KEY , 
 ADDRBOOK.ADDB_KEY , 
 ADDRBOOK.ADDB_BRANCH , 
@@ -20,7 +22,7 @@ ADDRBOOK.ADDB_ADDB_1 ,
 ADDRBOOK.ADDB_ADDB_2 , 
 ADDRBOOK.ADDB_COMPANY ,
 DOCINFO.DI_REF , 
-DOCINFO.DI_DATE ,
+DOCINFO.DI_DATE,
 DAY(DI_DATE) AS DI_DAY ,
 MONTH(DI_DATE) AS DI_MONTH ,
 YEAR(DI_DATE) AS DI_YEAR ,
@@ -31,7 +33,7 @@ TRANSTKD.TRD_QTY,
 TRANSTKD.TRD_U_PRC,
 TRANSTKD.TRD_B_SELL,
 TRANSTKD.TRD_B_VAT,
-TRANSTKD.TRD_B_AMT 
+TRANSTKD.TRD_B_AMT
 
 FROM 
 ADDRBOOK,
@@ -41,24 +43,23 @@ DOCINFO ,
 TRANSTKH ,
 TRANSTKD ,
 SKUMASTER
-
-WHERE 
-
--- ADDRBOOK.ADDB_COMPANY like '%พงษ์ศักดิ์ %'   AND  
--- ADDRBOOK.ADDB_BRANCH  not like '' AND 
--- ADDRBOOK.ADDB_SEARCH like '%%' AND 
-
+ 
+WHERE
+ADDRBOOK.ADDB_COMPANY like '%" . $customer_name . "%' AND
+ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
 (DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) 
+(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
 
-";
+ORDER BY TRD_KEY  DESC ";
 
-    ## Read value
-    $table_name = $_POST['table_name'];
+    $stmt = $conn_sqlsvr->prepare($sql_data_select, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+    $stmt->execute();
+    $rows = $stmt->rowCount();
+
     $draw = $_POST['draw'];
     $row = $_POST['start'];
     $rowperpage = $_POST['length']; // Rows display per page
@@ -71,64 +72,56 @@ WHERE
 
 ## Search
     $searchQuery = " ";
-    if ($searchValue != '') {
-        $searchQuery = " AND (doc_no LIKE :doc_no or
-        doc_date LIKE :doc_date ) ";
-        $searchArray = array(
-            'doc_no' => "%$searchValue%",
-            'doc_date' => "%$searchValue%",
-        );
-    }
+    /*
+        if ($searchValue != '') {
+            $searchQuery = " AND (doc_no LIKE :doc_no or
+            doc_date LIKE : ) ";
+            $searchArray = array(
+                'doc_no' => "%$searchValue%",
+                'doc_date' => "%$searchValue%",
+            );
+        }
+    */
 
 ## Total number of records without filtering
-    $stmt = $conn->prepare("select count(*) from ADDRBOOK   WHERE ADDRBOOK.ADDB_COMPANY like '%" . $_POST["customer_name"] . "%'" . " or ADDRBOOK.ADDB_SEARCH like '%" . $_POST["car_no"] . "%'");
-    $stmt->execute();
-    $records = $stmt->fetch();
-    $totalRecords = $records['allcount'];
+    $totalRecords = $rows;
 
 ## Total number of records with filtering
-    $stmt = $conn->prepare("select count(*) from ADDRBOOK   WHERE ADDRBOOK.ADDB_COMPANY like '%" . $_POST["customer_name"] . "%'" . " or ADDRBOOK.ADDB_SEARCH like '%" . $_POST["car_no"] . "%'");
-    $stmt->execute();
-    $records = $stmt->fetch();
-    $totalRecordwithFilter = $records['allcount'];
+    $totalRecordwithFilter = $rows;
 
+    //$myfile = fopen("qry_datas.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $totalRecords . " | " . $totalRecordwithFilter);
+    //fclose($myfile);
 
-    $query_str = "SELECT * FROM " . $table_name . " WHERE doc_no = '" . $_POST["doc_no"] . "'"
-        . " ORDER BY line_no ";
+    $query_str = $sql_data_select;
 
-    $stmt = $conn->prepare($query_str);
-    $stmt->execute();
-    $empRecords = $stmt->fetchAll();
+    $query = $conn_sqlsvr->prepare($query_str);
+    $query->execute();
+
     $data = array();
 
-    foreach ($empRecords as $row) {
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+
+        /*
+        $myfile = fopen("data_file.txt", "w") or die("Unable to open file!");
+        $di_ref = $di_ref . $row['DI_REF'];
+        fwrite($myfile, $di_ref);
+        fclose($myfile);
+        */
+
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $data[] = array(
-                "id" => $row['id'],
-                "doc_no" => $row['doc_no'],
-                "doc_date" => $row['doc_date'],
-                "line_no" => $row['line_no'],
-                "product_id" => $row['product_id'],
-                "product_name" => $row['product_name'],
-                "quantity" => number_format($row['quantity'], 2),
-                "price" => number_format($row['price'], 2),
-                "total_price" => number_format($row['total_price'], 2),
-                "unit_id" => $row['unit_id'],
-                "unit_name" => $row['unit_name'],
-                "update" => "<button type='button' name='update' id='" . $row['id'] . "' class='btn btn-info btn-xs update' data-toggle='tooltip' title='Update'>Update</button>",
-                "delete" => "<button type='button' name='delete' id='" . $row['id'] . "' class='btn btn-danger btn-xs delete' data-toggle='tooltip' title='Delete'>Delete</button>"
-            );
-        } else {
-            $data[] = array(
-                "id" => $row['id'],
-                "doc_no" => $row['doc_no'],
-                "doc_date" => $row['doc_date'],
-                "select" => "<button type='button' name='select' id='" . $row['doc_no'] . "@" . $row['doc_date'] . "' class='btn btn-outline-success btn-xs select' data-toggle='tooltip' title='select'>select <i class='fa fa-check' aria-hidden='true'></i>
-</button>",
+                "DI_REF" => $row['DI_REF'],
+                "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] ,
+                "ADDB_COMPANY" => $row['ADDB_COMPANY'],
+                "ADDB_SEARCH" => $row['ADDB_SEARCH'],
+                "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
+                "SKU_CODE" => $row['SKU_CODE'],
+                "SKU_NAME" => $row['SKU_NAME'],
+                "TRD_B_AMT" => $row['TRD_B_AMT']
             );
         }
-
     }
 
 ## Response Return Value

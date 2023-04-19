@@ -1,5 +1,7 @@
 <?php
 include('includes/Header.php');
+include('config/connect_sqlserver.php');
+
 if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
 } else {
@@ -60,44 +62,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                    value="">
                                             <div class="modal-body">
                                                 <div class="modal-body">
-                                                    <div class="form-group row">
-                                                        <div class="col-sm-2">
-                                                            <label for="car_no"
-                                                                   class="control-label">เลขที่เอกสาร</label>
-                                                            <input type="text" class="form-control"
-                                                                   id="car_no" name="car_no"
-                                                                   readonly="true"
-                                                                   placeholder="เลขที่เอกสาร">
-                                                        </div>
-
-                                                        <div class="col-sm-2">
-                                                            <label for="doc_date"
-                                                                   class="control-label">วันที่</label>
-                                                            <input type="text" class="form-control"
-                                                                   id="doc_date"
-                                                                   name="doc_date"
-                                                                   required="required"
-                                                                   readonly="true"
-                                                                   placeholder="วันที่">
-                                                            <div class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-th"></span>
-                                                            </div>
-                                                        </div>
-
-                                                        <input type="hidden" class="form-control"
-                                                               id="supplier_id"
-                                                               name="supplier_id">
-                                                        <div class="col-sm-6">
-                                                            <label for="supplier_name"
-                                                                   class="control-label">ชื่อผู้ขาย</label>
-                                                            <input type="text" class="form-control"
-                                                                   id="supplier_name"
-                                                                   name="supplier_name"
-                                                                   required="required"
-                                                                   placeholder="ชื่อผู้ขาย">
-                                                        </div>
-
-                                                    </div>
 
 
                                                     <table cellpadding="0" cellspacing="0" border="0"
@@ -106,7 +70,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                            width="100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>เลขที่เอกสาร</th>
+                                                            <th>วันที่</th>
+                                                            <th>ชื่อลูกค้า</th>
+                                                            <th>ทะเบียนรถ</th>
+                                                            <th>ยี่ห้อรถ/รุ่น</th>
+                                                            <th>รหัสสินค้า</th>
+                                                            <th>ชื่อสินค้า</th>
+                                                            <th>จำนวนเงิน</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -266,29 +237,19 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#car_no').val(queryString["car_no"]);
                 $('#customer_name').val(queryString["customer_name"]);
 
-                <?php
-
-                $car_no = $_GET['car_no'];
-                $customer_name = $_GET['customer_name'];
-
-                ?>
-
-
-
-                //Load_Data_Detail(queryString["car_no"], queryString["customer_name"], "history");
+                Load_Data_Detail(queryString["car_no"], queryString["customer_name"]);
             }
         });
     </script>
 
     <script>
-        function Load_Data_Detail(car_no, customer_name, table_name) {
+        function Load_Data_Detail(car_no, customer_name) {
 
             let formData = {
                 action: "GET_HISTORY_DETAIL",
                 sub_action: "GET_MASTER",
                 car_no: car_no,
-                customer_name: customer_name,
-                table_name: table_name
+                customer_name: customer_name
             };
             let dataRecords = $('#TableHistoryCustomerDetailList').DataTable({
                 "paging": false,
@@ -316,7 +277,14 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
-                    {data: 'line_no'}
+                    {data: 'DI_REF'},
+                    {data: 'DI_DATE'},
+                    {data: 'ADDB_COMPANY'},
+                    {data: 'ADDB_SEARCH'},
+                    {data: 'ADDB_ADDB'},
+                    {data: 'SKU_CODE'},
+                    {data: 'SKU_NAME'},
+                    {data: 'TRD_B_AMT'}
                 ]
             });
         }

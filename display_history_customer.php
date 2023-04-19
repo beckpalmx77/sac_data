@@ -87,7 +87,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="">
                                                                         <input type="text" name="customer_name"
                                                                                class="form-control"
-                                                                               id="customer_name">
+                                                                               id="customer_name" value="">
                                                                     </div>
                                                                 </div>
 
@@ -96,7 +96,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="">
                                                                         <input type="text" name="car_no"
                                                                                class="form-control"
-                                                                               id="car_no">
+                                                                               id="car_no" value="">
                                                                     </div>
                                                                 </div>
 
@@ -198,7 +198,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 let sub_menu = document.getElementById("sub_menu").value;
                 let customer_name = document.getElementById("customer_name").value;
                 let car_no = document.getElementById("car_no").value;
-                let url = "show_history_customer_data.php?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
+                let url = "show_history_customer_data_detail.php?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
                     + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
                     + '&action=QUERY';
                 OpenPopupCenter(url, "", "");
