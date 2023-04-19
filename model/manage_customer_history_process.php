@@ -101,6 +101,8 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     $data = array();
 
+    $line_no = 0;
+
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
         /*
@@ -113,7 +115,9 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
         if ($_POST['sub_action'] === "GET_MASTER") {
             $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
+            $line_no++;
             $data[] = array(
+                "line_no" => $line_no,
                 "DI_REF" => $row['DI_REF'],
                 "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] ,
                 "ADDB_COMPANY" => $row['ADDB_COMPANY'],

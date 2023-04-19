@@ -70,6 +70,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                            width="100%">
                                                         <thead>
                                                         <tr>
+                                                            <th>ลำดับที่</th>
                                                             <th>เลขที่เอกสาร</th>
                                                             <th>วันที่</th>
                                                             <th>ชื่อลูกค้า</th>
@@ -278,6 +279,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     'data': formData
                 },
                 'columns': [
+                    {data: 'line_no'},
                     {data: 'DI_REF'},
                     {data: 'DI_DATE'},
                     {data: 'ADDB_COMPANY'},
