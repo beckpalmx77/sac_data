@@ -21,7 +21,8 @@ include('../cond_file/query_product_stock.php');
     $statement = $conn_sqlsvr->query($sql_main);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
     foreach ($results as $result) {
-        $sql_find = "SELECT * FROM ims_product_stock_balance WHERE SKU_CODE = '" . $result["SKU_CODE"] . "'"
+        $sql_find = "SELECT * FROM ims_product_stock_balance 
+                WHERE SKU_CODE = '" . $result["SKU_CODE"] . "'"
             . " AND ICCAT_CODE = '" . $result["ICCAT_CODE"] . "'"
             . " AND DI_DATE = '" . $result["DI_DATE"] . "'"
             . " AND WL_CODE = '" . $result["WL_CODE"] . "'"
