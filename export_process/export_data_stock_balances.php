@@ -1,7 +1,8 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
-$filename = "Data_Product_Price-" . date('m/d/Y H:i:s', time()) . ".csv";
+$WH_CODE = $_POST['WH_CODE'];
+$filename = "Data_Stock_Balance-" . $WH_CODE . "-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
 @header('Content-Encoding: UTF-8');
@@ -10,7 +11,6 @@ $filename = "Data_Product_Price-" . date('m/d/Y H:i:s', time()) . ".csv";
 include('../config/connect_sqlserver.php');
 include('../config/connect_db.php');
 
-$WH_CODE = $_POST['WH_CODE'];
 $WH_NAME = "";
 
 $sql_get = "SELECT * FROM ims_branch WHERE WH_CODE = '" . $WH_CODE . "'";
