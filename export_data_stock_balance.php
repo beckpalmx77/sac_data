@@ -92,8 +92,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="form-group row">
 
                                                                         <div class="form-group">
-                                                                            <label for="price_code"
-                                                                                   class="control-label">เลือกสาขา</label>
                                                                             <label for="WH_CODE">เลือกสาขา :</label>
                                                                             <select name="WH_CODE" id="WH_CODE" class="form-control" required>
                                                                                 <?php foreach ($BranchRecords as $row) { ?>
