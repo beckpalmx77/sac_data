@@ -226,6 +226,7 @@ foreach ($BranchRecords as $rows) {
     </div>
 </div>
 
+<?php include("includes/stick_menu.php"); ?>
 
 <script>
     function showGraph_Data_Monthly(p_group) {

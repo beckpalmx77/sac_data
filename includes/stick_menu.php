@@ -129,11 +129,19 @@
     }
 </style>
 
+<script>
+    $(document).ready(function () {
+        $("#menu-close").click(function () {
+            window.close();
+        });
+    });
+</script>
+
 <a href="#" class="float" id="menu-start">
     <i class="fa fa-user my-float"></i>
 </a>
 <ul>
-    <li><a href="#" id="menu-1">
+    <li><a href="#" id="menu-close">
             <i class="fa fa-times my-float"></i>
         </a></li>
     <!--li><a href="#" id="menu-2">

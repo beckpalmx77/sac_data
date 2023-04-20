@@ -160,6 +160,7 @@ if (strlen($_SESSION['alogin']) == "") {
         </div>
     </div>
 
+
     <!-- Scroll to top -->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>

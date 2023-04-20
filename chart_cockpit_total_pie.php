@@ -85,6 +85,8 @@ include("display_data_cockpit_detail.php");
 ?>
 
 
+<?php include("includes/stick_menu.php"); ?>
+
 <script>
 
     function showGraph_Daily() {
