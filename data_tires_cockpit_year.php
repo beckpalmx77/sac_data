@@ -348,6 +348,7 @@ SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
     <a id="myLink" href="#" onclick="PrintPage();"><i class="fa fa-print"></i> พิมพ์</a>
 </div>
 
+<?php include("includes/stick_menu.php"); ?>
 
 </body>
 </html>

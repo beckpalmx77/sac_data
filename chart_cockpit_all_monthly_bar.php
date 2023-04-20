@@ -337,6 +337,8 @@ SUM(IF(SKU_CAT='TA01-001',TRD_G_KEYIN,0)) AS PART_6
 
 </div>
 
+<?php include("includes/stick_menu.php"); ?>
+
 </body>
 </html>
 
