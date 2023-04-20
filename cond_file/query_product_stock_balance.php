@@ -28,9 +28,8 @@ FROM
   JOIN DOCINFO ON SKUMOVE.SKM_DI=DOCINFO.DI_KEY
   JOIN DOCTYPE ON  DOCINFO.DI_DT=DOCTYPE.DT_KEY ";
 
-$sql_cond_stock = "";
 
-// $sql_cond_stock = " WHERE
+//$sql_cond_stock = " WHERE
 // SKUMASTER.SKU_STOCK <> 0 ";
 
 $sql_group_stock = " GROUP BY
