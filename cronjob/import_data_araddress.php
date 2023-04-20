@@ -6,7 +6,17 @@ error_reporting(~0);
 include ("../config/connect_sqlserver.php");
 include ("../config/connect_db.php");
 
-$sql_sqlsvr = "select * from araddress ";
+
+$sql_keymax = " select ARA_KEY from araddress order by ARA_KEY desc  limit 1  ";
+$statement = $conn->query($sql_keymax);
+$results = $statement->fetchAll(PDO::FETCH_ASSOC);
+foreach ($results as $result) {
+
+    $ARA_KEY_LAST = $result['ARA_KEY'];
+
+}
+
+$sql_sqlsvr = "select * from araddress  where ARA_KEY >= " . $ARA_KEY_LAST;
 
 //$myfile = fopen("qry_file1.txt", "w") or die("Unable to open file!");
 //fwrite($myfile, $sql_sqlsvr);
