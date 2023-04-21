@@ -2,10 +2,37 @@
 session_start();
 error_reporting(0);
 date_default_timezone_set("Asia/Bangkok");
-// include('../config/connect_db.php');
+include('../config/connect_db.php');
 include("../config/connect_sqlserver.php");
 include('../config/lang.php');
 
+
+
+if ($_POST["action"] === 'GET_DATA') {
+
+    $id = $_POST["id"];
+
+    //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $id);
+    //fclose($myfile);
+
+    $return_arr = array();
+    $sql_get = " SELECT * FROM ADDRBOOK WHERE ADDB_COMPANY LIKE '%" .  $id . "%' AND ADDB_PHONE IS NOT NULL ";
+    $statement = $conn->query($sql_get);
+    $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($results as $result) {
+        $return_arr[] = array("id" => $result['id'],
+            "ADDB_ADDB_1" => $result['ADDB_ADDB_1'],
+            "ADDB_ADDB_2" => $result['ADDB_ADDB_2'],
+            "ADDB_ADDB_3" => $result['ADDB_ADDB_3'],
+            "ADDB_PROVINCE" => $result['ADDB_PROVINCE'],
+            "ADDB_PHONE" => $result['ADDB_PHONE']);
+    }
+
+    echo json_encode($return_arr);
+
+}
 
 if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
 
@@ -96,21 +123,22 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
-
         if ($_POST['sub_action'] === "GET_MASTER") {
             $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
             $line_no++;
+
             $data[] = array(
                 "line_no" => $line_no,
                 "DI_REF" => $row['DI_REF'],
                 "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] ,
-                "ADDB_COMPANY" => $row['ADDB_COMPANY'],
+                "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . $row['ADDB_PHONE'],
                 "ADDB_SEARCH" => $row['ADDB_SEARCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
                 "TRD_QTY" => number_format($TRD_QTY, 2),
-                "TRD_B_AMT" => number_format($row['TRD_B_AMT'], 2)
+                "TRD_B_AMT" => number_format($row['TRD_B_AMT'], 2),
+                "detail" => "<button type='button' name='detail' id='" . $row['ADDB_COMPANY'] . "' class='btn btn-info btn-xs detail' data-toggle='tooltip' title='Detail'>Detail</button>"
             );
         }
     }

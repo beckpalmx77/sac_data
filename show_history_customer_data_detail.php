@@ -80,6 +80,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <th>ชื่อสินค้า</th>
                                                             <th>จำนวน</th>
                                                             <th>จำนวนเงิน</th>
+                                                            <th>Detail</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -113,6 +114,88 @@ if (strlen($_SESSION['alogin']) == "") {
                         </div>
 
                     </div>
+
+
+                    <div class="modal fade" id="recordModal">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Modal title</h4>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">×
+                                    </button>
+                                </div>
+                                <form method="post" id="recordForm">
+                                    <div class="modal-body">
+                                        <div class="modal-body">
+
+                                            <div class="form-group">
+                                                <label for="ADDB_ADDB_1"
+                                                       class="control-label">ที่อยู่ 1</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_ADDB_1"
+                                                       name="ADDB_ADDB_1"
+                                                       required="required"
+                                                       placeholder="ช">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ADDB_ADDB_2"
+                                                       class="control-label">ที่อยู่ 2</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_ADDB_2"
+                                                       name="ADDB_ADDB_2"
+                                                       required="required"
+                                                       placeholder="">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ADDB_ADDB_3"
+                                                       class="control-label">ที่อยู่ 3</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_ADDB_3"
+                                                       name="ADDB_ADDB_3"
+                                                       required="required"
+                                                       placeholder="">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ADDB_PROVINCE"
+                                                       class="control-label">จังหวัด</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_PROVINCE"
+                                                       name="ADDB_PROVINCE"
+                                                       required="required"
+                                                       placeholder="">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ADDB_PHONE"
+                                                       class="control-label">หมายเลขโทรศัพท์</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_PHONE"
+                                                       name="ADDB_PHONE"
+                                                       required="required"
+                                                       placeholder="">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="hidden" name="id" id="id"/>
+                                        <input type="hidden" name="action" id="action" value=""/>
+                                        <button type="button" class="btn btn-danger"
+                                                data-dismiss="modal">Close <i
+                                                    class="fa fa-window-close"></i>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
                     <!--Row-->
 
                     <!-- Row -->
@@ -286,12 +369,57 @@ if (strlen($_SESSION['alogin']) == "") {
                     {data: 'ADDB_ADDB'},
                     {data: 'SKU_CODE'},
                     {data: 'SKU_NAME'},
-                    {data: 'TRD_QTY' ,className: "text-right" },
-                    {data: 'TRD_B_AMT' ,className: "text-right" }
+                    {data: 'TRD_QTY', className: "text-right"},
+                    {data: 'TRD_B_AMT', className: "text-right"},
+                    {data: 'detail'}
                 ]
             });
         }
     </script>
+
+    <script>
+
+        $("#TableHistoryCustomerDetailList").on('click', '.detail', function () {
+            let id = $(this).attr("id");
+
+            let formData = {action: "GET_DATA", id: id};
+
+            $.ajax({
+                type: "POST",
+                url: 'model/manage_customer_history_process.php',
+                dataType: "json",
+                data: formData,
+                success: function (response) {
+
+                    let len = response.length;
+                    for (let i = 0; i < len; i++) {
+                        let id = response[i].id;
+                        let ADDB_ADDB_1 = response[i].ADDB_ADDB_1;
+                        let ADDB_ADDB_2 = response[i].ADDB_ADDB_2;
+                        let ADDB_ADDB_3 = response[i].ADDB_ADDB_3;
+                        let ADDB_PROVINCE = response[i].ADDB_PROVINCE;
+                        let ADDB_PHONE = response[i].ADDB_PHONE;
+
+                        $('#recordModal').modal('show');
+                        $('#id').val(id);
+                        $('#ADDB_ADDB_1').val(ADDB_ADDB_1);
+                        $('#ADDB_ADDB_2').val(ADDB_ADDB_2);
+                        $('#ADDB_ADDB_3').val(ADDB_ADDB_3);
+                        $('#ADDB_PROVINCE').val(ADDB_PROVINCE);
+                        $('#ADDB_PHONE').val(ADDB_PHONE);
+                        $('.modal-title').html("<i class='fa fa-plus'></i> Detail Record");
+                        $('#action').val('UPDATE');
+                        $('#save').val('Save');
+                    }
+                },
+                error: function (response) {
+                    alertify.error("error : " + response);
+                }
+            });
+        });
+
+    </script>
+
 
     <script>
         $(document).ready(function () {
