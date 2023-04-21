@@ -7,27 +7,36 @@ include("../config/connect_sqlserver.php");
 include('../config/lang.php');
 
 
-
 if ($_POST["action"] === 'GET_DATA') {
 
     $id = $_POST["id"];
 
-    //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
-    //fwrite($myfile, $id);
-    //fclose($myfile);
-
     $return_arr = array();
-    $sql_get = " SELECT * FROM ADDRBOOK WHERE ADDB_COMPANY LIKE '%" .  $id . "%' AND ADDB_PHONE IS NOT NULL ";
+    $sql_get = " SELECT * FROM ADDRBOOK WHERE ADDB_COMPANY LIKE '%" . $id . "%' AND ADDB_PHONE IS NOT NULL LIMIT 1";
     $statement = $conn->query($sql_get);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($results as $result) {
+    //$myfile = fopen("qry_file.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $sql_get);
+    //fclose($myfile);
+
+    $nRows = $conn->query($sql_get)->fetchColumn();
+    if ($nRows > 0) {
+        foreach ($results as $result) {
+            $return_arr[] = array("id" => $result['id'],
+                "ADDB_ADDB_1" => $result['ADDB_ADDB_1'],
+                "ADDB_ADDB_2" => $result['ADDB_ADDB_2'],
+                "ADDB_ADDB_3" => $result['ADDB_ADDB_3'],
+                "ADDB_PROVINCE" => $result['ADDB_PROVINCE'],
+                "ADDB_PHONE" => $result['ADDB_PHONE']);
+        }
+    } else {
         $return_arr[] = array("id" => $result['id'],
-            "ADDB_ADDB_1" => $result['ADDB_ADDB_1'],
-            "ADDB_ADDB_2" => $result['ADDB_ADDB_2'],
-            "ADDB_ADDB_3" => $result['ADDB_ADDB_3'],
-            "ADDB_PROVINCE" => $result['ADDB_PROVINCE'],
-            "ADDB_PHONE" => $result['ADDB_PHONE']);
+            "ADDB_ADDB_1" => "",
+            "ADDB_ADDB_2" => "",
+            "ADDB_ADDB_3" => "",
+            "ADDB_PROVINCE" => "",
+            "ADDB_PHONE" => "");
     }
 
     echo json_encode($return_arr);
@@ -130,7 +139,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
             $data[] = array(
                 "line_no" => $line_no,
                 "DI_REF" => $row['DI_REF'],
-                "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] ,
+                "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'],
                 "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . $row['ADDB_PHONE'],
                 "ADDB_SEARCH" => $row['ADDB_SEARCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
