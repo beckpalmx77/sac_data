@@ -130,13 +130,24 @@ if (strlen($_SESSION['alogin']) == "") {
                                         <div class="modal-body">
 
                                             <div class="form-group">
+                                                <label for="ADDB_COMPANY"
+                                                       class="control-label">ชื่อลูกค้า</label>
+                                                <input type="text" class="form-control"
+                                                       id="ADDB_COMPANY"
+                                                       name="ADDB_COMPANY"
+                                                       required="required"
+                                                       placeholder="">
+                                            </div>
+
+
+                                            <div class="form-group">
                                                 <label for="ADDB_ADDB_1"
                                                        class="control-label">ที่อยู่ 1</label>
                                                 <input type="text" class="form-control"
                                                        id="ADDB_ADDB_1"
                                                        name="ADDB_ADDB_1"
                                                        required="required"
-                                                       placeholder="ช">
+                                                       placeholder="">
                                             </div>
 
                                             <div class="form-group">
@@ -390,10 +401,10 @@ if (strlen($_SESSION['alogin']) == "") {
                 dataType: "json",
                 data: formData,
                 success: function (response) {
-
                     let len = response.length;
                     for (let i = 0; i < len; i++) {
                         let id = response[i].id;
+                        let ADDB_COMPANY = response[i].ADDB_COMPANY;
                         let ADDB_ADDB_1 = response[i].ADDB_ADDB_1;
                         let ADDB_ADDB_2 = response[i].ADDB_ADDB_2;
                         let ADDB_ADDB_3 = response[i].ADDB_ADDB_3;
@@ -402,6 +413,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                         $('#recordModal').modal('show');
                         $('#id').val(id);
+                        $('#ADDB_COMPANY').val(ADDB_COMPANY);
                         $('#ADDB_ADDB_1').val(ADDB_ADDB_1);
                         $('#ADDB_ADDB_2').val(ADDB_ADDB_2);
                         $('#ADDB_ADDB_3').val(ADDB_ADDB_3);

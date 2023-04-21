@@ -24,6 +24,7 @@ if ($_POST["action"] === 'GET_DATA') {
     if ($nRows > 0) {
         foreach ($results as $result) {
             $return_arr[] = array("id" => $result['id'],
+                "ADDB_COMPANY" => $result['ADDB_COMPANY'],
                 "ADDB_ADDB_1" => $result['ADDB_ADDB_1'],
                 "ADDB_ADDB_2" => $result['ADDB_ADDB_2'],
                 "ADDB_ADDB_3" => $result['ADDB_ADDB_3'],
@@ -32,6 +33,7 @@ if ($_POST["action"] === 'GET_DATA') {
         }
     } else {
         $return_arr[] = array("id" => $result['id'],
+            "ADDB_COMPANY" => "",
             "ADDB_ADDB_1" => "",
             "ADDB_ADDB_2" => "",
             "ADDB_ADDB_3" => "",
