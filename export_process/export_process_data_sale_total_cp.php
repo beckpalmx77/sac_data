@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
-$myCheck = $_POST["myCheckValue"];
+$myCheckValue = $_POST["myCheckValue"];
 $branch = $_POST["branch"];
 $month = $_POST["month"];
 $year = $_POST["year"];
@@ -12,7 +12,6 @@ $year = $_POST["year"];
 //fclose($my_file);
 
 
-
 $filename = $branch . "-" . "Total_Data_Sale_CP" . "-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
@@ -21,14 +20,14 @@ $filename = $branch . "-" . "Total_Data_Sale_CP" . "-" . date('m/d/Y H:i:s', tim
 
 $select_query_daily = "  SELECT DI_REF,DT_DOCCODE,AR_NAME ,SUM(TRD_G_KEYIN) AS SUM_TOTAL,BRANCH,DI_MONTH_NAME,DI_YEAR FROM ims_product_sale_cockpit ";
 
-if ($myCheck==='Y') {
-    $select_where_daily = " WHERE DI_YEAR = ". $year ;
+if ($myCheckValue === 'Y') {
+    $select_where_daily = " WHERE DI_YEAR = " . $year;
 } else {
-    $select_where_daily = " WHERE DI_MONTH = " . $month . " AND DI_YEAR = ". $year ;
+    $select_where_daily = " WHERE DI_MONTH = " . $month . " AND DI_YEAR = " . $year;
 }
 
 $select_group_order = " GROUP BY DI_REF 
-ORDER BY AR_NAME,BRANCH " ;
+ORDER BY AR_NAME,BRANCH ";
 
 
 include('../config/connect_db.php');
@@ -53,7 +52,7 @@ switch ($branch) {
 }
 
 
-$String_Sql = $select_query_daily . $select_where_daily.  $query_daily_cond_ext . $select_group_order;
+$String_Sql = $select_query_daily . $select_where_daily . $query_daily_cond_ext . $select_group_order;
 
 //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
 //fwrite($my_file,$String_Sql);

@@ -85,15 +85,13 @@ if (strlen($_SESSION['alogin']) == "") {
                                                               action="export_process/export_process_data_sale_total_cp.php"
                                                               enctype="multipart/form-data">
 
-                                                            <input type="hidden" id="myCheckValue" name="myCheckValue"
-                                                                   value="N">
+                                                            <input type="hidden" id="myCheckValue" name="myCheckValue">
 
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <!--div class="form-check"-->
-                                                                        <input type="checkbox" id="myCheck"
-                                                                               name="myCheck" value="N"
-                                                                               onclick="ChkMonth();">
+                                                                    <input type="checkbox" id="myCheck"
+                                                                           name="myCheck" value="N">
                                                                     <label class="form-check-label"
                                                                            for="flexCheckChecked">
                                                                         เลือกข้อมูลทุกเดือน
@@ -209,25 +207,18 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/MyFrameWork/framework_util.js"></script>
 
-
     <script>
-
-        const checkbox = document.getElementById('myCheck')
-        let status_y = "Y";
-        let status_n = "N";
-
-        checkbox.addEventListener('change', (event) => {
-            if (event.currentTarget.checked) {
-                $('#myCheckValue').val(status_y);
-                //alert('checked ' + $('#myCheck').val());
-            } else {
-                $('#myCheckValue').val(status_n);
-                //alert('not checked ' + $('#myCheck').val());
-            }
-        })
-
+        $(document).ready(function () {
+            $('#myCheckValue').val('N');
+            $('#myCheck').click(function () {
+                if ($("#myCheck").is(":checked") == true) {
+                    $('#myCheckValue').val('Y');
+                } else {
+                    $('#myCheckValue').val('N');
+                }
+            });
+        });
     </script>
-
 
     </body>
 
