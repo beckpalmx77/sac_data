@@ -85,19 +85,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                               action="export_process/export_process_data_sale_total_cp.php"
                                                               enctype="multipart/form-data">
 
-                                                            <input type="hidden" id="myCheckValue" name="myCheckValue" value="N">
+                                                            <input type="hidden" id="myCheckValue" name="myCheckValue"
+                                                                   value="N">
 
                                                             <div class="row">
                                                                 <div class="col-sm-12">
-                                                                    <div class="form-check">
+                                                                    <!--div class="form-check"-->
                                                                         <input type="checkbox" id="myCheck"
-                                                                               name="myCheck"  value="N"
+                                                                               name="myCheck" value="N"
                                                                                onclick="ChkMonth();">
-                                                                        <label class="form-check-label"
-                                                                               for="flexCheckChecked">
-                                                                            เลือกข้อมูลทุกเดือน
-                                                                        </label>
-                                                                    </div>
+                                                                    <label class="form-check-label"
+                                                                           for="flexCheckChecked">
+                                                                        เลือกข้อมูลทุกเดือน
+                                                                    </label>
+                                                                    <!--/div-->
                                                                 </div>
                                                             </div>
 
