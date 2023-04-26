@@ -7,9 +7,9 @@ $month = $_POST["month"];
 $year = $_POST["year"];
 
 
-$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
-fwrite($my_file, $branch . "-" .$month . "-" .$year . " myCheck  = " . $myCheck);
-fclose($my_file);
+//$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
+//fwrite($my_file, $branch . "-" .$month . "-" .$year . " myCheck  = " . $myCheck);
+//fclose($my_file);
 
 
 
@@ -55,9 +55,9 @@ switch ($branch) {
 
 $String_Sql = $select_query_daily . $select_where_daily.  $query_daily_cond_ext . $select_group_order;
 
-$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-fwrite($my_file,$String_Sql);
-fclose($my_file);
+//$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
+//fwrite($my_file,$String_Sql);
+//fclose($my_file);
 
 $data = "เลขที่เอกสาร,ชื่อลูกค้า,มูลค่ารวม,สาขา,เดือน,ปี\n";
 
