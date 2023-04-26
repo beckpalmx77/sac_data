@@ -1,14 +1,17 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
+$myCheck = $_POST["myCheckValue"];
 $branch = $_POST["branch"];
 $month = $_POST["month"];
 $year = $_POST["year"];
 
 
-//$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
-//fwrite($my_file, $branch . "-" .$month . "-" .$year);
-//fclose($my_file);
+$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
+fwrite($my_file, $branch . "-" .$month . "-" .$year . " myCheck  = " . $myCheck);
+fclose($my_file);
+
+
 
 $filename = $branch . "-" . "Total_Data_Sale_CP" . "-" . date('m/d/Y H:i:s', time()) . ".csv";
 
@@ -16,8 +19,13 @@ $filename = $branch . "-" . "Total_Data_Sale_CP" . "-" . date('m/d/Y H:i:s', tim
 @header('Content-Encoding: UTF-8');
 @header("Content-Disposition: attachment; filename=" . $filename);
 
-$select_query_daily = "  SELECT DI_REF,DT_DOCCODE,AR_NAME ,SUM(TRD_G_KEYIN) AS SUM_TOTAL,BRANCH,DI_MONTH_NAME,DI_YEAR FROM ims_product_sale_cockpit 
-WHERE DI_MONTH =  " . $month . " AND DI_YEAR = ". $year ;
+$select_query_daily = "  SELECT DI_REF,DT_DOCCODE,AR_NAME ,SUM(TRD_G_KEYIN) AS SUM_TOTAL,BRANCH,DI_MONTH_NAME,DI_YEAR FROM ims_product_sale_cockpit ";
+
+if ($myCheck==='Y') {
+    $select_where_daily = " WHERE DI_YEAR = ". $year ;
+} else {
+    $select_where_daily = " WHERE DI_MONTH = " . $month . " AND DI_YEAR = ". $year ;
+}
 
 $select_group_order = " GROUP BY DI_REF 
 ORDER BY AR_NAME,BRANCH " ;
@@ -45,11 +53,11 @@ switch ($branch) {
 }
 
 
-$String_Sql = $select_query_daily . $query_daily_cond_ext . $select_group_order;
+$String_Sql = $select_query_daily . $select_where_daily.  $query_daily_cond_ext . $select_group_order;
 
-//$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-//fwrite($my_file,$String_Sql);
-//fclose($my_file);
+$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
+fwrite($my_file,$String_Sql);
+fclose($my_file);
 
 $data = "เลขที่เอกสาร,ชื่อลูกค้า,มูลค่ารวม,สาขา,เดือน,ปี\n";
 

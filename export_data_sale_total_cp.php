@@ -6,7 +6,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     include("config/connect_db.php");
 
-    $month_num = str_replace('0','',date('m'));
+    $month_num = str_replace('0', '', date('m'));
 
     $sql_curr_month = " SELECT * FROM ims_month where month = '" . $month_num . "'";
 
@@ -85,11 +85,29 @@ if (strlen($_SESSION['alogin']) == "") {
                                                               action="export_process/export_process_data_sale_total_cp.php"
                                                               enctype="multipart/form-data">
 
+                                                            <input type="hidden" id="myCheckValue" name="myCheckValue" value="N">
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="form-check">
+                                                                        <input type="checkbox" id="myCheck"
+                                                                               name="myCheck"  value="N"
+                                                                               onclick="ChkMonth();">
+                                                                        <label class="form-check-label"
+                                                                               for="flexCheckChecked">
+                                                                            เลือกข้อมูลทุกเดือน
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <label for="month">เลือกเดือน :</label>
-                                                                    <select name="month" id="month" class="form-control" required>
-                                                                        <option value="<?php echo $month_num;?>" selected><?php echo $month_name;?></option>
+                                                                    <select name="month" id="month" class="form-control"
+                                                                            required>
+                                                                        <option value="<?php echo $month_num; ?>"
+                                                                                selected><?php echo $month_name; ?></option>
                                                                         <?php foreach ($MonthRecords as $row) { ?>
                                                                             <option value="<?php echo $row["month"]; ?>">
                                                                                 <?php echo $row["month_name"]; ?>
@@ -97,7 +115,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <?php } ?>
                                                                     </select>
                                                                     <label for="year">เลือกปี :</label>
-                                                                    <select name="year" id="year" class="form-control" required>
+                                                                    <select name="year" id="year" class="form-control"
+                                                                            required>
                                                                         <?php foreach ($YearRecords as $row) { ?>
                                                                             <option value="<?php echo $row["DI_YEAR"]; ?>">
                                                                                 <?php echo $row["DI_YEAR"]; ?>
@@ -105,7 +124,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <?php } ?>
                                                                     </select>
                                                                     <label for="branch">เลือกสาขา :</label>
-                                                                    <select name="branch" id="branch" class="form-control" required>
+                                                                    <select name="branch" id="branch"
+                                                                            class="form-control" required>
                                                                         <?php foreach ($BranchRecords as $row) { ?>
                                                                             <option value="<?php echo $row["branch"]; ?>">
                                                                                 <?php echo $row["branch_name"]; ?>
@@ -115,7 +135,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <br>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="submit" class="btn btn-success"
+                                                                            <button type="submit"
+                                                                                    class="btn btn-success"
                                                                                     id="btnExport"> Export <i
                                                                                         class="fa fa-check"></i>
                                                                             </button>
@@ -186,6 +207,25 @@ if (strlen($_SESSION['alogin']) == "") {
     <link href="vendor/date-picker-1.9/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
     <script src="js/MyFrameWork/framework_util.js"></script>
+
+
+    <script>
+
+        const checkbox = document.getElementById('myCheck')
+        let status_y = "Y";
+        let status_n = "N";
+
+        checkbox.addEventListener('change', (event) => {
+            if (event.currentTarget.checked) {
+                $('#myCheckValue').val(status_y);
+                //alert('checked ' + $('#myCheck').val());
+            } else {
+                $('#myCheckValue').val(status_n);
+                //alert('not checked ' + $('#myCheck').val());
+            }
+        })
+
+    </script>
 
 
     </body>
