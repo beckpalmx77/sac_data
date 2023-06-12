@@ -78,7 +78,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="col-md-12 col-md-offset-2">
                                                 <div class="panel">
                                                     <div class="panel-body">
-
+                                                        <form id="myform" name="myform" enctype="multipart/form-data">
                                                         <div class="row">
                                                             <br>
                                                             <div class="col-sm-12">
@@ -110,8 +110,18 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <button type="button" id="BtnExport"
+                                                                                name="BtnExport"
+                                                                                class="btn btn-success mb-3">Export
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
                                                         </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -178,8 +188,9 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#BtnSaleBak").click(function () {
-            document.forms['myform'].action = 'show_history_customer_data';
+        $("#BtnExport").click(function () {
+            
+            document.forms['myform'].action = 'export_process/export_process_data_history_customer';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
