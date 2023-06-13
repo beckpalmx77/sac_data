@@ -78,7 +78,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="col-md-12 col-md-offset-2">
                                                 <div class="panel">
                                                     <div class="panel-body">
-                                                        <form id="myform" name="myform" enctype="multipart/form-data">
+                                                        <form id="myform" name="myform" action="" enctype="multipart/form-data">
                                                         <div class="row">
                                                             <br>
                                                             <div class="col-sm-12">
@@ -188,12 +188,32 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#BtnExport").click(function () {
+        $("#BtnExport-BAK").click(function () {
+
+            let customer_name = document.getElementById("customer_name").value;
+            let car_no = document.getElementById("car_no").value;
             
             document.forms['myform'].action = 'export_process/export_process_data_history_customer';
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
+        });
+
+    </script>
+
+    <script>
+
+        $("#BtnExport-BAKA").click(function () {
+
+                $.ajax({
+                    type: 'post',
+                    url: 'export_process/export_process_data_history_customer.php',
+                    data: $('form').serialize(),
+                    success: function () {
+                        alert('Success');
+                    }
+                });
+                return true;
         });
 
     </script>

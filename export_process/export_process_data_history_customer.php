@@ -1,14 +1,9 @@
 <?php
-date_default_timezone_set('Asia/Bangkok');
+date_default_timezone_set("Asia/Bangkok");
+include("../config/connect_sqlserver.php");
 
 $customer_name = $_POST["customer_name"];
 $car_no = $_POST["car_no"];
-
-
-//$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
-//fwrite($my_file, $branch . "-" .$month . "-" .$year . " myCheck  = " . $myCheck);
-//fclose($my_file);
-
 
 $filename = "Data_Customer_History" . "-" . date('m/d/Y H:i:s', time()) . ".csv";
 
@@ -16,7 +11,7 @@ $filename = "Data_Customer_History" . "-" . date('m/d/Y H:i:s', time()) . ".csv"
 @header('Content-Encoding: UTF-8');
 @header("Content-Disposition: attachment; filename=" . $filename);
 
-$select_query_daily = " SELECT 
+$sql_data_select = " SELECT 
 TRANSTKD.TRD_KEY , 
 ADDRBOOK.ADDB_KEY , 
 ADDRBOOK.ADDB_BRANCH , 
@@ -61,33 +56,45 @@ ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
 
 ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
+/*
+$my_file = fopen("Sale_D-CP.txt", "w") or die("Unable to open file!");
+fwrite($my_file, $car_no . " Cust Name  = " . $customer_name . " | " . $sql_data_select );
+fclose($my_file);
+*/
 
-include('../config/connect_db.php');
+//$stmt = $conn_sqlsvr->prepare($sql_data_select, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+//$stmt->execute();
+//$rows = $stmt->rowCount();
 
 
 $data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน\n";
 
-$query = $conn->prepare($select_query_daily);
+$query = $conn_sqlsvr->prepare($sql_data_select);
 $query->execute();
 $results = $query->fetchAll(PDO::FETCH_OBJ);
-$line_no = 0;
-if ($query->rowCount() >= 1) {
-    foreach ($results as $result) {
+
+//if ($rows>0) {
+
+    $line_no = 0;
+    $query = $conn_sqlsvr->prepare($sql_data_select);
+    $query->execute();
+    $data = array();
+
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
         $line_no++;
         $data .= " " . $line_no . ",";
-        $data .= " " . $result->$row['DI_REF'] . ",";
+        $data .= " " . $row['DI_REF'] . ",";
         $data .= " " . $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'];
-        $data .= " " . $result->$row['ADDB_COMPANY'] . "  " . $row['ADDB_PHONE']. ",";
-        $data .= " " . $result->$row['ADDB_SEARCH'] . ",";
-        $data .= " " . $result->$row['SKU_CODE'] . ",";
-        $data .= " " . $result->$TRD_QTY . ",";
-        $data .= " " . $result->TRD_B_AMT . "\n";
-
-        //$data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
-    }
+        $data .= " " . $row['ADDB_COMPANY'] . "  " . $row['ADDB_PHONE'] . ",";
+        $data .= " " . $row['ADDB_SEARCH'] . ",";
+        $data .= " " . $row['SKU_CODE'] . ",";
+        $data .= " " . $TRD_QTY . ",";
+        $data .= " " . TRD_B_AMT . "\n";
+    //}
 
 }
+
 
 $data = iconv("utf-8", "tis-620", $data);
 echo $data;

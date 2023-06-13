@@ -1,4 +1,6 @@
 <?php
+include('../config/connect_db.php');
+
 date_default_timezone_set('Asia/Bangkok');
 
 $myCheckValue = $_POST["myCheckValue"];
@@ -28,10 +30,6 @@ if ($myCheckValue === 'Y') {
 
 $select_group_order = " GROUP BY DI_REF 
 ORDER BY AR_NAME,BRANCH ";
-
-
-include('../config/connect_db.php');
-
 
 switch ($branch) {
     case "CP-340":
