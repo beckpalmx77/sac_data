@@ -46,29 +46,34 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_data_customer.php"
+                                                              action="export_process/export_process_data_history_customer.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">
 
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
-
-                                                                        <div class="form-group has-success">
-                                                                            <label for="success" class="control-label">ค้นหาตามชื่อลูกค้า</label>
-                                                                            <div class="">
-                                                                                <input type="text" name="customer_name"
-                                                                                       class="form-control"
-                                                                                       id="customer_name" value="">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group has-success">
+                                                                                <label for="success"
+                                                                                       class="control-label">ค้นหาตามชื่อลูกค้า</label>
+                                                                                <div class="">
+                                                                                    <input type="text"
+                                                                                           name="customer_name"
+                                                                                           class="form-control"
+                                                                                           id="customer_name" value="">
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <div class="form-group has-success">
-                                                                            <label for="success" class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
-                                                                            <div class="">
-                                                                                <input type="text" name="car_no"
-                                                                                       class="form-control"
-                                                                                       id="car_no" value="">
+                                                                        <div class="col-sm-12">
+                                                                            <div class="form-group has-success">
+                                                                                <label for="success"
+                                                                                       class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
+                                                                                <div class="">
+                                                                                    <input type="text" name="car_no"
+                                                                                           class="form-control"
+                                                                                           id="car_no" value="">
+                                                                                </div>
                                                                             </div>
                                                                         </div>
 
@@ -89,10 +94,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         id="btnExport"> Export <i
                                                                             class="fa fa-check"></i>
                                                                 </button>
-                                                                <!--button type="button" class="btn btn-danger"
-                                                                        id="btnClose">Close <i
-                                                                            class="fa fa-window-close"></i>
-                                                                </button-->
                                                             </div>
 
 
@@ -165,36 +166,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script src="js/util.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            let today = new Date();
-            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
-            $('#doc_date_start').val(doc_date);
-            $('#doc_date_to').val(doc_date);
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_start').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function () {
-            $('#doc_date_to').datepicker({
-                format: "dd-mm-yyyy",
-                todayHighlight: true,
-                language: "th",
-                autoclose: true
-            });
-        });
-    </script>
 
     </body>
 
