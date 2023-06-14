@@ -110,15 +110,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-sm-12">
-                                                                        <button type="button" id="BtnExport"
-                                                                                name="BtnExport"
-                                                                                class="btn btn-success mb-3">Export
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
                                                             </div>
                                                         </div>
                                                         </form>
