@@ -1,18 +1,35 @@
 <?php
+include('../config/connect_sqlserver.php');
+include("../config/connect_db.php");
 date_default_timezone_set('Asia/Bangkok');
-
-$customer_name = $_POST["customer_name"];
-$car_no = $_POST["car_no"];
 
 $filename = "Data_Customer_History-" . date('m/d/Y H:i:s', time()) . ".csv";
 
-@header('Content-type: text/csv; charset=UTF-8');
-@header('Content-Encoding: UTF-8');
-@header("Content-Disposition: attachment; filename=" . $filename);
+//@header('Content-type: text/csv; charset=UTF-8');
+//@header('Content-Encoding: UTF-8');
+//@header("Content-Disposition: attachment; filename=" . $filename);
 
-include('../config/connect_sqlserver.php');
+//$customer_name = $_POST["AR_NAME"];
+//$car_no = $_POST["car_no"];
 
-$sql_data_select = " SELECT 
+$customer_name = "บริษัท ดี.ไดร์เวอร์ กรุงเทพ จำกัด";
+//$car_no = "";
+
+$sql_cmd = "";
+
+$data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
+
+$sql_data_select_main = "SELECT * FROM  ADDRBOOK WHERE ADDB_COMPANY LIKE '" . $customer_name.  "'";
+
+
+$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_data_select_main);
+$stmt_sqlsvr->execute();
+
+while ($result_sqlsvr_main = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+
+    //echo $result_sqlsvr_main["ADDB_COMPANY"] . " | " . $result_sqlsvr_main["ADDB_BRANCH"] . " | " . $result_sqlsvr_main["ADDB_BRANCH"] . "\n\r";
+
+    $sql_data_selectDetail = " SELECT 
 TRANSTKD.TRD_KEY , 
 ADDRBOOK.ADDB_KEY , 
 ADDRBOOK.ADDB_BRANCH , 
@@ -46,8 +63,9 @@ TRANSTKD ,
 SKUMASTER
  
 WHERE
-ADDRBOOK.ADDB_COMPANY like '%" . $customer_name . "%' AND
-ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
+ADDRBOOK.ADDB_COMPANY ='" . $result_sqlsvr_main["ADDB_COMPANY"] . "' AND
+ADDRBOOK.ADDB_SEARCH = '" . $result_sqlsvr_main["ADDB_BRANCH"] . "' AND
+ADDRBOOK.ADDB_KEY = '" . $result_sqlsvr_main["ADDB_KEY"] . "' AND
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
@@ -55,31 +73,48 @@ ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
 (TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
 
-ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";;
+ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
-$data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
+    $sql_cmd .= $sql_data_selectDetail . "\n\r";
 
-$query = $conn_sqlsvr->prepare($sql_data_select);
-$query->execute();
+    $myfile = fopen("qry_file_mysql_server2.txt", "w") or die("Unable to open file!");
+    fwrite($myfile, $sql_cmd);
+    fclose($myfile);
 
-$loop = 0;
+    $statement_sqlsvr = $conn_sqlsvr->prepare($sql_data_selectDetail);
+    $statement_sqlsvr->execute();
+    $line = 0 ;
+    while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
-while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    $loop++;
-    $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
-    $data .= $loop . ",";
-    $data .= $row['DI_REF'] . ",";
-    $data .= $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] . ",";
-    $data .= str_replace(",", "^", $row['ADDB_COMPANY']) . "  " . str_replace(",", "^", $row['ADDB_PHONE']) . ",";
-    $data .= str_replace(",", "^", $row['ADDB_SEARCH']) . ",";
-    $data .= str_replace(",", "^", $row['ADDB_ADDB_1']) . "  " . str_replace(",", "^", $row['ADDB_ADDB_2']) . ",";
-    $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
-    $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
-    $data .= $TRD_QTY . ",";
-    $data .= $row['TRD_B_AMT'] . "\n";
+        $line++;
+        $TRD_QTY = $result_sqlsvr_detail['TRD_Q_FREE'] > 0 ? $result_sqlsvr_detail['TRD_QTY'] = $result_sqlsvr_detail['TRD_QTY'] + $result_sqlsvr_detail['TRD_Q_FREE'] : $result_sqlsvr_detail['TRD_QTY'];
+        $data .= $line . ",";
+        $data .= $result_sqlsvr_detail['DI_REF'] . ",";
+        $data .= $result_sqlsvr_detail['DI_DAY'] . "/" . $result_sqlsvr_detail['DI_MONTH'] . "/" . $result_sqlsvr_detail['DI_YEAR'] . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_COMPANY']) . "  " . str_replace(",", "^", $result_sqlsvr_detail['ADDB_PHONE']) . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_SEARCH']) . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_1']) . "  " . str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_2']) . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['SKU_CODE']) . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['SKU_NAME']) . ",";
+        $data .= $TRD_QTY . ",";
+        $data .= $result_sqlsvr_detail['TRD_B_AMT'] . "\n";
+
+        $data .= $line . " | " . $result_sqlsvr_detail["ADDB_COMPANY"]
+            . " | " . $result_sqlsvr_detail["ADDB_BRANCH"]
+            . " | " . $result_sqlsvr_detail["ADDB_PHONE"]
+            . " | " . $result_sqlsvr_detail["DI_REF"]
+            . " | " . $result_sqlsvr_detail["DI_DATE"]
+            . " | " . $result_sqlsvr_detail["TRD_QTY"]
+            . " | " . $result_sqlsvr_detail["TRD_U_PRC"]
+            . " | " . $result_sqlsvr_detail["TRD_B_AMT"]
+            . " | " . $result_sqlsvr_detail["SKU_CODE"] . " | " . $result_sqlsvr_detail["SKU_NAME"] . "\n\r" ;
+    }
+
 }
 
+/*
 $data = iconv("utf-8", "tis-620", $data);
 echo $data;
+*/
 
 exit();

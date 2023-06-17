@@ -54,7 +54,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
                                                                         <div class="col-sm-12">
-                                                                            <div class="form-group has-success">
+                                                                            <!--div class="form-group has-success">
                                                                                 <label for="success"
                                                                                        class="control-label">ค้นหาตามชื่อลูกค้า</label>
                                                                                 <div class="">
@@ -63,7 +63,19 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                            class="form-control"
                                                                                            id="customer_name" value="">
                                                                                 </div>
-                                                                            </div>
+                                                                            </div-->
+
+                                                                            <label for="AR_CODE">เลือกลูกค้า :</label>
+                                                                            <input type="hidden" name="AR_CODE" id="AR_CODE"
+                                                                                   class="form-control">
+                                                                            <input type="hidden" name="AR_NAME" id="AR_NAME"
+                                                                                   class="form-control">
+                                                                            <select id='selCustomer' class='form-control'
+                                                                                    onchange="Onchange_AR_CODE();">
+                                                                                <option value='0'>- ค้นหารายชื่อลูกค้า -
+                                                                                </option>
+                                                                            </select>
+
                                                                         </div>
                                                                         <div class="col-sm-12">
                                                                             <div class="form-group has-success">
@@ -145,8 +157,15 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Select2 -->
+
     <script src="vendor/select2/dist/js/select2.min.js"></script>
+
+    <!-- select2 css -->
+    <link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+    <!-- select2 script -->
+    <script src='js/select2/dist/js/select2.min.js'></script>
+
     <!-- Bootstrap Datepicker -->
     <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap Touchspin -->
@@ -165,6 +184,45 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script src="js/util.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            $("#selCustomer").select2({
+                ajax: {
+                    url: "model/get_customer_ajax.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term // search term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+    </script>
+
+
+    <script>
+
+        function Onchange_AR_CODE() {
+
+            $('#AR_NAME').val($("#selCustomer").val());
+
+        }
+    </script>
+
+
 
 
     </body>
