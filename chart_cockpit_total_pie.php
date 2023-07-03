@@ -109,7 +109,6 @@ include("display_data_cockpit_detail.php");
                 "#00aba9",
                 "#f81b61",
                 "#fcae13"
-
             ];
 
             $.post("engine/chart_data_pie_daily.php", {doc_date: doc_date ,branch: branch }, function (data) {
@@ -216,8 +215,6 @@ include("display_data_cockpit_detail.php");
     }
 
 </script>
-
-
 
 </body>
 </html>
