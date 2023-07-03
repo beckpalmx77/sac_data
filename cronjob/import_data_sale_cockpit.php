@@ -37,9 +37,9 @@ $sql_sqlsvr = $select_query_daily . $select_query_daily_cond . $query_daily_cond
 
 echo $sql_sqlsvr;
 
-//$myfile = fopen("qry_file_mssql_server.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $sql_sqlsvr);
-//fclose($myfile);
+$myfile = fopen("qry_file_mssql_server.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $sql_sqlsvr);
+fclose($myfile);
 
 $insert_data = "";
 $update_data = "";
@@ -57,6 +57,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
     $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
+
+    $TRD_QTY = $result_sqlsvr['TRD_Q_FREE'] > 0 ? $result_sqlsvr['TRD_QTY'] + $result_sqlsvr['TRD_Q_FREE'] : $result_sqlsvr['TRD_QTY'];
 
     $branch = "";
 
@@ -154,7 +156,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':SKU_CAT', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':ICCAT_CODE', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':ICCAT_NAME', $result_sqlsvr["ICCAT_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
+        //$query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
+        $query->bindParam(':TRD_QTY', $TRD_QTY, PDO::PARAM_STR);
         $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
         $query->bindParam(':TRD_DSC_KEYINV', $result_sqlsvr["TRD_DSC_KEYINV"], PDO::PARAM_STR);
         $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);
@@ -208,7 +211,8 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':SKU_CAT', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':ICCAT_CODE', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':ICCAT_NAME', $result_sqlsvr["ICCAT_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
+        //$query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
+        $query->bindParam(':TRD_QTY', $TRD_QTY, PDO::PARAM_STR);
         $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
         $query->bindParam(':TRD_DSC_KEYINV', $result_sqlsvr["TRD_DSC_KEYINV"], PDO::PARAM_STR);
         $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);

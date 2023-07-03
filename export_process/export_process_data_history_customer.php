@@ -77,9 +77,9 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     $sql_cmd .= $sql_data_selectDetail . "\n\r";
 
-    $myfile = fopen("qry_file_mysql_server2.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $sql_cmd);
-    fclose($myfile);
+    //$myfile = fopen("qry_file_mysql_server2.txt", "w") or die("Unable to open file!");
+    //fwrite($myfile, $sql_cmd);
+    //fclose($myfile);
 
     $statement_sqlsvr = $conn_sqlsvr->prepare($sql_data_selectDetail);
     $statement_sqlsvr->execute();
