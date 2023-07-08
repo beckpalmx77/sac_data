@@ -113,9 +113,23 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnService"
-                                                                                    name="BtnSalePart"
+                                                                                    name="BtnService"
                                                                                     class="btn btn-primary btn-block">
                                                                                 แสดงข้อมูลยอด ค่าแรง-ค่าบริการ เปรียบเทียบ
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnAll"
+                                                                                    name="BtnAll"
+                                                                                    class="btn btn-primary btn-block">
+                                                                                แสดงข้อมูลยอดขายรวม  ยาง + อะไหล่ + ค่าแรง-ค่าบริการ
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -188,6 +202,13 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $("#BtnService").click(function () {
             $('#product_group').val("P3");
+            SubMitForm();
+        });
+    </script>
+
+    <script>
+        $("#BtnAll").click(function () {
+            $('#product_group').val("PALL");
             SubMitForm();
         });
     </script>
