@@ -68,4 +68,7 @@ include('../cond_file/query_product_stock.php');
     }
 //}
 
+$conn_sqlsvr = null;
+
+
 
