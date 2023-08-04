@@ -78,7 +78,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $query_tel = $conn_sqlsvr->prepare($sql_find_tel);
     $query_tel->execute();
     while ($rows = $query_tel->fetch(PDO::FETCH_ASSOC)) {
-        $tel = $rows['ADDB_PHONE'];
+        $tel = " , " . $rows['ADDB_PHONE'];
     }
 
     $data .= " " . $row['DI_DATE'] . ",";
