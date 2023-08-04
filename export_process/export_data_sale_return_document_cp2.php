@@ -2,7 +2,7 @@
 date_default_timezone_set('Asia/Bangkok');
 
 $branch = $_POST["branch"];
-
+$sql_find_tel = "";
 $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
@@ -71,6 +71,16 @@ $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
+    $sql_find_tel = "select TOP 1 * from ADDRBOOK 
+                    where ADDB_COMPANY LIKE '%" . $row['AR_NAME'] . "%' 
+                    and ADDB_PHONE IS NOT NULL ";
+    $tel = "";
+    $query_tel = $conn_sqlsvr->prepare($sql_find_tel);
+    $query_tel->execute();
+    while ($rows = $query_tel->fetch(PDO::FETCH_ASSOC)) {
+        $tel = " / " . $rows['ADDB_PHONE'];
+    }
+
     $data .= " " . $row['DI_DATE'] . ",";
     $data .= " " . $month_name. ",";
     $data .= " " . $year . ",";
@@ -83,7 +93,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     //$data .= " " . ",";
     $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
     $data .= str_replace(",", "^", $row['DI_REF']) . ",";
-    $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
+    $data .= str_replace(",", "^", $row['AR_NAME'] . $tel) . ",";
     $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
 
 

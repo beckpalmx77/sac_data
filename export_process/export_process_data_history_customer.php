@@ -5,14 +5,14 @@ date_default_timezone_set('Asia/Bangkok');
 
 $filename = "Data_Customer_History-" . date('m/d/Y H:i:s', time()) . ".csv";
 
-//@header('Content-type: text/csv; charset=UTF-8');
-//@header('Content-Encoding: UTF-8');
-//@header("Content-Disposition: attachment; filename=" . $filename);
+@header('Content-type: text/csv; charset=UTF-8');
+@header('Content-Encoding: UTF-8');
+@header("Content-Disposition: attachment; filename=" . $filename);
 
-//$customer_name = $_POST["AR_NAME"];
-//$car_no = $_POST["car_no"];
+$customer_name = $_POST["AR_NAME"];
+$car_no = $_POST["car_no"];
 
-$customer_name = "บริษัท ดี.ไดร์เวอร์ กรุงเทพ จำกัด";
+//$customer_name = "บริษัท ดี.ไดร์เวอร์ กรุงเทพ จำกัด";
 //$car_no = "";
 
 $sql_cmd = "";
@@ -98,7 +98,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
         $data .= str_replace(",", "^", $result_sqlsvr_detail['SKU_NAME']) . ",";
         $data .= $TRD_QTY . ",";
         $data .= $result_sqlsvr_detail['TRD_B_AMT'] . "\n";
-
+/*
         $data .= $line . " | " . $result_sqlsvr_detail["ADDB_COMPANY"]
             . " | " . $result_sqlsvr_detail["ADDB_BRANCH"]
             . " | " . $result_sqlsvr_detail["ADDB_PHONE"]
@@ -108,13 +108,14 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
             . " | " . $result_sqlsvr_detail["TRD_U_PRC"]
             . " | " . $result_sqlsvr_detail["TRD_B_AMT"]
             . " | " . $result_sqlsvr_detail["SKU_CODE"] . " | " . $result_sqlsvr_detail["SKU_NAME"] . "\n\r" ;
+*/
     }
 
 }
 
-/*
+
 $data = iconv("utf-8", "tis-620", $data);
 echo $data;
-*/
+
 
 exit();
