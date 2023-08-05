@@ -71,14 +71,28 @@ $query->execute();
 
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
+/*
     $sql_find_tel = "select TOP 1 * from ADDRBOOK 
                     where ADDB_COMPANY LIKE '%" . $row['AR_NAME'] . "%' 
                     and ADDB_PHONE IS NOT NULL ";
+*/
+
+    /*
+        $sql_find_tel = "SELECT ARADDRESS.ARA_KEY,ADDRBOOK.ADDB_COMPANY,ADDB_PHONE, FROM  ARFILE
+    LEFT JOIN ARADDRESS ON ARADDRESS.ARA_AR = ARFILE.AR_KEY AND ARADDRESS.ARA_DEFAULT = 'Y'
+    LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+    WHERE AR_KEY = " . $row['AR_KEY'];
+    */
+
+    $sql_find_tel = "SELECT ARADDRESS.ARA_KEY,ADDRBOOK.ADDB_COMPANY,ADDB_PHONE FROM  ARADDRESS 
+LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'";
+
     $tel = "";
     $query_tel = $conn_sqlsvr->prepare($sql_find_tel);
     $query_tel->execute();
     while ($rows = $query_tel->fetch(PDO::FETCH_ASSOC)) {
-        $tel = ". " . $rows['ADDB_PHONE'];
+        $tel = $rows['ADDB_PHONE'] . " .";
     }
 
     $data .= " " . $row['DI_DATE'] . ",";
