@@ -55,8 +55,8 @@ DOCINFO.DI_CRE_DATE,
 DOCINFO.DI_PRN_DATE,
 FORMAT(cast(DOCINFO.DI_PRN_DATE as datetime),'HH:mm') as DI_PRN_DATE_CHK,
 FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime),'HH:mm') as DI_TIME_CHK,
-FORMAT(cast(DOCINFO.DI_PRN_DATE as datetime), 'dd/MM/yyyy, hh:mm:ss') as DI_PRN_DATE_CHK1,
-FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, hh:mm:ss') as DI_TIME_CHK1
+FORMAT(cast(DOCINFO.DI_PRN_DATE as datetime), 'dd/MM/yyyy, HH:mm:ss') as DI_PRN_DATE_CHK1,
+FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, HH:mm:ss') as DI_TIME_CHK1
  
 FROM
 DOCINFO,

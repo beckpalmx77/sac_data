@@ -101,7 +101,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $str_reserve_id = substr($row['DI_REMARK'],$pos1,$pos3);
 
     $sql_find_reserve = "SELECT DOCINFO.DI_REF,
-    FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, hh:mm:ss') as START_BILL 
+    FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, HH:mm:ss') as START_BILL 
     FROM  DOCINFO
     WHERE DOCINFO.DI_REF = '" . $str_reserve_id . "'";
 
