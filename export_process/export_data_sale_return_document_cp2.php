@@ -64,7 +64,7 @@ $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BET
 //fwrite($my_file, $String_Sql);
 //fclose($my_file);
 
-$data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,เบอร์โทรฯ,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง,วันเวลาเปิดบิล,,วันเวลาปิดบิล\n";
+$data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,เบอร์โทรฯ,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง,เลขที่ใบจอง,วันเวลาเปิดบิล,,วันเวลาปิดบิล\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
@@ -85,8 +85,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     */
 
     $sql_find_tel = "SELECT ARADDRESS.ARA_KEY,ADDRBOOK.ADDB_COMPANY,ADDB_PHONE FROM  ARADDRESS 
-LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
-WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'";
+    LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+    WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'";
 
     $tel = "";
     $query_tel = $conn_sqlsvr->prepare($sql_find_tel);
@@ -94,6 +94,24 @@ WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'"
     while ($rows = $query_tel->fetch(PDO::FETCH_ASSOC)) {
         $tel = $rows['ADDB_PHONE'] . " .";
     }
+
+    $pos1= strpos($row['DI_REMARK'],"B");
+    $pos2= strpos($row['DI_REMARK'],":");
+    $pos3= $pos2 - $pos1;
+    $str_reserve_id = substr($row['DI_REMARK'],$pos1,$pos3);
+
+    $sql_find_reserve = "SELECT DOCINFO.DI_REF,
+    FORMAT(cast(DOCINFO.DI_CRE_DATE as datetime), 'dd/MM/yyyy, hh:mm:ss') as START_BILL 
+    FROM  DOCINFO
+    WHERE DOCINFO.DI_REF = '" . $str_reserve_id . "'";
+
+    $reserve_id = "";
+    $query_reserve = $conn_sqlsvr->prepare($sql_find_reserve);
+    $query_reserve->execute();
+    while ($rows1 = $query_reserve->fetch(PDO::FETCH_ASSOC)) {
+        $reserve_id = $rows1['START_BILL'];
+    }
+
 
     $data .= " " . $row['DI_DATE'] . ",";
     $data .= " " . $month_name. ",";
@@ -135,7 +153,8 @@ WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'"
     $data .= $TRD_B_VAT . ",";
     $data .= $TRD_G_KEYIN . ",";
     $data .= str_replace(",", "^", $row['WL_CODE']) . ",";
-    $data .= $row['DI_TIME_CHK1'] . ",";
+    $data .= $str_reserve_id . ",";
+    $data .= $reserve_id . ",";
     $data .= $row['DI_PRN_DATE_CHK1'] . "\n";
 
 }
