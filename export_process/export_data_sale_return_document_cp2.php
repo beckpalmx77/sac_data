@@ -64,7 +64,7 @@ $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BET
 //fwrite($my_file, $String_Sql);
 //fclose($my_file);
 
-$data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,เบอร์โทรฯ,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง,วันเวลาที่เปิดบิล\n";
+$data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,เบอร์โทรฯ,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง,วันเวลาเปิดบิล,,วันเวลาปิดบิล\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
@@ -135,7 +135,8 @@ WHERE ARADDRESS.ARA_AR = " . $row['AR_KEY'] . " AND ARADDRESS.ARA_DEFAULT = 'Y'"
     $data .= $TRD_B_VAT . ",";
     $data .= $TRD_G_KEYIN . ",";
     $data .= str_replace(",", "^", $row['WL_CODE']) . ",";
-    $data .= $row['DI_DATE'] . "  " . $row['DI_TIME_CHK'] . "\n";
+    $data .= $row['DI_TIME_CHK1'] . ",";
+    $data .= $row['DI_PRN_DATE_CHK1'] . "\n";
 
 }
 
