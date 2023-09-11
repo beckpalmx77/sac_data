@@ -47,7 +47,6 @@ if ($_POST["action"] === 'ADD') {
             $sale_id = $row_branch['branch'];
 
             $sql_find = "SELECT * FROM ims_sale_target WHERE sale_id =  '" . $sale_id . "' AND target_month = '" .  $target_month .  "'  AND target_year = '" . $target_year . "'";
-            $sql_find_data .= "\n\r" . $sql_find ;
 
             $nRows = $conn->query($sql_find)->fetchColumn();
 
