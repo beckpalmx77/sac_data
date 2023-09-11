@@ -1,0 +1,5 @@
+SQL = 
+SELECT * FROM ims_sale_target WHERE sale_id =  'CP-340' AND target_month = '10'  AND target_year = '2023'
+SELECT * FROM ims_sale_target WHERE sale_id =  'CP-BY' AND target_month = '10'  AND target_year = '2023'
+SELECT * FROM ims_sale_target WHERE sale_id =  'CP-RP' AND target_month = '10'  AND target_year = '2023'
+SELECT * FROM ims_sale_target WHERE sale_id =  'CP-BB' AND target_month = '10'  AND target_year = '2023'

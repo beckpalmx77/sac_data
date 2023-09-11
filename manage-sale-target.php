@@ -3,6 +3,8 @@ include('includes/Header.php');
 if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
 } else {
+    $year = date("Y");
+    $year_next =  date("Y") + 1 ;
     ?>
 
     <!DOCTYPE html>
@@ -37,17 +39,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                 </div>
                                 <div class="card-body">
                                     <section class="container-fluid">
-
-                                        <div class="col-md-12 col-md-offset-2">
-                                            <label for="name_t"
-                                                   class="control-label"><b>เพิ่ม <?php echo urldecode($_GET['s']) ?></b></label>
-
-                                            <button type='button' name='btnAdd' id='btnAdd'
-                                                    class='btn btn-primary btn-xs'>Add
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        </div>
-
                                         <div class="col-md-12 col-md-offset-2">
                                             <table id='TableRecordList' class='display dataTable'>
                                                 <thead>
@@ -143,7 +134,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <div class="modal fade" id="SearchModal">
                                             <div class="modal-dialog modal-lg">
@@ -252,33 +242,10 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 
     <script>
-
-        $("#target_month").blur(function () {
-            let method = $('#action').val();
-            if (method === "ADD") {
-                let sale_id = $('#sale_id').val();
-                let target_month = $('#target_month').val();
-                let formData = {action: "SEARCH", sale_id: sale_id, target_month: target_month};
-                $.ajax({
-                    url: 'model/manage_sale_target.php',
-                    method: "POST",
-                    data: formData,
-                    success: function (data) {
-                        if (data == 2) {
-                            alert("Duplicate มีข้อมูลนี้แล้วในระบบ กรุณาตรวจสอบ");
-                        }
-                    }
-                })
-            }
-        });
-
-    </script>
-
-    <script>
         $(document).ready(function () {
             let formData = {action: "GET_SALE_TARGET", sub_action: "GET_MASTER"};
             let dataRecords = $('#TableRecordList').DataTable({
-                'lengthMenu': [[4, 12, 16, 32, 64], [4, 12, 16, 32, 64]],
+                'lengthMenu': [[8, 16, 32, 64], [8, 16, 32, 64]],
                 'language': {
                     search: 'ค้นหา', lengthMenu: 'แสดง _MENU_ รายการ',
                     info: 'หน้าที่ _PAGE_ จาก _PAGES_',
@@ -326,22 +293,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 })
             });
             <!-- *** FOR SUBMIT FORM *** -->
-        });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            $("#btnAdd").click(function () {
-                $('#recordModal').modal('show');
-                $('#id').val("");
-                $('#sale_id').val("");
-                $('#target_month').val("");
-                $('#target_year').val("");
-                $('#target_money').val("");
-                $('.modal-title').html("<i class='fa fa-plus'></i> ADD Record");
-                $('#action').val('ADD');
-                $('#save').val('Save');
-            });
         });
     </script>
 

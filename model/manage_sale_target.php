@@ -30,49 +30,54 @@ if ($_POST["action"] === 'GET_DATA') {
 
 }
 
-if ($_POST["action"] === 'SEARCH') {
-
-    if ($_POST["target_month"] !== '') {
-
-        $target_month = $_POST["target_month"];
-        $sql_find = "SELECT * FROM ims_sale_target WHERE target_month = '" . $target_month . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            echo 2;
-        } else {
-            echo 1;
-        }
-    }
-}
-
 if ($_POST["action"] === 'ADD') {
-    if ($_POST["target_month"] !== '') {
-        $target_money = 0;
-        $target_month = $_POST["target_month"];
-        $target_year = $_POST["target_year"];
-        $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_sale_target WHERE
-        target_month = . $target_month .  
-        target_year = '" . $target_year . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        if ($nRows > 0) {
-            echo $dup;
-        } else {
-            $sql = "INSERT INTO ims_sale_target(pgroup_id,target_month,status) VALUES (:pgroup_id,:target_month,:status)";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':pgroup_id', $pgroup_id, PDO::PARAM_STR);
-            $query->bindParam(':target_month', $target_month, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
-            $query->execute();
-            $lastInsertId = $conn->lastInsertId();
 
-            if ($lastInsertId) {
-                echo $save_success;
+    if ($_POST["target_month"] != '' && $_POST["target_year"]) {
+
+        $sql_branch = "SELECT * FROM ims_branch WHERE chk_cond = 'Y' ORDER BY id ";
+
+        $statement_branch = $conn->query($sql_branch);
+        $results_branch = $statement_branch->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results_branch as $row_branch) {
+
+            $target_month = $_POST["target_month"];
+            $target_year = $_POST["target_year"];
+            $target_money = $_POST["target_money"];
+            $sale_id = $row_branch['branch'];
+
+            $sql_find = "SELECT * FROM ims_sale_target WHERE sale_id =  '" . $sale_id . "' AND target_month = '" .  $target_month .  "'  AND target_year = '" . $target_year . "'";
+            $sql_find_data .= "\n\r" . $sql_find ;
+
+            $nRows = $conn->query($sql_find)->fetchColumn();
+
+            if ($nRows > 0) {
+                $res = 2 ;
             } else {
-                echo $error;
+                $sql = "INSERT INTO ims_sale_target(sale_id,target_month,target_year,target_month_order,target_year_order,target_money) 
+                VALUES (:sale_id,:target_month,:target_year,:target_month_order,:target_year_order,:target_money)";
+
+                $query = $conn->prepare($sql);
+                $query->bindParam(':sale_id', $sale_id, PDO::PARAM_STR);
+                $query->bindParam(':target_month', $target_month, PDO::PARAM_STR);
+                $query->bindParam(':target_year', $target_year, PDO::PARAM_STR);
+                $query->bindParam(':target_month_order', $target_month, PDO::PARAM_STR);
+                $query->bindParam(':target_year_order', $target_year, PDO::PARAM_STR);
+                $query->bindParam(':target_money', $target_money, PDO::PARAM_STR);
+
+                $query->execute();
+                $lastInsertId = $conn->lastInsertId();
+
+                if ($lastInsertId) {
+                    $res = 1 ;
+                } else {
+                    $res = 3 ;
+                }
             }
         }
+        echo $res;
     }
+
 }
 
 
@@ -165,7 +170,7 @@ if ($_POST["action"] === 'GET_SALE_TARGET') {
     $totalRecordwithFilter = $records['allcount'];
 
 
-    $columnName = " target_year desc , target_month desc , sale_id ";
+    $columnName = " target_year_order desc , target_month_order desc , sale_id ";
 
 ## Fetch records
     $stmt = $conn->prepare("SELECT * FROM ims_sale_target WHERE 1 " . $searchQuery

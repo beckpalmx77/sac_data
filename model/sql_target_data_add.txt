@@ -1,0 +1,2 @@
+SQL ADD = INSERT INTO ims_sale_target(sale_id,target_month,target_year,target_month_order,target_year_order,target_money) 
+                VALUES (:sale_id,:target_month,:target_year,:target_month_order,:target_year_order,:target_money)
