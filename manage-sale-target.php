@@ -123,16 +123,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                            required="required"
                                                                            placeholder="ยอดเป้าหมาย">
                                                                 </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="target_year" class="control-label"></label>
-                                                                    <select id="target_year" name="target_year"
-                                                                            class="form-control" data-live-search="true"
-                                                                            title="Please select">
-                                                                        <option>Active</option>
-                                                                        <option>Inactive</option>
-                                                                    </select>
-                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">

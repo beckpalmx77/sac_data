@@ -164,7 +164,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $stmt_target->execute();
                                         $TargetCurr = $stmt_target->fetchAll();
                                         foreach ($TargetCurr as $trow_curr) {
-
                                             $sale_point = $trow_curr["target_money"];
                                         }
 
@@ -175,7 +174,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         fclose($my_file);
                                         */
 
-                                            ?>
+                                        ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
@@ -197,10 +196,8 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                 <p class="number">
                                                     ยอดเป้าหมายคือ <?php echo htmlentities(number_format($sale_point, 2)) ?></p>
-
                                                 <p class="number">
                                                     คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย "; ?></p>
-
                                                 <?php if (number_format($total_remain, 2) <= 0) {
                                                     $text1 = "เกินจากเป้ายอดขาย คือ " . number_format(abs($total_remain), 2);
                                                     $text2 = " หรือ " . number_format(abs($percent_total_remain), 2) . " % ";

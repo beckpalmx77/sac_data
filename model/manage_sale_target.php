@@ -32,10 +32,10 @@ if ($_POST["action"] === 'GET_DATA') {
 
 if ($_POST["action"] === 'SEARCH') {
 
-    if ($_POST["pgroup_name"] !== '') {
+    if ($_POST["target_month"] !== '') {
 
-        $pgroup_name = $_POST["pgroup_name"];
-        $sql_find = "SELECT * FROM ims_sale_target WHERE pgroup_name = '" . $pgroup_name . "'";
+        $target_month = $_POST["target_month"];
+        $sql_find = "SELECT * FROM ims_sale_target WHERE target_month = '" . $target_month . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             echo 2;
@@ -46,20 +46,22 @@ if ($_POST["action"] === 'SEARCH') {
 }
 
 if ($_POST["action"] === 'ADD') {
-    if ($_POST["pgroup_name"] !== '') {
-        //$pgroup_id = "X-" . sprintf('%04s', LAST_ID($conn, "ims_sale_target", 'id') + 1);
-        $pgroup_id = $_POST["pgroup_id"];
-        $pgroup_name = $_POST["pgroup_name"];
+    if ($_POST["target_month"] !== '') {
+        $target_money = 0;
+        $target_month = $_POST["target_month"];
+        $target_year = $_POST["target_year"];
         $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_sale_target WHERE pgroup_name = '" . $pgroup_name . "'";
+        $sql_find = "SELECT * FROM ims_sale_target WHERE
+        target_month = . $target_month .  
+        target_year = '" . $target_year . "'";
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
             echo $dup;
         } else {
-            $sql = "INSERT INTO ims_sale_target(pgroup_id,pgroup_name,status) VALUES (:pgroup_id,:pgroup_name,:status)";
+            $sql = "INSERT INTO ims_sale_target(pgroup_id,target_month,status) VALUES (:pgroup_id,:target_month,:status)";
             $query = $conn->prepare($sql);
             $query->bindParam(':pgroup_id', $pgroup_id, PDO::PARAM_STR);
-            $query->bindParam(':pgroup_name', $pgroup_name, PDO::PARAM_STR);
+            $query->bindParam(':target_month', $target_month, PDO::PARAM_STR);
             $query->bindParam(':status', $status, PDO::PARAM_STR);
             $query->execute();
             $lastInsertId = $conn->lastInsertId();
@@ -76,21 +78,30 @@ if ($_POST["action"] === 'ADD') {
 
 if ($_POST["action"] === 'UPDATE') {
 
-    if ($_POST["pgroup_name"] != '') {
+    if ($_POST["target_month"] != '' && $_POST["target_year"] != '' && $_POST["target_money"] != '') {
 
         $id = $_POST["id"];
-        $pgroup_id = $_POST["pgroup_id"];
-        $pgroup_name = $_POST["pgroup_name"];
-        $status = $_POST["status"];
-        $sql_find = "SELECT * FROM ims_sale_target WHERE pgroup_id = '" . $pgroup_id . "'";
+        $target_money = $_POST["target_money"];
+        $sql_find = "SELECT * FROM ims_sale_target WHERE id = " . $id ;
+/*
+        $sql_target_s .= "\n\r" . $sql_find . "\n\r" . $_POST["target_month"]  . " | " . $_POST["target_year"] . " | " .  $target_money . " | " .  $status;
+        $my_file = fopen("target_point.txt", "w") or die("Unable to open file!");
+        fwrite($my_file, "sale_point = " . $sql_target_s);
+        fclose($my_file);
+*/
+
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
-            $sql_update = "UPDATE ims_sale_target SET pgroup_id=:pgroup_id,pgroup_name=:pgroup_name,status=:status            
+            $sql_update = "UPDATE ims_sale_target SET target_money=:target_money
             WHERE id = :id";
+/*
+            $my_file = fopen("update_target_point.txt", "w") or die("Unable to open file!");
+            fwrite($my_file, "update = " . $sql_update);
+            fclose($my_file);
+*/
+
             $query = $conn->prepare($sql_update);
-            $query->bindParam(':pgroup_id', $pgroup_id, PDO::PARAM_STR);
-            $query->bindParam(':pgroup_name', $pgroup_name, PDO::PARAM_STR);
-            $query->bindParam(':status', $status, PDO::PARAM_STR);
+            $query->bindParam(':target_money', $target_money, PDO::PARAM_STR);
             $query->bindParam(':id', $id, PDO::PARAM_STR);
             $query->execute();
             echo $save_success;
