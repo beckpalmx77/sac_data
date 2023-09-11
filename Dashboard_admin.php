@@ -21,7 +21,7 @@ if (strlen($_SESSION['alogin']) == "") {
     }
 
     $sale_point = 1500000;
-    $sale_point_text = '1,500,000 บาท';
+    $sale_point_text = "";
 
     ?>
 
@@ -113,7 +113,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="card-header">
                                     สถิติ ยอดขายรายวัน Cockpit แต่ละสาขา เดือน
                                     <?php echo $month_name . " " . date("Y"); ?>
-                                    เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">ปี <?php echo $year; ?></h5>
@@ -148,9 +147,35 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily
+                                        foreach ($results_daily as $row_daily) {
 
-                                        as $row_daily) { ?>
+                                        $sql_target = " SELECT * FROM ims_sale_target WHERE target_month = '" . date("n") . "' AND target_year = '" . date("Y") . "'"
+                                        . " AND sale_id = '" . $row_daily['BRANCH'] . "'"
+                                        . " ORDER BY target_year DESC , target_month DESC , sale_id ";
+
+                                        /*
+                                        $sql_target_s .= "\n\r" . $sql_target . " | " . $sale_point ;
+                                        $my_file = fopen("sql_target.txt", "w") or die("Unable to open file!");
+                                        fwrite($my_file, "SQL = " . $sql_target_s);
+                                        fclose($my_file);
+                                        */
+
+                                        $stmt_target = $conn->prepare($sql_target);
+                                        $stmt_target->execute();
+                                        $TargetCurr = $stmt_target->fetchAll();
+                                        foreach ($TargetCurr as $trow_curr) {
+
+                                            $sale_point = $trow_curr["target_money"];
+                                        }
+
+                                        /*
+                                        $sql_target_s .= "\n\r" . $sale_point;
+                                        $my_file = fopen("target_point.txt", "w") or die("Unable to open file!");
+                                        fwrite($my_file, "sale_point = " . $sale_point);
+                                        fclose($my_file);
+                                        */
+
+                                            ?>
 
                                         <tr>
                                             <td><?php echo htmlentities($row_daily['BRANCH']); ?></td>
@@ -160,7 +185,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 $percent_total_remain = ($total_remain / $sale_point) * 100;
                                                 $data = "style='width: " . $percent_sale . "%'";
                                                 ?>
-                                                <p class="number"><?php echo htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
+                                                <p class="number"><?php echo "ยอดขายปัจจุบัน = " . htmlentities(number_format($row_daily['TRD_G_KEYIN'], 2)); ?></p>
 
                                                 <div class="progress">
                                                     <div class="progress-bar progress-bar-striped progress-bar-animated"
@@ -171,7 +196,10 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 </div>
 
                                                 <p class="number">
-                                                    คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย"; ?></p>
+                                                    ยอดเป้าหมายคือ <?php echo htmlentities(number_format($sale_point, 2)) ?></p>
+
+                                                <p class="number">
+                                                    คิดเป็น <?php echo htmlentities(number_format($percent_sale, 2)) . " % จากเป้ายอดขาย "; ?></p>
 
                                                 <?php if (number_format($total_remain, 2) <= 0) {
                                                     $text1 = "เกินจากเป้ายอดขาย คือ " . number_format(abs($total_remain), 2);
@@ -192,7 +220,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                         </tbody>
                                         <?php echo "ยอดขายรวมทุกสาขา เดือน " . $month_name . " " . date("Y") . " = " . number_format($total, 2) . " บาท " ?>
-                                        เป้าหมายยอดขายสาขาละ = <?php echo $sale_point_text ?>
                                     </table>
                                 </div>
 
