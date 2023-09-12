@@ -12,8 +12,10 @@ $filename = "Data_Customer_History-" . date('m/d/Y H:i:s', time()) . ".csv";
 $customer_name = $_POST["AR_NAME"];
 $car_no = $_POST["car_no"];
 
-//$customer_name = "บริษัท ดี.ไดร์เวอร์ กรุงเทพ จำกัด";
-//$car_no = "";
+$doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
+$doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
+
+$sql_where_ext = " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' " ;
 
 $sql_cmd = "";
 
@@ -70,17 +72,18 @@ ADDRBOOK.ADDB_KEY = '" . $result_sqlsvr_main["ADDB_KEY"] . "' AND
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
 (DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
+(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) ";
 
-ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
+$order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
+    $sql_string = $sql_data_selectDetail . $sql_where_ext . $order_by ;
 /*
     $myfile = fopen("qry_file_mysql_server2.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $sql_data_selectDetail);
+    fwrite($myfile, $sql_string);
     fclose($myfile);
 */
 
-    $statement_sqlsvr = $conn_sqlsvr->prepare($sql_data_selectDetail);
+    $statement_sqlsvr = $conn_sqlsvr->prepare($sql_string);
     $statement_sqlsvr->execute();
     $line = 0 ;
     while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {

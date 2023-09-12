@@ -54,16 +54,38 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
                                                                         <div class="col-sm-12">
-                                                                            <!--div class="form-group has-success">
-                                                                                <label for="success"
-                                                                                       class="control-label">ค้นหาตามชื่อลูกค้า</label>
-                                                                                <div class="">
-                                                                                    <input type="text"
-                                                                                           name="customer_name"
-                                                                                           class="form-control"
-                                                                                           id="customer_name" value="">
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group row">
+
+                                                                                    <div class="col-sm-3">
+                                                                                        <label for="doc_date_start"
+                                                                                               class="control-label">จากวันที่</label>
+                                                                                        <i class="fa fa-calendar"
+                                                                                           aria-hidden="true"></i>
+                                                                                        <input type="text" class="form-control"
+                                                                                               id="doc_date_start"
+                                                                                               name="doc_date_start"
+                                                                                               required="required"
+                                                                                               readonly="true"
+                                                                                               placeholder="จากวันที่">
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-3">
+                                                                                        <label for="doc_date_to"
+                                                                                               class="control-label">ถึงวันที่</label>
+                                                                                        <i class="fa fa-calendar"
+                                                                                           aria-hidden="true"></i>
+                                                                                        <input type="text" class="form-control"
+                                                                                               id="doc_date_to"
+                                                                                               name="doc_date_to"
+                                                                                               required="required"
+                                                                                               readonly="true"
+                                                                                               placeholder="ถึงวันที่">
+                                                                                    </div>
+
+
                                                                                 </div>
-                                                                            </div-->
+                                                                            </div>
 
                                                                             <label for="AR_CODE">เลือกลูกค้า :</label>
                                                                             <input type="hidden" name="AR_CODE" id="AR_CODE"
@@ -184,6 +206,37 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/MyFrameWork/framework_util.js"></script>
 
     <script src="js/util.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            let today = new Date();
+            let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
+            $('#doc_date_start').val(doc_date);
+            $('#doc_date_to').val(doc_date);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#doc_date_start').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#doc_date_to').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
 
 
     <script>
