@@ -51,42 +51,81 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <div class="modal-body">
 
+                                                                <!--div class="modal-body">
+                                                                    <div class="form-group row">
+
+                                                                        <div class="col-sm-3">
+                                                                            <label for="doc_date_start"
+                                                                                   class="control-label">จากวันที่</label>
+                                                                            <i class="fa fa-calendar"
+                                                                               aria-hidden="true"></i>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="doc_date_start"
+                                                                                   name="doc_date_start"
+                                                                                   required="required"
+                                                                                   readonly="true"
+                                                                                   placeholder="จากวันที่">
+                                                                        </div>
+
+                                                                        <div class="col-sm-3">
+                                                                            <label for="doc_date_to"
+                                                                                   class="control-label">ถึงวันที่</label>
+                                                                            <i class="fa fa-calendar"
+                                                                               aria-hidden="true"></i>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="doc_date_to"
+                                                                                   name="doc_date_to"
+                                                                                   required="required"
+                                                                                   readonly="true"
+                                                                                   placeholder="ถึงวันที่">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                </div-->
+
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
                                                                         <div class="col-sm-12">
-                                                                            <!--div class="form-group has-success">
-                                                                                <label for="success"
-                                                                                       class="control-label">ค้นหาตามชื่อลูกค้า</label>
-                                                                                <div class="">
-                                                                                    <input type="text"
-                                                                                           name="customer_name"
-                                                                                           class="form-control"
-                                                                                           id="customer_name" value="">
-                                                                                </div>
-                                                                            </div-->
-
-                                                                            <label for="AR_CODE">เลือกลูกค้า :</label>
-                                                                            <input type="hidden" name="AR_CODE" id="AR_CODE"
+                                                                            <label for="ICCAT_CODE">เลือกประเภทบริการ :</label>
+                                                                            <input type="hidden" name="ICCAT_CODE" id="ICCAT_CODE"
                                                                                    class="form-control">
-                                                                            <input type="hidden" name="AR_NAME" id="AR_NAME"
+                                                                            <input type="hidden" name="ICCAT_NAME" id="ICCAT_NAME"
                                                                                    class="form-control">
-                                                                            <select id='selCustomer' class='form-control'
-                                                                                    onchange="Onchange_AR_CODE();">
-                                                                                <option value='0'>- ค้นหารายชื่อลูกค้า -
+                                                                            <select id='selService' class='form-control'
+                                                                                    onchange="Onchange_SERVICE_CODE();">
+                                                                                <option value='0'>- ค้นหาประเภทบริการ -
                                                                                 </option>
                                                                             </select>
 
                                                                         </div>
+
                                                                         <div class="col-sm-12">
-                                                                            <div class="form-group has-success">
-                                                                                <label for="success"
-                                                                                       class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
-                                                                                <div class="">
-                                                                                    <input type="text" name="car_no"
-                                                                                           class="form-control"
-                                                                                           id="car_no" value="">
-                                                                                </div>
-                                                                            </div>
+                                                                            <label for="BRAND_CODE">เลือกยี่ห้อสินค้า :</label>
+                                                                            <input type="hidden" name="BRAND_CODE" id="BRAND_CODE"
+                                                                                   class="form-control">
+                                                                            <input type="hidden" name="BRAND_NAME" id="BRAND_NAME"
+                                                                                   class="form-control">
+                                                                            <select id='selBrand' class='form-control'
+                                                                                    onchange="Onchange_BRAND_CODE();">
+                                                                                <option value='0'>- ค้นหายี่ห้อ -
+                                                                                </option>
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                        <div class="col-sm-12">
+                                                                            <label for="BRANCH">เลือกสาขา :</label>
+                                                                            <input type="hidden" name="BRANCH" id="BRANCH"
+                                                                                   class="form-control">
+                                                                            <input type="hidden" name="BRANCH_NAME" id="BRANCH_NAME"
+                                                                                   class="form-control">
+                                                                            <select id='selBranch' class='form-control'
+                                                                                    onchange="Onchange_BRANCH_CODE();">
+                                                                                <option value='0'>- ค้นหาสาขา -
+                                                                                </option>
+                                                                            </select>
+
                                                                         </div>
 
 
@@ -189,9 +228,61 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $(document).ready(function () {
 
-            $("#selCustomer").select2({
+            $("#selService").select2({
                 ajax: {
-                    url: "model/get_customer_ajax.php",
+                    url: "model/get_service_ajax.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term // search term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#selBrand").select2({
+                ajax: {
+                    url: "model/get_brand_ajax.php",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            searchTerm: params.term // search term
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#selBranch").select2({
+                ajax: {
+                    url: "model/get_branch_ajax.php",
                     type: "post",
                     dataType: 'json',
                     delay: 250,
@@ -215,9 +306,28 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        function Onchange_AR_CODE() {
+        function Onchange_SERVICE_CODE() {
 
-            $('#AR_NAME').val($("#selCustomer").val());
+            $('#ICCAT_NAME').val($("#selService").val());
+
+        }
+    </script>
+
+
+    <script>
+
+        function Onchange_BRAND_CODE() {
+
+            $('#BRAND_NAME').val($("#selBrand").val());
+
+        }
+    </script>
+
+    <script>
+
+        function Onchange_BRANCH_CODE() {
+
+            $('#BRANCH_NAME').val($("#selBranch").val());
 
         }
     </script>
