@@ -109,7 +109,8 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE
 }
 
 
-$data = iconv("utf-8", "tis-620", $data);
+// $data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "windows-874", $data);
 echo $data;
 
 

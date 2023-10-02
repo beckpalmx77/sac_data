@@ -94,7 +94,8 @@ if ($query->rowCount() >= 1) {
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+// $data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "windows-874", $data);
 echo $data;
 
 exit();
