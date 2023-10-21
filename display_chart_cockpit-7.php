@@ -80,6 +80,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <input type="hidden" id="month" name="month" value="">
                                                             <input type="hidden" id="year" name="year" value="">
                                                             <input type="hidden" id="product_group" name="product_group" value="">
+                                                            <input type="hidden" id="form_use" name="form_use" value="">
                                                             <div class="row">
                                                                 <div class="col-sm-12">
                                                                     <div class="row">
@@ -130,6 +131,20 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                     name="BtnAll"
                                                                                     class="btn btn-primary btn-block">
                                                                                 แสดงข้อมูลยอดขายรวม  ยาง + อะไหล่ + ค่าแรง-ค่าบริการ
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <button type="button" id="BtnCustomer"
+                                                                                    name="BtnCustomer"
+                                                                                    class="btn btn-primary btn-block">
+                                                                                แสดงข้อมูลจำนวนลูกค้าที่ใช้บริการ
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -188,6 +203,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $("#BtnSaleTires").click(function () {
             $('#product_group').val("P1");
+            $('#form_use').val("PRODUCT");
             SubMitForm();
         });
     </script>
@@ -195,6 +211,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $("#BtnSalePart").click(function () {
             $('#product_group').val("P2");
+            $('#form_use').val("PRODUCT");
             SubMitForm();
         });
     </script>
@@ -202,6 +219,7 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $("#BtnService").click(function () {
             $('#product_group').val("P3");
+            $('#form_use').val("PRODUCT");
             SubMitForm();
         });
     </script>
@@ -209,13 +227,26 @@ if (strlen($_SESSION['alogin']) == "") {
     <script>
         $("#BtnAll").click(function () {
             $('#product_group').val("PALL");
+            $('#form_use').val("PRODUCT");
+            SubMitForm();
+        });
+    </script>
+
+    <script>
+        $("#BtnCustomer").click(function () {
+            $('#product_group').val("PALL");
+            $('#form_use').val("CUSTOMER");
             SubMitForm();
         });
     </script>
 
     <script>
         function SubMitForm() {
-            document.forms['myform'].action = 'data_tires_cockpit_year';
+            if ($('#form_use').val()==='PRODUCT') {
+                document.forms['myform'].action = 'data_tires_cockpit_year';
+            } else {
+                document.forms['myform'].action = 'data_customer_cockpit_year';
+            }
             document.forms['myform'].target = '_blank';
             document.forms['myform'].submit();
             return true;
