@@ -189,9 +189,9 @@ SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
  FROM ims_product_sale_cockpit "
- . $where
- . " GROUP BY DI_YEAR 
- ORDER BY DI_YEAR ";
+. $where
+. " GROUP BY DI_YEAR 
+ ORDER BY DI_YEAR DESC ";
 
                 $statement_brand = $conn->query($sql_brand);
                 $results_brand = $statement_brand->fetchAll(PDO::FETCH_ASSOC);
@@ -310,9 +310,12 @@ SUM(IF(DI_MONTH='11',TRD_QTY,0)) AS 11_QTY,
 SUM(IF(DI_MONTH='11',TRD_G_KEYIN,0)) AS 11_AMT,
 SUM(IF(DI_MONTH='12',TRD_QTY,0)) AS 12_QTY,
 SUM(IF(DI_MONTH='12',TRD_G_KEYIN,0)) AS 12_AMT
- FROM ims_product_sale_cockpit"
- . $where
- . " GROUP BY DI_YEAR ";
+FROM ims_product_sale_cockpit"
+. $where
+. " GROUP BY DI_YEAR 
+ ORDER BY DI_YEAR DESC ";
+
+
 
             //WHERE DI_YEAR = '" . $year . "'
 
