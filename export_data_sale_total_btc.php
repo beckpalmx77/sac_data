@@ -122,16 +122,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             </option>
                                                                         <?php } ?>
                                                                     </select>
-                                                                    <label for="branch">เลือกสาขา :</label>
-                                                                    <select name="branch" id="branch"
-                                                                            class="form-control" required>
-                                                                        <?php foreach ($BranchRecords as $row) { ?>
-                                                                            <option value="<?php echo $row["branch"]; ?>">
-                                                                                <?php echo $row["branch_name"]; ?>
-                                                                            </option>
-                                                                        <?php } ?>
-                                                                    </select>
-                                                                    <br>
+
+                                                                    <input type="hidden" id="branch" name="branch" value="BTC">
+                                                                    
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <button type="submit"
