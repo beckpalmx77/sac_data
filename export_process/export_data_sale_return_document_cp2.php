@@ -12,6 +12,10 @@ $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . "
 include('../config/connect_sqlserver.php');
 include('../cond_file/doc_info_sale_daily_cp.php');
 
+$DT_DOCCODE_MINUS1 = "IS";
+$DT_DOCCODE_MINUS2 = "IIS";
+$DT_DOCCODE_MINUS3 = "IC";
+
 switch ($branch) {
     case "CP-340":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4')) ";
@@ -139,12 +143,29 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $TRD_B_VAT = $row['TRD_G_VAT'];
     $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
 
+    if((strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS1) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS2) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS3) !== false)){
+        $data .= "-" . $TRD_QTY . ",";
+        $data .= "-" . $TRD_U_PRC . ",";
+        $data .= "-" . $TRD_DSC_KEYINV . ",";
+        $data .= "-" . $TRD_B_SELL . ",";
+        $data .= "-" . $TRD_B_VAT . ",";
+        $data .= "-" . $TRD_G_KEYIN . ",";
+    } else {
+        $data .= $TRD_QTY . ",";
+        $data .= $TRD_U_PRC . ",";
+        $data .= $TRD_DSC_KEYINV . ",";
+        $data .= $TRD_B_SELL . ",";
+        $data .= $TRD_B_VAT . ",";
+        $data .= $TRD_G_KEYIN . ",";
+    }
+
 
     //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
     //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
     //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
     //fclose($my_file);
 
+/*
     $data .= $TRD_QTY . ",";
     $data .= $TRD_U_PRC . ",";
     $data .= $TRD_DSC_KEYINV . ",";
@@ -152,6 +173,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= $TRD_B_SELL . ",";
     $data .= $TRD_B_VAT . ",";
     $data .= $TRD_G_KEYIN . ",";
+*/
+
     $data .= str_replace(",", "^", $row['WL_CODE']) . ",";
     $data .= $str_reserve_id . ",";
     $data .= $reserve_id . ",";

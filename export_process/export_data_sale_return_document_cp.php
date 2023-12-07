@@ -111,10 +111,13 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $data .= $TRD_G_KEYIN . ",";
     }
 
+/*
+
     $data .= $TRD_QTY . ",";
     $data .= $TRD_U_PRC . ",";
     $data .= $TRD_DSC_KEYINV . ",";
     $data .= " " . ",";
+*/
 
     if (in_array($row['AR_CODE'], $customer_except_list)) {
         $data .= "0" . ",";
