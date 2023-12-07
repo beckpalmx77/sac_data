@@ -14,6 +14,10 @@ include('../cond_file/doc_info_sale_daily_cp.php');
 
 $customer_except_list = array("SAC.0000328");
 
+$DT_DOCCODE_MINUS1 = "IS";
+$DT_DOCCODE_MINUS2 = "IIS";
+$DT_DOCCODE_MINUS3 = "IC";
+
 switch ($branch) {
     case "CP-340":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4')) ";
@@ -85,12 +89,27 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
 
-    $TRD_QTY = $row['TRD_QTY'];
     $TRD_U_PRC = $row['TRD_U_PRC'];
     $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
     $TRD_B_SELL = $row['TRD_G_SELL'];
     $TRD_B_VAT = $row['TRD_G_VAT'];
     $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
+
+    if((strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS1) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS2) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS3) !== false)){
+        $data .= "-" . $TRD_QTY . ",";
+        $data .= "-" . $TRD_U_PRC . ",";
+        $data .= "-" . $TRD_DSC_KEYINV . ",";
+        $data .= "-" . $TRD_B_SELL . ",";
+        $data .= "-" . $TRD_B_VAT . ",";
+        $data .= "-" . $TRD_G_KEYIN . ",";
+    } else {
+        $data .= $TRD_QTY . ",";
+        $data .= $TRD_U_PRC . ",";
+        $data .= $TRD_DSC_KEYINV . ",";
+        $data .= $TRD_B_SELL . ",";
+        $data .= $TRD_B_VAT . ",";
+        $data .= $TRD_G_KEYIN . ",";
+    }
 
     $data .= $TRD_QTY . ",";
     $data .= $TRD_U_PRC . ",";
