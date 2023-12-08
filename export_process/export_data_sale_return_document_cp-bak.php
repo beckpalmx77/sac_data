@@ -66,10 +66,6 @@ $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BET
     . $query_daily_cond_ext
     . $select_query_daily_order;
 
-//$my_file = fopen("D-CP.txt", "w") or die("Unable to open file!");
-//fwrite($my_file, $String_Sql);
-//fclose($my_file);
-
 $data = "วันที่,เดือน,ปี,รหัสลูกค้า,รหัสสินค้า,รายละเอียดสินค้า,รายละเอียด,ยี่ห้อ,INV ลูกค้า,ชื่อลูกค้า,ผู้แทนขาย,จำนวน,ราคาขาย,ส่วนลดรวม,ส่วนลดต่อเส้น,มูลค่ารวม,ภาษี 7%,มูลค่ารวมภาษี,คลัง\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
@@ -84,9 +80,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
     $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
     $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
-
-    $data .= str_replace(",", "^", $row['ICCAT_NAME']) . ",";
-    //$data .= " " . ",";
+    $data .= str_replace(",", "^", $row['ICCAT_NAME']) . ",";    //$data .= " " . ",";
     $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
     $data .= str_replace(",", "^", $row['DI_REF']) . ",";
     $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
@@ -95,46 +89,46 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
 
+    $TRD_U_PRC = $row['TRD_U_PRC'];
+    $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
+    $TRD_B_SELL = $row['TRD_G_SELL'];
+    $TRD_B_VAT = $row['TRD_G_VAT'];
+    $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
+
     if((strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS1) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS2) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS3) !== false)){
-        $TRD_QTY = "-" . $row['TRD_QTY'];
-        $TRD_U_PRC = "-" . $row['TRD_U_PRC'];
-        $TRD_DSC_KEYINV = "-" . $row['TRD_DSC_KEYINV'];
-        $TRD_B_SELL = "-" . $row['TRD_G_SELL'];
-        $TRD_B_VAT = "-" . $row['TRD_G_VAT'];
-        $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
+        $data .= "-" . $TRD_QTY . ",";
+        $data .= "-" . $TRD_U_PRC . ",";
+        $data .= "-" . $TRD_DSC_KEYINV . ",";
+        $data .= "-" . $TRD_B_SELL . ",";
+        $data .= "-" . $TRD_B_VAT . ",";
+        $data .= "-" . $TRD_G_KEYIN . ",";
     } else {
-        $TRD_QTY = $row['TRD_QTY'];
-        $TRD_U_PRC = $row['TRD_U_PRC'];
-        $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
-        $TRD_B_SELL = $row['TRD_G_SELL'];
-        $TRD_B_VAT = $row['TRD_G_VAT'];
-        $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
+        $data .= $TRD_QTY . ",";
+        $data .= $TRD_U_PRC . ",";
+        $data .= $TRD_DSC_KEYINV . ",";
+        $data .= $TRD_B_SELL . ",";
+        $data .= $TRD_B_VAT . ",";
+        $data .= $TRD_G_KEYIN . ",";
     }
 
+/*
     if (in_array($row['AR_CODE'], $customer_except_list)) {
-        $TRD_B_SELL = "0";
-        $TRD_B_VAT = "0";
-        $TRD_G_KEYIN = "0";
+        $data .= "0" . ",";
+        $data .= "0" . ",";
+        $data .= "0" . ",";
+    } else {
+        $data .= $TRD_B_SELL . ",";
+        $data .= $TRD_B_VAT . ",";
+        $data .= $TRD_G_KEYIN . ",";
     }
+*/
 
-
-    //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
-    //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
-    //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
-    //fclose($my_file);
-
-    $data .= $TRD_QTY . ",";
-    $data .= $TRD_U_PRC . ",";
-    $data .= $TRD_DSC_KEYINV . ",";
-    $data .= " " . ",";
-    $data .= $TRD_B_SELL . ",";
-    $data .= $TRD_B_VAT . ",";
-    $data .= $TRD_G_KEYIN . ",";
     $data .= str_replace(",", "^", $row['WL_CODE']) . "\n";
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+// $data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "windows-874", $data);
 echo $data;
 
 exit();
