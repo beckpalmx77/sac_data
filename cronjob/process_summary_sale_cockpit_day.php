@@ -9,10 +9,9 @@ $year = date("Y");
 
 $month = date("n");
 
-$year = "2023";
+//$year = "2023";
 
-for ($month=1;$month<=12;$month++) {
-
+//for ($month=1;$month<=12;$month++) {
 
 echo $year . " | " . $month . "\n\r";
 
@@ -117,6 +116,6 @@ for ($x = 0; $x <= 3; $x++) {
         }
     }
 
-}
+//}
 
 }
