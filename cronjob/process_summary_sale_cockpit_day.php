@@ -9,6 +9,12 @@ $year = date("Y");
 
 $month = date("n");
 
+$year = "2023";
+
+$month = "12";
+
+
+
 $str_insert = "OK Insert";
 $str_update = "OK Update";
 
