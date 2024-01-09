@@ -16,6 +16,8 @@ $day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
 //echo $year . " - " . $month . " | " . $day . " Count <br>";
 
+
+
 for ($x = 0; $x <= 3; $x++) {
 
     switch ($x) {
@@ -40,7 +42,7 @@ for ($x = 0; $x <= 3; $x++) {
             AND DI_MONTH = '" . $month . "'
             AND BRANCH = '" . $branch . "'
             AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
-            AND ICCAT_CODE <> '6SAC08'
+            AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
             GROUP BY DI_DATE";
 
         $nRows = $conn->query($sql_find)->fetchColumn();
@@ -52,7 +54,7 @@ for ($x = 0; $x <= 3; $x++) {
                     AND DI_MONTH = '" . $month . "'
                     AND BRANCH = '" . $branch . "'
                     AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
-                    AND ICCAT_CODE <> '6SAC08'
+                    AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                     GROUP BY DI_DATE,DI_MONTH,BRANCH  
                     ORDER BY CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) ";
 

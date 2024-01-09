@@ -47,7 +47,7 @@ for ($year = 2019; $year <= 2023; $year++) {
             WHERE DI_YEAR = '" . $year . "'
             AND DI_MONTH = '" . $month . "'
             AND BRANCH = '" . $branch . "'
-            AND ICCAT_CODE <> '6SAC08'
+            AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
             AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
             GROUP BY DI_DATE";
 
@@ -59,7 +59,7 @@ for ($year = 2019; $year <= 2023; $year++) {
                     WHERE DI_YEAR = '" . $year . "'
                     AND DI_MONTH = '" . $month . "'
                     AND BRANCH = '" . $branch . "'
-                    AND ICCAT_CODE <> '6SAC08'
+                    AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                     AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
                     GROUP BY DI_DATE,DI_MONTH,BRANCH  
                     ORDER BY CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) ";
