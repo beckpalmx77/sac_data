@@ -141,6 +141,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_MONTH = '" . date("n") . "'
                                                       AND DI_YEAR = '" . date("Y") . "'
+                                                      AND ICCAT_CODE <> '6SAC08'
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
