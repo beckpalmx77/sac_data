@@ -9,8 +9,6 @@ $year = date("Y");
 
 $month = date("n");
 
-echo $year . " | " . $month . "\n\r";
-
 $str_insert = "OK Insert";
 $str_update = "OK Update";
 
@@ -41,8 +39,8 @@ for ($x = 0; $x <= 3; $x++) {
             WHERE DI_YEAR = '" . $year . "'
             AND DI_MONTH = '" . $month . "'
             AND BRANCH = '" . $branch . "'
-            AND ICCAT_CODE <> '6SAC08'
             AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
+            AND ICCAT_CODE <> '6SAC08'
             GROUP BY DI_DATE";
 
         $nRows = $conn->query($sql_find)->fetchColumn();
@@ -53,8 +51,8 @@ for ($x = 0; $x <= 3; $x++) {
                     WHERE DI_YEAR = '" . $year . "'
                     AND DI_MONTH = '" . $month . "'
                     AND BRANCH = '" . $branch . "'
-                    AND ICCAT_CODE <> '6SAC08'
                     AND CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) = " . $day_loop . "
+                    AND ICCAT_CODE <> '6SAC08'
                     GROUP BY DI_DATE,DI_MONTH,BRANCH  
                     ORDER BY CAST(SUBSTR(DI_DATE,1,2) AS UNSIGNED) ";
 
@@ -111,5 +109,6 @@ for ($x = 0; $x <= 3; $x++) {
             echo " | " . $str_update . "<br>";
         }
     }
+
 
 }

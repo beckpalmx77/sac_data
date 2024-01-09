@@ -12,12 +12,6 @@ $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . "
 include('../config/connect_sqlserver.php');
 include('../cond_file/doc_info_sale_daily_cp.php');
 
-$customer_except_list = array("SAC.0000328");
-
-$DT_DOCCODE_MINUS1 = "IS";
-$DT_DOCCODE_MINUS2 = "IIS";
-$DT_DOCCODE_MINUS3 = "IC";
-
 switch ($branch) {
     case "CP-340":
         $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('30','CS4','CS5','DS4','IS3','IS4','ISC3','ISC4')) ";
@@ -145,34 +139,11 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $TRD_B_VAT = $row['TRD_G_VAT'];
     $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
 
-    if((strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS1) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS2) !== false) || (strpos($row['DT_DOCCODE'], $DT_DOCCODE_MINUS3) !== false)){
-        $TRD_QTY = "-" . $row['TRD_QTY'];
-        $TRD_U_PRC = "-" . $row['TRD_U_PRC'];
-        $TRD_DSC_KEYINV = "-" . $row['TRD_DSC_KEYINV'];
-        $TRD_B_SELL = "-" . $row['TRD_G_SELL'];
-        $TRD_B_VAT = "-" . $row['TRD_G_VAT'];
-        $TRD_G_KEYIN = "-" . $row['TRD_G_KEYIN'];
-    } else {
-        $TRD_QTY = $row['TRD_QTY'];
-        $TRD_U_PRC = $row['TRD_U_PRC'];
-        $TRD_DSC_KEYINV = $row['TRD_DSC_KEYINV'];
-        $TRD_B_SELL = $row['TRD_G_SELL'];
-        $TRD_B_VAT = $row['TRD_G_VAT'];
-        $TRD_G_KEYIN = $row['TRD_G_KEYIN'];
-    }
-
-    if (in_array($row['AR_CODE'], $customer_except_list)) {
-        $TRD_B_SELL = "0";
-        $TRD_B_VAT = "0";
-        $TRD_G_KEYIN = "0";
-    }
-
 
     //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
     //fwrite($my_file, "Data " . " = " . $TRD_QTY . " | " . $TRD_U_PRC . " | "
     //. $TRD_DSC_KEYINV . " | " . $TRD_B_SELL . " | " . $TRD_B_VAT . " | " . $TRD_G_KEYIN);
     //fclose($my_file);
-
 
     $data .= $TRD_QTY . ",";
     $data .= $TRD_U_PRC . ",";
@@ -181,8 +152,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= $TRD_B_SELL . ",";
     $data .= $TRD_B_VAT . ",";
     $data .= $TRD_G_KEYIN . ",";
-
-
     $data .= str_replace(",", "^", $row['WL_CODE']) . ",";
     $data .= $str_reserve_id . ",";
     $data .= $reserve_id . ",";

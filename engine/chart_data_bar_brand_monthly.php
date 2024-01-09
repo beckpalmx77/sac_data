@@ -16,6 +16,7 @@ $sql_get = " SELECT BRN_NAME,DI_MONTH,DI_MONTH_NAME,DI_DATE
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'   
  and BRN_NAME = '" . $brn_name . "'
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY  BRN_NAME,DI_MONTH,DI_MONTH_NAME 
  ORDER BY CAST(DI_MONTH AS UNSIGNED) ASC ";
 

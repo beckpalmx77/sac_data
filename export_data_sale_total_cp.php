@@ -213,7 +213,7 @@ if (strlen($_SESSION['alogin']) == "") {
             $('#myCheck').click(function () {
                 if ($("#myCheck").is(":checked") == true) {
                     $('#myCheckValue').val('Y');
-                    $( "#month" ).prop( "disabled", false );
+                    $( "#month" ).prop( "disabled", true );
                 } else {
                     $('#myCheckValue').val('N');
                     $( "#month" ).prop( "disabled", false );

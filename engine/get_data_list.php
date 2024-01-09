@@ -16,6 +16,7 @@ $sql_get = "
  FROM ims_product_sale_cockpit 
  WHERE  PGROUP = '" . $p_group . "'  
  AND DI_YEAR = '" . $year . "'   
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY BRN_NAME
  ORDER BY sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) DESC 
 ";

@@ -16,7 +16,6 @@ $sql_get = "
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'   
  and BRANCH like '%" . $branch . "'
- AND ICCAT_CODE <> '6SAC08'
  GROUP BY  BRANCH,DI_MONTH,DI_MONTH_NAME 
  ORDER BY DI_MONTH
 ";

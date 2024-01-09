@@ -18,7 +18,7 @@ for ($month = 1; $month <= 12; $month++) {
  FROM ims_product_sale_cockpit 
  WHERE DI_MONTH = '" . $month . "'
  AND DI_YEAR = '" . $year . "'
- AND (PGROUP = 'P1' OR PGROUP = 'P2' OR PGROUP = 'P3')
+ AND (PGROUP = 'P1' OR PGROUP = 'P2' OR PGROUP = 'P3')    
  AND ICCAT_CODE <> '6SAC08'
  GROUP BY  BRANCH,DI_MONTH,DI_MONTH_NAME,DI_YEAR 
  ORDER BY DI_MONTH , TRD_G_KEYIN DESC 

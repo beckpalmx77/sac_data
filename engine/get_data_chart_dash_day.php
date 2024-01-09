@@ -54,8 +54,7 @@ for ($x = 0; $x <= 3; $x++) {
         $str_return = "[";
 
         $sql_get = "SELECT *  FROM ims_product_sale_cockpit_day 
-        WHERE year = " . $year . " AND month = '" . $month . "' AND BRANCH = '" . $branch . "'     
-        AND ICCAT_CODE <> '6SAC08'             
+        WHERE year = " . $year . " AND month = '" . $month . "' AND BRANCH = '" . $branch . "'                  
         ORDER BY CAST(day AS UNSIGNED) ";
 
 
