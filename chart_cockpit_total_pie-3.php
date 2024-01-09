@@ -128,6 +128,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
  AND DI_YEAR = '" . $year . "'
  AND DI_MONTH = '" . $month . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT ";
 
@@ -195,6 +196,7 @@ include("display_data_cockpit_detail_grp_monthly.php");
  AND DI_YEAR = '" . $year . "'
  AND DI_MONTH = '" . $month . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'
  GROUP BY SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT ";
 
