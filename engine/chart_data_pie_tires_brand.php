@@ -14,7 +14,7 @@ $sql_get = "
  FROM ims_product_sale_cockpit 
  WHERE PGROUP IN ('P1') AND BRN_CODE <> ''
  AND DI_YEAR = '" . $year . "'
- AND ICCAT_CODE <> '6SAC08'
+ AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY BRN_CODE,BRN_NAME,SKU_CAT,ICCAT_NAME
  ORDER BY SKU_CAT 
  ";

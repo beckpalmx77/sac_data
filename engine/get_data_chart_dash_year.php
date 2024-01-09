@@ -32,6 +32,7 @@ for ($x = 0; $x <= 3; $x++) {
  FROM ims_product_sale_cockpit 
  WHERE DI_YEAR = '" . $year . "'
  AND BRANCH = '" . $branch . "'
+ AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
  GROUP BY DI_MONTH,BRANCH  
  ORDER BY BRANCH,CAST(DI_MONTH AS UNSIGNED) ";
 

@@ -19,9 +19,9 @@ for ($x = 0; $x <= 3; $x++) {
     $year = $year_start - $x;
 
     if ($product_group==='PALL') {
-        $where = " WHERE DI_YEAR = '" . $year . "' ";
+        $where = " WHERE ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC') AND DI_YEAR = '" . $year . "' ";
     } else {
-        $where = " WHERE PGROUP = '" . $product_group . "' AND DI_YEAR = '" . $year . "' ";
+        $where = " WHERE ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC') AND PGROUP = '" . $product_group . "' AND DI_YEAR = '" . $year . "' ";
     }
 
 

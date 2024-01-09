@@ -86,7 +86,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $sql_daily = "SELECT BRANCH,sum(CAST(TRD_G_KEYIN AS DECIMAL(10,2))) as  TRD_G_KEYIN
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_DATE = '" . $date . "'
-                                                      AND ICCAT_CODE <> '6SAC08'
+                                                      AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
@@ -142,7 +142,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                       FROM ims_product_sale_cockpit 
                                                       WHERE DI_MONTH = '" . date("n") . "'
                                                       AND DI_YEAR = '" . date("Y") . "'
-                                                      AND ICCAT_CODE <> '6SAC08' 
+                                                      AND ICCAT_CODE <> '6SAC08'  AND (DT_DOCCODE <> 'IS' OR DT_DOCCODE <> 'IIS' OR DT_DOCCODE <> 'IC')
                                                       GROUP BY  BRANCH
                                                       ORDER BY BRANCH";
 
