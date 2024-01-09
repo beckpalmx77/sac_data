@@ -11,7 +11,7 @@ $month = date("n");
 
 $year = "2023";
 
-for ($year = 2019; $year <= 2023; $year++) {
+for ($year = 2023; $year <= 2023; $year++) {
 
     for ($month = 1; $month <= 12; $month++) {
 
