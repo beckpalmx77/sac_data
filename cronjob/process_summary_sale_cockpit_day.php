@@ -14,6 +14,7 @@ $year = "2023";
 $month = "12";
 
 
+echo $year . " | " . $month;
 
 $str_insert = "OK Insert";
 $str_update = "OK Update";
