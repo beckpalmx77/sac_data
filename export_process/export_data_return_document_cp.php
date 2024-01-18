@@ -63,7 +63,7 @@ $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BET
     . $query_daily_cond_ext
     . $select_query_daily_order;
 
-//$my_file = fopen("D-CP.txt", "w") or die("Unable to open file!");
+//$my_file = fopen("Ret_CP.txt", "w") or die("Unable to open file!");
 //fwrite($my_file, $String_Sql);
 //fclose($my_file);
 
