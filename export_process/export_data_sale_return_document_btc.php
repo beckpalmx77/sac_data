@@ -17,11 +17,10 @@ $customer_except_list = array("SAC.0000328");
 $DT_DOCCODE_MINUS1 = "IC";
 $DT_DOCCODE_MINUS2 = "IIS";
 
-
 switch ($branch) {
 
     case "ALL":
-        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CCS6','CCS7','DDS5','IC5','IC6','IIS5','IIS6','IV6')) ";
+        $query_daily_cond_ext = " AND (DOCTYPE.DT_DOCCODE in ('CCS6','CCS7','DDS5','IC5','IC6','IIS5','IIS6','IV3')) ";
         break;
 }
 
