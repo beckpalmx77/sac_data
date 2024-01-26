@@ -78,7 +78,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $data .= str_replace(",", "^", $row['BRN_NAME']) . ",";
         $data .= str_replace(",", "^", $row['DI_REF']) . ",";
         $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
-        $data .= str_replace(",", "^", $row['SLMN_CODE']) . ",";
+        $data .= str_replace(",", "^", $row['SLMN_NAME']) . ",";
 
 
         $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
