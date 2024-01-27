@@ -34,7 +34,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // $data = iconv("utf-8", "tis-620", $data);
-$data = iconv("utf-8", "windows-874", $data);
+$data = iconv("utf-8", "windows-874//IGNORE", $data);
 echo $data;
 
 exit();

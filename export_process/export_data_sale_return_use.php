@@ -103,7 +103,7 @@ for ($loop = 1; $loop <= 2; $loop++) {
 }
 
 // $data = iconv("utf-8", "tis-620", $data);
-$data = iconv("utf-8", "windows-874", $data);
+$data = iconv("utf-8", "windows-874//IGNORE", $data);
 echo $data;
 
 exit();

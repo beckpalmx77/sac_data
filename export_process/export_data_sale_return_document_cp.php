@@ -138,7 +138,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 }
 
-$data = iconv("utf-8", "tis-620", $data);
+$data = iconv("utf-8", "tis-620//IGNORE", $data);
 echo $data;
 
 exit();
