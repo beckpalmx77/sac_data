@@ -85,7 +85,6 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $data .= " " . $year . ",";
 
         $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
-        $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
         $data .= str_replace(",", "^", $row['SKU_CODE']) . ",";
         $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
 
