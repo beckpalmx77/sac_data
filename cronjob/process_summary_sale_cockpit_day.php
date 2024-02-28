@@ -95,7 +95,7 @@ for ($x = 0; $x <= 3; $x++) {
             $query->execute();
             $lastInsertId = $conn->lastInsertId();
             if ($lastInsertId) {
-                echo " | " . $str_insert . "<br>";
+                echo " | " . $str_insert . "\n\r";
             }
         } else {
             $sql_update = "UPDATE ims_product_sale_cockpit_day SET total=:total , remark=:remark               
@@ -108,7 +108,7 @@ for ($x = 0; $x <= 3; $x++) {
             $query->bindParam(':month', $month, PDO::PARAM_STR);
             $query->bindParam(':year', $year, PDO::PARAM_STR);
             $query->execute();
-            echo " | " . $str_update . "<br>";
+            echo " | " . $str_update . "\n\r";
         }
     }
 
