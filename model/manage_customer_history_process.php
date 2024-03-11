@@ -50,6 +50,7 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
     ## Read value
     $car_no = $_POST['car_no'];
     $customer_name = $_POST['customer_name'];
+    $sku_name = $_POST['sku_name'];
 
     $sql_data_select = " SELECT 
 TRANSTKD.TRD_KEY , 
@@ -57,7 +58,8 @@ ADDRBOOK.ADDB_KEY ,
 ADDRBOOK.ADDB_BRANCH , 
 ADDRBOOK.ADDB_SEARCH ,
 ADDRBOOK.ADDB_ADDB_1 , 
-ADDRBOOK.ADDB_ADDB_2 , 
+ADDRBOOK.ADDB_ADDB_2 ,
+ADDRBOOK.ADDB_ADDB_3 ,  
 ADDRBOOK.ADDB_COMPANY ,
 ADDRBOOK.ADDB_PHONE ,
 DOCINFO.DI_REF , 
@@ -87,6 +89,7 @@ SKUMASTER
 WHERE
 ADDRBOOK.ADDB_COMPANY like '%" . $customer_name . "%' AND
 ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
+SKUMASTER.SKU_NAME like '%" . $sku_name . "%' AND
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
@@ -145,6 +148,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
                 "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . $row['ADDB_PHONE'],
                 "ADDB_SEARCH" => $row['ADDB_SEARCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
+                "KM" => $row['ADDB_ADDB_3'],
                 "SKU_CODE" => $row['SKU_CODE'],
                 "SKU_NAME" => $row['SKU_NAME'],
                 "TRD_QTY" => number_format($TRD_QTY, 2),

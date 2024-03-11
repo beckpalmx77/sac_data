@@ -100,6 +100,15 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
+                                                                <div class="form-group has-success">
+                                                                    <label for="sku_name" class="control-label">ค้นหาตามสินค้า-บริการ</label>
+                                                                    <div class="">
+                                                                        <input type="text" name="sku_name"
+                                                                               class="form-control"
+                                                                               id="sku_name" value="">
+                                                                    </div>
+                                                                </div>
+
                                                                 <br>
                                                                 <div class="row">
                                                                     <div class="col-sm-12">
@@ -220,8 +229,9 @@ if (strlen($_SESSION['alogin']) == "") {
                 let sub_menu = document.getElementById("sub_menu").value;
                 let customer_name = document.getElementById("customer_name").value;
                 let car_no = document.getElementById("car_no").value;
+                let sku_name = document.getElementById("sku_name").value;
                 let url = "show_history_customer_data_detail.php?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
-                    + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
+                    + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no + '&sku_name=' + sku_name
                     + '&action=QUERY';
                 OpenPopupCenter(url, "", "");
             }

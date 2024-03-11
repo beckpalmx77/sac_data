@@ -76,6 +76,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <th>ชื่อลูกค้า</th>
                                                             <th>ทะเบียนรถ</th>
                                                             <th>ยี่ห้อรถ/รุ่น</th>
+                                                            <th>เลขไมล์</th>
                                                             <th>รหัสสินค้า</th>
                                                             <th>ชื่อสินค้า</th>
                                                             <th>จำนวน</th>
@@ -326,25 +327,25 @@ if (strlen($_SESSION['alogin']) == "") {
             $("#main_menu").html(queryString["main_menu"]);
             $("#sub_menu").html(queryString["sub_menu"]);
             $('#action').val(queryString["action"]);
-
             if (queryString["car_no"] != null && queryString["customer_name"] != null) {
 
                 $('#car_no').val(queryString["car_no"]);
                 $('#customer_name').val(queryString["customer_name"]);
 
-                Load_Data_Detail(queryString["car_no"], queryString["customer_name"]);
+                Load_Data_Detail(queryString["car_no"], queryString["customer_name"],queryString["sku_name"] );
             }
         });
     </script>
 
     <script>
-        function Load_Data_Detail(car_no, customer_name) {
+        function Load_Data_Detail(car_no, customer_name,sku_name) {
 
             let formData = {
                 action: "GET_HISTORY_DETAIL",
                 sub_action: "GET_MASTER",
                 car_no: car_no,
-                customer_name: customer_name
+                customer_name: customer_name,
+                sku_name: sku_name
             };
             let dataRecords = $('#TableHistoryCustomerDetailList').DataTable({
                 "paging": false,
@@ -378,6 +379,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     {data: 'ADDB_COMPANY'},
                     {data: 'ADDB_SEARCH'},
                     {data: 'ADDB_ADDB'},
+                    {data: 'KM'},
                     {data: 'SKU_CODE'},
                     {data: 'SKU_NAME'},
                     {data: 'TRD_QTY', className: "text-right"},
