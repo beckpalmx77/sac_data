@@ -19,7 +19,7 @@ $sql_where_ext = " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_d
 
 $sql_cmd = "";
 
-$data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
+$data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,เลขไมล์,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
 
 $sql_data_select_main = "SELECT * FROM  ADDRBOOK WHERE ADDB_COMPANY LIKE '" . $customer_name.  "'";
 
@@ -37,6 +37,7 @@ ADDRBOOK.ADDB_BRANCH ,
 ADDRBOOK.ADDB_SEARCH ,
 ADDRBOOK.ADDB_ADDB_1 , 
 ADDRBOOK.ADDB_ADDB_2 , 
+ADDRBOOK.ADDB_ADDB_3 ,
 ADDRBOOK.ADDB_COMPANY ,
 ADDRBOOK.ADDB_PHONE ,
 DOCINFO.DI_REF , 
@@ -99,6 +100,7 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE
         $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_PHONE']===null?"-":$result_sqlsvr_detail['ADDB_PHONE']) . ",";
         $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_SEARCH']) . ",";
         $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_1']) . "  " . str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_2']) . ",";
+        $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_3']) . ",";
         $data .= str_replace(",", "^", $result_sqlsvr_detail['SKU_CODE']) . ",";
         $data .= str_replace(",", "^", $result_sqlsvr_detail['SKU_NAME']) . ",";
         $data .= $TRD_QTY . ",";
