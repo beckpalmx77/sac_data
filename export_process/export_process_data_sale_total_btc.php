@@ -40,7 +40,7 @@ fclose($my_file);
 */
 
 $data = "ยอดขายของ BTC\n";
-$data .= "เลขที่เอกสาร,ชื่อลูกค้า,ประเภท,มูลค่ารวม,เดือน,ปี\n";
+$data .= "เลขที่เอกสาร,รหัสลูกค้า,ชื่อลูกค้า,ประเภท,มูลค่ารวม,เดือน,ปี\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
@@ -52,6 +52,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
             $month_name = $month_arr[$row['DI_MONTH']];
 
             $data .= str_replace(",", "^", $row['DI_REF']) . ",";
+            $data .= str_replace(",", "^", $row['AR_CODE']) . ",";
             $data .= str_replace(",", "^", $row['AR_NAME']) . ",";
             $data .= str_replace(",", "^", $row['ICCAT_NAME']) . ",";
             $data .= $row['TRD_G_KEYIN'] . ",";
