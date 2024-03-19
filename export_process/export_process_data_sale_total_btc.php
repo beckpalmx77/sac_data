@@ -29,7 +29,7 @@ if ($myCheckValue === 'Y') {
     $select_where_daily = " AND MONTH(DI_DATE) = " . $month . " AND YEAR(DI_DATE) = " . $year;
 }
 
-$String_Sql = $select_query_daily . $select_query_daily_cond .  " AND DT_DOCCODE = 'IV3' " . $select_where_daily
+$String_Sql = $select_query_daily . $select_query_daily_cond .  " AND (DT_DOCCODE = 'IV3' OR DT_DOCCODE = 'CCS7') " . $select_where_daily
     . $select_query_daily_order;
 
 
