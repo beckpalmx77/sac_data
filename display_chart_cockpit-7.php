@@ -146,7 +146,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnCustomer"
                                                                                     name="BtnCustomer"
-                                                                                    class="btn btn-primary btn-block">
+                                                                                    class="btn btn-outline-primary btn-block">
                                                                                 แสดงข้อมูลจำนวนลูกค้าที่ใช้บริการ
                                                                             </button>
                                                                         </div>
@@ -160,7 +160,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnAvg1"
                                                                                     name="BtnAvg1"
-                                                                                    class="btn btn-primary btn-block">
+                                                                                    class="btn btn-success btn-block">
                                                                                 แสดงข้อมูลค่าเฉลี่ย ราคา/ลูกค้า ยาง +
                                                                                 อะไหล่ + ค่าแรง-ค่าบริการ
                                                                             </button>
@@ -175,7 +175,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnAvg2"
                                                                                     name="BtnAvg2"
-                                                                                    class="btn btn-primary btn-block">
+                                                                                    class="btn btn-success btn-block">
                                                                                 แสดงข้อมูลค่าเฉลี่ย ราคา/ลูกค้า
                                                                                 อะไหล่ + ค่าแรง-ค่าบริการ
                                                                             </button>
@@ -190,7 +190,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnAvg11"
                                                                                     name="BtnAvg11"
-                                                                                    class="btn btn-primary btn-block">
+                                                                                    class="btn btn-success btn-block">
                                                                                 แสดงข้อมูลค่าเฉลี่ย ราคา/ลูกค้า ยาง +
                                                                                 อะไหล่ + ค่าแรง-ค่าบริการ 2
                                                                             </button>
@@ -205,7 +205,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-sm-12">
                                                                             <button type="button" id="BtnAvg21"
                                                                                     name="BtnAvg21"
-                                                                                    class="btn btn-primary btn-block">
+                                                                                    class="btn btn-success btn-block">
                                                                                 แสดงข้อมูลค่าเฉลี่ย ราคา/ลูกค้า
                                                                                 อะไหล่ + ค่าแรง-ค่าบริการ 2
                                                                             </button>
