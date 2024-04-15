@@ -250,7 +250,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
         if ($lastInsertId) {
             $insert_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " | ";
-            echo " Save OK " . $insert_data;
+            echo " Save OK " . $insert_data . "\n\r";
         } else {
             echo " Error ";
         }
