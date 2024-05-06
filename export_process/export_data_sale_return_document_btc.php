@@ -42,10 +42,11 @@ $month_arr=array(
     "12"=>"ธันวาคม"
 );
 
+/*
 $month = substr($_POST['doc_date_start'], 3, 2);
 $month_name = $month_arr[$month];
-
 $year = substr($_POST['doc_date_to'], 6, 4);
+*/
 
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
     . $query_daily_cond_ext
@@ -64,6 +65,10 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
 
     //if ($row['ICCAT_CODE']!=="6SAC08") {
+
+        $month = substr($row['DI_DATE'], 3, 2);
+        $month_name = $month_arr[$month];
+        $year = substr($row['DI_DATE'], 6, 4);
 
         $data .= " " . $row['DI_DATE'] . ",";
         $data .= " " . $month_name . ",";
