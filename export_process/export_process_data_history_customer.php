@@ -21,16 +21,8 @@ $sql_cmd = "";
 
 $data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,เลขไมล์,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
 
-$sql_data_select_main = "SELECT * FROM  ADDRBOOK WHERE ADDB_COMPANY LIKE '" . $customer_name.  "'";
 
-
-$stmt_sqlsvr = $conn_sqlsvr->prepare($sql_data_select_main);
-$stmt_sqlsvr->execute();
-
-while ($result_sqlsvr_main = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
-
-
-$sql_data_selectDetail =  " SELECT 
+$sql_data_selectDetail =  "   SELECT 
 TRANSTKD.TRD_KEY , 
 ADDRBOOK.ADDB_KEY , 
 ADDRBOOK.ADDB_BRANCH , 
@@ -46,6 +38,7 @@ DAY(DI_DATE) AS DI_DAY ,
 MONTH(DI_DATE) AS DI_MONTH ,
 YEAR(DI_DATE) AS DI_YEAR ,
 TRANSTKH.TRH_DI,
+TRANSTKH.TRH_SHIP_ADDB,
 SKUMASTER.SKU_CODE ,
 SKUMASTER.SKU_NAME ,
 TRANSTKD.TRD_QTY,
@@ -65,17 +58,17 @@ TRANSTKD ,
 SKUMASTER
  
 WHERE
-ADDRBOOK.ADDB_COMPANY ='" . $result_sqlsvr_main["ADDB_COMPANY"] . "' AND
-ADDRBOOK.ADDB_SEARCH = '" . $result_sqlsvr_main["ADDB_BRANCH"] . "' AND
-ADDRBOOK.ADDB_KEY = '" . $result_sqlsvr_main["ADDB_KEY"] . "' AND
+ADDRBOOK.ADDB_COMPANY like '%".$customer_name. "%' AND
+ADDRBOOK.ADDB_BRANCH like '%".$car_no. "%' AND
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
+TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
 (DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) ";
+(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)   ";
 
-$order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
+$order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_BRANCH , TRANSTKD.TRD_KEY , SKUMASTER.SKU_CODE  ";
 
     $sql_string = $sql_data_selectDetail . $sql_where_ext . $order_by ;
 /*
@@ -107,8 +100,6 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE
         $data .= $result_sqlsvr_detail['TRD_B_AMT'] . "\n";
 
     }
-
-}
 
 
 // $data = iconv("utf-8", "tis-620", $data);
