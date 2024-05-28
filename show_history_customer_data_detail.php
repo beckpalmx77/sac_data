@@ -377,7 +377,7 @@ if (strlen($_SESSION['alogin']) == "") {
                     {data: 'DI_REF'},
                     {data: 'DI_DATE'},
                     {data: 'ADDB_COMPANY'},
-                    {data: 'ADDB_SEARCH'},
+                    {data: 'ADDB_BRANCH'},
                     {data: 'ADDB_ADDB'},
                     {data: 'KM'},
                     {data: 'SKU_CODE'},
