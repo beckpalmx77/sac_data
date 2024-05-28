@@ -149,7 +149,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
             SELECT ADDRBOOK.ADDB_PHONE,ARADDRESS.ARA_ADDB
             FROM ARADDRESS
             LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
-            WHERE ADDRBOOK.ADDB_COMPANY LIKE '%" . $row['ADDB_COMPANY'] . "%' AND ARA_DEFAULT = 'Y' ";
+            WHERE ADDRBOOK.ADDB_COMPANY LIKE '%" . $row['ADDB_COMPANY'] . "%' AND ARADDRESS.ARA_DEFAULT = 'Y' ";
             $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
             $statement_cust_sqlsvr->execute();
             while ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
