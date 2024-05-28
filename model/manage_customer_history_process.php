@@ -161,7 +161,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
                 "DI_REF" => $row['DI_REF'],
                 "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'],
                 "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . $addb_phone,
-                "ADDB_SEARCH" => $row['ADDB_SEARCH'],
+                "ADDB_SEARCH" => $row['ADDB_SEARCH']===null?"-":$row['ADDB_SEARCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
                 "KM" => $row['ADDB_ADDB_3'],
                 "SKU_CODE" => $row['SKU_CODE'],
