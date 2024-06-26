@@ -64,14 +64,14 @@ for ($x = 0; $x <= 3; $x++) {
 
             foreach ($results as $result) {
 
-                echo $branch . " | " . $day_loop . " | " . $result['TRD_G_KEYIN'];
+                //echo $branch . " | " . $day_loop . " | " . $result['TRD_G_KEYIN'];
                 $total = $result['TRD_G_KEYIN'];
 
             }
 
         } else {
 
-            echo $branch . " | " . $day_loop . " = 0 ";
+            //echo $branch . " | " . $day_loop . " = 0 ";
             $total = "0.00";
 
         }
@@ -95,7 +95,7 @@ for ($x = 0; $x <= 3; $x++) {
             $query->execute();
             $lastInsertId = $conn->lastInsertId();
             if ($lastInsertId) {
-                echo " | " . $str_insert . "\n\r";
+                //echo " | " . $str_insert . "\n\r";
             }
         } else {
             $sql_update = "UPDATE ims_product_sale_cockpit_day SET total=:total , remark=:remark               
@@ -108,7 +108,7 @@ for ($x = 0; $x <= 3; $x++) {
             $query->bindParam(':month', $month, PDO::PARAM_STR);
             $query->bindParam(':year', $year, PDO::PARAM_STR);
             $query->execute();
-            echo " | " . $str_update . "\n\r";
+            //echo " | " . $str_update . "\n\r";
         }
     }
 

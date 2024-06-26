@@ -15,6 +15,7 @@ $stmt_month = $conn->prepare($sql_month);
 $stmt_month->execute();
 $MonthRecords = $stmt_month->fetchAll();
 foreach ($MonthRecords as $row) {
+    $month_id = $row["month_id"];
     $month_name = $row["month_name"];
 }
 
