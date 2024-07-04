@@ -113,8 +113,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 <br>
                                                                                 <div class="row">
                                                                                     <div class="col-sm-12">
-                                                                                        <button type="button" id="BtnSale" name="BtnSale" class="btn btn-primary mb-3">แสดง
-                                                                                            Chart ยอดขาย รายเดือน
+                                                                                        <button type="button" id="BtnSale" name="BtnSale" class="btn btn-success"
+                                                                                                id="btnExport"> Export <i
+                                                                                                    class="fa fa-check"></i>
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
