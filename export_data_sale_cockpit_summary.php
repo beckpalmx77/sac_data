@@ -119,16 +119,13 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <div class="col-1">
                                                                             <button type="button" id="BtnDisplay"
                                                                                     name="BtnDisplay"
-                                                                                    class="btn btn-success"> Display
-                                                                                <iclass
-                                                                                ="fa fa-check"></i>
+                                                                                    class="btn btn-primary"> Display<i class ="fa fa-check"></i>
                                                                             </button>
                                                                         </div>
                                                                         <div class="col-1">
                                                                             <button type="button" id="BtnSale"
                                                                                     name="BtnSale"
-                                                                                    class="btn btn-primary"> Export <i
-                                                                                        class="fa fa-check"></i>
+                                                                                    class="btn btn-success"> Export <i class="fa fa-check"></i>
                                                                             </button>
                                                                         </div>
                                                                     </div>
