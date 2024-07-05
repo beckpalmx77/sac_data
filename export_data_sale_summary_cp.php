@@ -45,7 +45,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="panel">
                                                     <div class="panel-body">
 
-                                                        <form id="from_data" method="post"
+                                                        <form id="myform" method="post"
                                                               action="export_process/export_data_sale_summary_process_cp.php"
                                                               enctype="multipart/form-data">
 
@@ -106,14 +106,14 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                        id="save_status"/>
                                                                 <input type="hidden" name="action" id="action"
                                                                        value=""/>
-                                                                <button type="submit" class="btn btn-success"
+                                                                <!--button type="button" class="btn btn-primary"
+                                                                        id="BtnDisplay">Display <i
+                                                                            class="fa fa-check"></i>
+                                                                </button-->
+                                                                <button type="button" class="btn btn-success"
                                                                         id="btnExport"> Export <i
                                                                             class="fa fa-check"></i>
                                                                 </button>
-                                                                <!--button type="button" class="btn btn-danger"
-                                                                        id="btnClose">Close <i
-                                                                            class="fa fa-window-close"></i>
-                                                                </button-->
                                                             </div>
 
 
@@ -214,6 +214,29 @@ if (strlen($_SESSION['alogin']) == "") {
                 autoclose: true
             });
         });
+    </script>
+
+    <script>
+
+        $("#btnExport").click(function () {
+            document.forms['myform'].action = 'export_process/export_data_sale_summary_process_cp.php';
+            document.forms['myform'].target = '';
+            document.forms['myform'].submit();
+            return true;
+        });
+
+    </script>
+
+
+    <script>
+
+        $("#BtnDisplay").click(function () {
+            document.forms['myform'].action = 'data_sale_cockpit_summary_cp.php';
+            document.forms['myform'].target = '_blank';
+            document.forms['myform'].submit();
+            return true;
+        });
+
     </script>
 
     </body>
