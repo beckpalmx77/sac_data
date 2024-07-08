@@ -89,8 +89,8 @@ ORDER BY BRANCH,DI_DATE ";
 
             foreach ($results_summary as $row_summary) {
 
-            $sql_count = "SELECT AR_CODE,DI_DATE,DI_REF,BRANCH FROM ims_product_sale_cockpit 
-                              WHERE  DI_DATE = '" . $row_summary['DI_DATE'] . "' and BRANCH = '" . $row_summary['BRANCH'] . "' GROUP BY AR_CODE,DI_DATE,DI_REF,BRANCH";
+            $sql_count = "SELECT AR_CODE FROM ims_product_sale_cockpit 
+                              WHERE  DI_DATE = '" . $row_summary['DI_DATE'] . "' and BRANCH = '" . $row_summary['BRANCH'] . "' GROUP BY AR_CODE";
             $statement_count = $conn->query($sql_count);
             $results_count = $statement_count->fetchAll(PDO::FETCH_ASSOC);
             $customer_count = 0;
