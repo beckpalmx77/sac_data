@@ -1,5 +1,6 @@
 <?php
 
+include('includes/Header.php');
 include("config/connect_db.php");
 
 $DI_MONTH = $_POST['month'];
@@ -37,11 +38,13 @@ foreach ($MonthRecords as $row) {
 
     <script src='js/util.js'></script>
 
+    <script src="js/myadmin.min.js"></script>
+
     <title>สงวนออโต้คาร์</title>
 
 </head>
 
-<body onload="">
+<body id="page-top">
 
 <p class="card">
 <div class="card-header bg-primary text-white">
@@ -72,22 +75,21 @@ foreach ($MonthRecords as $row) {
                 <th>ภาษี 7%</th>
                 <th>มูลค่ารวมภาษี</th>
             </tr>
-            </tr>
             </thead>
-            <tfoot>
-            </tfoot>
             <tbody>
             <?php
             $sql_summary = "SELECT DI_DATE,BRANCH,SUM(TRD_B_SELL) AS SUM_TRD_B_SELL,SUM(TRD_B_VAT) AS SUM_TRD_B_VAT,SUM(TRD_G_KEYIN) AS SUM_TRD_G_KEYIN 
-FROM  ims_product_sale_cockpit 
-WHERE DI_MONTH = '" . $DI_MONTH . "' AND DI_YEAR = '" . $DI_YEAR . "' AND BRANCH = '" . $BRANCH . "' 
-GROUP BY DI_DATE,BRANCH 
-ORDER BY BRANCH,DI_DATE ";
+            FROM  ims_product_sale_cockpit 
+            WHERE DI_MONTH = '" . $DI_MONTH . "' AND DI_YEAR = '" . $DI_YEAR . "' AND BRANCH = '" . $BRANCH . "' 
+            GROUP BY DI_DATE,BRANCH 
+            ORDER BY BRANCH,DI_DATE ";
 
             $statement_summary = $conn->query($sql_summary);
             $results_summary = $statement_summary->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($results_summary as $row_summary) {
+            foreach ($results_summary
+
+            as $row_summary) {
 
             $sql_count = "SELECT AR_CODE FROM ims_product_sale_cockpit 
                               WHERE  DI_DATE = '" . $row_summary['DI_DATE'] . "' and BRANCH = '" . $row_summary['BRANCH'] . "' GROUP BY AR_CODE";
@@ -115,16 +117,26 @@ ORDER BY BRANCH,DI_DATE ";
                             class="number"><?php echo htmlentities(number_format($row_summary['SUM_TRD_G_KEYIN'], 2)); ?></p>
                 </td>
                 <?php } ?>
-
+            </tr>
             </tbody>
         </table>
     </div>
 </div>
 
-</tbody>
-</table>
-</div>
-</div>
+<?php
+include('includes/Modal-Logout.php');
+include('includes/Footer.php');
+?>
+
+<!-- Scroll to top -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="js/myadmin.min.js"></script>
 
 
 </body>
