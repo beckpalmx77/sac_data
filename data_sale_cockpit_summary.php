@@ -67,6 +67,7 @@ foreach ($MonthRecords as $row) {
             <tr>
                 <th>วันที่</th>
                 <th>สาขา</th>
+                <th>จำนวนลูกค้า</th>
                 <th>มูลค่ารวม</th>
                 <th>ภาษี 7%</th>
                 <th>มูลค่ารวมภาษี</th>
@@ -86,11 +87,24 @@ ORDER BY BRANCH,DI_DATE ";
             $statement_summary = $conn->query($sql_summary);
             $results_summary = $statement_summary->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($results_summary as $row_summary) { ?>
+            foreach ($results_summary as $row_summary) {
+
+            $sql_count = "SELECT AR_CODE,DI_DATE,DI_REF,BRANCH FROM ims_product_sale_cockpit 
+                              WHERE  DI_DATE = '" . $row_summary['DI_DATE'] . "' and BRANCH = '" . $row_summary['BRANCH'] . "' GROUP BY AR_CODE,DI_DATE,DI_REF,BRANCH";
+            $statement_count = $conn->query($sql_count);
+            $results_count = $statement_count->fetchAll(PDO::FETCH_ASSOC);
+            $customer_count = 0;
+            foreach ($results_count as $row_count) {
+                $customer_count++;
+            }
+            ?>
 
             <tr>
                 <td><?php echo htmlentities($row_summary['DI_DATE']); ?></td>
                 <td><?php echo htmlentities($row_summary['BRANCH']); ?></td>
+                <td align="right"><p
+                            class="number"><?php echo htmlentities($customer_count); ?></p>
+                </td>
                 <td align="right"><p
                             class="number"><?php echo htmlentities(number_format($row_summary['SUM_TRD_B_SELL'], 2)); ?></p>
                 </td>
