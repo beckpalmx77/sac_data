@@ -19,11 +19,12 @@ $BranchRecords = $stmt_branch->fetchAll();
 foreach ($BranchRecords as $rows) {
     $branch_name = $rows["branch_name"];
 }
-
-//$myfile = fopen("param_post.txt", "w") or die("Unable to open file!");
-//fwrite($myfile, $_POST["month"] . "| month_name " . $month_name . "| branch = " . $_POST["branch"] . "| Branch Name = "
-//    . $branch_name . " | " . $sql_month . " | " . $sql_branch);
-//fclose($myfile);
+/*
+$myfile = fopen("CP-param_post.txt", "w") or die("Unable to open file!");
+fwrite($myfile, $_POST["month"] . "| month_name " . $month_name . "| branch = " . $_POST["branch"] . "| Branch Name = "
+    . $branch_name . " | " . $sql_month . " | " . $sql_branch);
+fclose($myfile);
+*/
 
 ?>
 <!DOCTYPE html>
