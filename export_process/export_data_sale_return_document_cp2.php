@@ -1,8 +1,10 @@
 <?php
 date_default_timezone_set('Asia/Bangkok');
 
+$product_cat = $_POST["product_cat"];
 $branch = $_POST["branch"];
 $sql_find_tel = "";
+$query_cat = "";
 $filename = $branch . "-" . "Data_Sale_Daily-" . date('m/d/Y H:i:s', time()) . ".csv";
 
 @header('Content-type: text/csv; charset=UTF-8');
@@ -57,8 +59,12 @@ $month_name = $month_arr[$month];
 $year = substr($_POST['doc_date_to'], 6, 4);
 */
 
+if ($product_cat!=='-') {
+    $query_cat = " AND ICCAT_CODE = '" . $product_cat . "' ";
+}
+
 $String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
-    . $query_daily_cond_ext
+    . $query_daily_cond_ext . $query_cat
     . $select_query_daily_order;
 
 //$my_file = fopen("D-CP.txt", "w") or die("Unable to open file!");
