@@ -227,7 +227,7 @@ if (strlen($_SESSION['alogin']) == "") {
         });
     </script>
 
-    <script>
+    <!--script>
         $(document).ready(function () {
             $('#product_cat').select2({
                 placeholder: "-- กรุณาเลือกประเภทสินค้า --",
@@ -249,6 +249,51 @@ if (strlen($_SESSION['alogin']) == "") {
                     },
                     cache: true
                 }
+            });
+        });
+    </script-->
+
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2
+            $('#product_cat').select2({
+                placeholder: "-- กรุณาเลือกประเภทสินค้า --",
+                allowClear: true,
+                ajax: {
+                    url: 'model/get_product_categories.php', // ไฟล์ PHP สำหรับดึงข้อมูล
+                    type: 'POST',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term // ส่งคำค้นหาไปยัง server
+                        };
+                    },
+                    processResults: function (data) {
+                        let options = [
+                            {
+                                id: "-",
+                                text: "-- กรุณาเลือกประเภทสินค้า --"
+                            }
+                        ]; // เพิ่มตัวเลือก "-- กรุณาเลือกประเภทสินค้า --" เป็นค่าแรก
+                        return {
+                            results: options.concat(
+                                $.map(data, function (item) {
+                                    return {
+                                        id: item.ICCAT_CODE, // ค่าที่ส่งกลับ
+                                        text: item.ICCAT_NAME // ข้อความที่จะแสดง
+                                    };
+                                })
+                            )
+                        };
+                    },
+                    cache: true
+                }
+            });
+
+            // Reset to default option when user clears the selection
+            $('#product_cat').on('select2:clear', function () {
+                $('#product_cat').val('-').trigger('change');
             });
         });
     </script>
