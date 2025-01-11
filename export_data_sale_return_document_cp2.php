@@ -87,7 +87,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         <label for="product_cat" class="control-label">ประเภทสินค้า</label>
                                                                         <select id="product_cat" name="product_cat"
                                                                                 class="form-control select2">
-                                                                            <option value="-">-- กรุณาเลือกประเภทสินค้า
+                                                                            <option value="-">-- เลือกทุกประเภท
                                                                                 --
                                                                             </option>
                                                                         </select>
@@ -257,7 +257,7 @@ if (strlen($_SESSION['alogin']) == "") {
         $(document).ready(function () {
             // Initialize Select2
             $('#product_cat').select2({
-                placeholder: "-- กรุณาเลือกประเภทสินค้า --",
+                placeholder: "-- เลือกทุกประเภท --",
                 allowClear: true,
                 ajax: {
                     url: 'model/get_product_categories.php', // ไฟล์ PHP สำหรับดึงข้อมูล
@@ -273,7 +273,7 @@ if (strlen($_SESSION['alogin']) == "") {
                         let options = [
                             {
                                 id: "-",
-                                text: "-- กรุณาเลือกประเภทสินค้า --"
+                                text: "-- เลือกทุกประเภท --"
                             }
                         ]; // เพิ่มตัวเลือก "-- กรุณาเลือกประเภทสินค้า --" เป็นค่าแรก
                         return {
