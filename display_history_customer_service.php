@@ -210,7 +210,6 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </script>
 
-
     <script>
 
         function Onchange_AR_CODE() {
