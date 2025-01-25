@@ -78,7 +78,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                             <div class="col-md-12 col-md-offset-2">
                                                 <div class="panel">
                                                     <div class="panel-body">
-                                                        <form id="myform" name="myform" action="" enctype="multipart/form-data">
+                                                        <form id="myform" name="myform" action=""
+                                                              enctype="multipart/form-data">
                                                             <div class="row">
                                                                 <br>
                                                                 <div class="col-sm-12">
@@ -103,8 +104,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <br>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
-                                                                            <button type="button" id="BtnSale"
-                                                                                    name="BtnSale"
+                                                                            <button type="button" id="BtnDisplay"
+                                                                                    name="BtnDisplay"
                                                                                     class="btn btn-primary mb-3">ค้นหา
                                                                             </button>
                                                                         </div>
@@ -221,7 +222,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
     <script>
 
-        $("#BtnSale").click(function () {
+        $("#BtnDisplay").click(function () {
 
             if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
                 alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
@@ -233,8 +234,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 let url = "show_history_customer_service_data_detail?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
                     + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
                     + '&action=QUERY';
-                window.open(url,'_blank');
-                //OpenPopupCenter(url, "", "");
+                window.open(url, '_blank');
             }
 
         });
