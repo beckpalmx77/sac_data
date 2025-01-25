@@ -50,7 +50,6 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
     ## Read value
     $car_no = $_POST['car_no'];
     $customer_name = $_POST['customer_name'];
-    $sku_name = $_POST['sku_name'];
 
     $addb_phone = "";
 
@@ -92,7 +91,6 @@ SKUMASTER
 WHERE
 ADDRBOOK.ADDB_COMPANY like '%" . $customer_name . "%' AND
 ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
-SKUMASTER.SKU_NAME like '%" . $sku_name . "%' AND
 TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
