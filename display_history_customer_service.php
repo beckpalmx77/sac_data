@@ -233,7 +233,8 @@ if (strlen($_SESSION['alogin']) == "") {
                 let url = "show_history_customer_service_data_detail?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
                     + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
                     + '&action=QUERY';
-                OpenPopupCenter(url, "", "");
+                window.open(url,'_blank');
+                //OpenPopupCenter(url, "", "");
             }
 
         });
