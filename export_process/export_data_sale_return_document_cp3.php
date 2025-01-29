@@ -71,7 +71,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // ตรวจสอบว่าไฟล์ถูกสร้างขึ้นหรือไม่
-file_put_contents("test.csv", $data);
+//file_put_contents("test.csv", $data);
 echo "\xEF\xBB\xBF"; // BOM UTF-8
 echo $data;
 
