@@ -63,7 +63,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     WHERE ARFILE.AR_NAME = :company;
 ";
     $statement_cust_sqlsvr2 = $conn_sqlsvr->prepare($sql_cust_string2);
-    $statement_cust_sqlsvr2->bindValue(':company',  $row['ADDB_COMPANY'] , PDO::PARAM_STR);
+    $statement_cust_sqlsvr2->bindValue(':company', $row['ADDB_COMPANY'], PDO::PARAM_STR);
     $statement_cust_sqlsvr2->execute();
 
     $AR_CODE = "";

@@ -156,7 +156,7 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
             $sql_cust_string2 = " SELECT TOP 1 ARFILE.AR_CODE FROM ARFILE WHERE ARFILE.AR_NAME = :company; ";
             $statement_cust_sqlsvr2 = $conn_sqlsvr->prepare($sql_cust_string2);
-            $statement_cust_sqlsvr2->bindValue(':company',  $row['ADDB_COMPANY'] , PDO::PARAM_STR);
+            $statement_cust_sqlsvr2->bindValue(':company', $row['ADDB_COMPANY'], PDO::PARAM_STR);
             $statement_cust_sqlsvr2->execute();
 
             $AR_CODE = "";
@@ -168,8 +168,8 @@ ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
                 "line_no" => $line_no,
                 "DI_REF" => $row['DI_REF'],
                 "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'],
-                "ADDB_COMPANY" => $AR_CODE. ":" . $row['ADDB_COMPANY'] . "  " . $addb_phone,
-                "ADDB_BRANCH" => $row['ADDB_BRANCH']===null?"-":$row['ADDB_BRANCH'],
+                "ADDB_COMPANY" => $AR_CODE . ":" . $row['ADDB_COMPANY'] . "  " . $addb_phone,
+                "ADDB_BRANCH" => $row['ADDB_BRANCH'] === null ? "-" : $row['ADDB_BRANCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
                 "KM" => $row['ADDB_ADDB_3'],
                 "SKU_CODE" => $row['SKU_CODE'],

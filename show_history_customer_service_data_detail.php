@@ -332,13 +332,13 @@ if (strlen($_SESSION['alogin']) == "") {
                 $('#car_no').val(queryString["car_no"]);
                 $('#customer_name').val(queryString["customer_name"]);
 
-                Load_Data_Detail(queryString["car_no"], queryString["customer_name"],queryString["sku_name"] );
+                Load_Data_Detail(queryString["car_no"], queryString["customer_name"], queryString["sku_name"]);
             }
         });
     </script>
 
     <script>
-        function Load_Data_Detail(car_no, customer_name,sku_name) {
+        function Load_Data_Detail(car_no, customer_name, sku_name) {
 
             let formData = {
                 action: "GET_HISTORY_DETAIL",
