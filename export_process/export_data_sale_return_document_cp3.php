@@ -54,16 +54,23 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     $addb_phone = "";
     if ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
-        $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'];
+        $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] === null ? "" : $result_sqlsvr_cust['ADDB_PHONE'];
     }
+
+    $ADDB_COMPANY = $row['ADDB_COMPANY'] === null ? "" : $row['ADDB_COMPANY'];
+    $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] === null ? "" : $result_sqlsvr_cust['ADDB_PHONE'];
+    $ADDB_ADDB_1 = $row['ADDB_ADDB_1'] === null ? "" : $row['ADDB_ADDB_1'];
+    $ADDB_ADDB_2 = $row['ADDB_ADDB_2'] === null ? "" : $row['ADDB_ADDB_2'];
+    $ADDB_ADDB_3 = $row['ADDB_ADDB_3'] === null ? "" : $row['ADDB_ADDB_3'];
+    $ADDB_BRANCH = $row['ADDB_BRANCH'] === null ? "" : $row['ADDB_BRANCH'];
 
     $data .= "$line,{$row['DI_DAY']},$month_name,$year,";
     $data .= str_replace(",", " ", $row['DI_REF']) . ",";
-    $data .= str_replace(",", " ", $row['ADDB_COMPANY']) . ",";
+    $data .= str_replace(",", " ", $ADDB_COMPANY) . ",";
     $data .= str_replace(",", " ", $addb_phone) . ",";
-    $data .= str_replace(",", " ", $row['ADDB_BRANCH']) . ",";
-    $data .= str_replace(",", " ", $row['ADDB_ADDB_1'] . " " . $row['ADDB_ADDB_2']) . ",";
-    $data .= str_replace(",", " ", $row['ADDB_ADDB_3']) . ",";
+    $data .= str_replace(",", " ", $ADDB_BRANCH) . ",";
+    $data .= str_replace(",", " ", $ADDB_ADDB_1 . " " . $ADDB_ADDB_2) . ",";
+    $data .= str_replace(",", " ", $ADDB_ADDB_3) . ",";
     $data .= str_replace(",", " ", $row['SKU_CODE']) . ",";
     $data .= str_replace(",", " ", $row['SKU_NAME']) . ",";
     $data .= str_replace(",", " ", $TRD_QTY) . ",";
