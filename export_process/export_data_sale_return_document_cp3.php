@@ -71,12 +71,14 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         $AR_CODE = $result_sqlsvr_cust2['AR_CODE'] === null ? "" : $result_sqlsvr_cust2['AR_CODE'];
     }
 
+    
     $ADDB_COMPANY = $row['ADDB_COMPANY'] === null ? "" : $row['ADDB_COMPANY'];
     $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] === null ? "" : $result_sqlsvr_cust['ADDB_PHONE'];
     $ADDB_ADDB_1 = $row['ADDB_ADDB_1'] === null ? "" : $row['ADDB_ADDB_1'];
     $ADDB_ADDB_2 = $row['ADDB_ADDB_2'] === null ? "" : $row['ADDB_ADDB_2'];
     $ADDB_ADDB_3 = $row['ADDB_ADDB_3'] === null ? "" : $row['ADDB_ADDB_3'];
     $ADDB_BRANCH = $row['ADDB_BRANCH'] === null ? "" : $row['ADDB_BRANCH'];
+
 
     $data .= "$line,{$row['DI_DAY']},$month_name,$year,";
     $data .= str_replace(",", " ", $row['DI_REF']) . ",";
