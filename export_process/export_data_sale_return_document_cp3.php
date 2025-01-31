@@ -12,12 +12,7 @@ header("Content-Disposition: attachment; filename=$filename");
 // เชื่อมต่อฐานข้อมูล
 include('../config/connect_sqlserver.php');
 include('../cond_file/query_customer_history_service.php');
-
-$month_arr = [
-    "1" => "มกราคม", "2" => "กุมภาพันธ์", "3" => "มีนาคม", "4" => "เมษายน",
-    "5" => "พฤษภาคม", "6" => "มิถุนายน", "7" => "กรกฎาคม", "8" => "สิงหาคม",
-    "9" => "กันยายน", "10" => "ตุลาคม", "11" => "พฤศจิกายน", "12" => "ธันวาคม"
-];
+include('../util/month_util.php');
 
 // ใช้ bindParam เพื่อความปลอดภัย
 $sql_and = " AND ADDRBOOK.ADDB_COMPANY LIKE :customer_name AND ADDRBOOK.ADDB_SEARCH LIKE :car_no ";
