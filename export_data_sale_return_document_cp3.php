@@ -91,7 +91,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        class="control-label">จากวันที่</label>
                                                 <i class="fa fa-calendar"
                                                    aria-hidden="true"></i>
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control datepicker"
                                                        id="doc_date_start"
                                                        name="doc_date_start"
                                                        required="required"
@@ -104,7 +104,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        class="control-label">ถึงวันที่</label>
                                                 <i class="fa fa-calendar"
                                                    aria-hidden="true"></i>
-                                                <input type="text" class="form-control"
+                                                <input type="text" class="form-control datepicker"
                                                        id="doc_date_to"
                                                        name="doc_date_to"
                                                        required="required"
@@ -144,16 +144,16 @@ if (strlen($_SESSION['alogin']) == "") {
 <script src="vendor/select2/dist/js/select2.min.js"></script>
 <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
 
-<script>
+<!--script>
     $(document).ready(function () {
         let today = new Date();
         let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
         $('#doc_date_start').val(doc_date);
         $('#doc_date_to').val(doc_date);
     });
-</script>
+</script-->
 
-<script>
+<!--script>
     $(document).ready(function () {
         $('#doc_date_start').datepicker({
             format: "dd-mm-yyyy",
@@ -173,7 +173,36 @@ if (strlen($_SESSION['alogin']) == "") {
             autoclose: true
         });
     });
+</script-->
+
+<script>
+    $(document).ready(function () {
+        function formatDate(date) {
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        let today = new Date();
+        let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+        // กำหนดค่าให้ฟิลด์วันที่
+        $('#doc_date_start').val(formatDate(firstDayOfMonth)); // วันที่ 1 ของเดือนปัจจุบัน
+        $('#doc_date_to').val(formatDate(today)); // วันที่ปัจจุบัน
+
+        // เปิดใช้งาน datepicker
+        $('.datepicker').datepicker({
+            format: "dd-mm-yyyy",
+            todayHighlight: true,
+            language: "th",
+            autoclose: true,
+            todayBtn: true
+        });
+    });
 </script>
+
+
 
 </body>
 </html>
