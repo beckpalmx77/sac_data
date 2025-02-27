@@ -52,18 +52,76 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <form id="from_data" method="post"
                                       action="export_process/export_data_sale_return_document_cp3.php"
                                       enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <label for="customer_name">ค้นหาตามชื่อลูกค้า</label>
-                                        <input type="text" name="customer_name" id="customer_name" class="form-control">
+
+                                    <div class="modal-body">
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label for="customer_name"
+                                                       class="control-label">ค้นหาตามชื่อลูกค้า</label>
+                                                <i class="fa fa-address-card"
+                                                   aria-hidden="true"></i>
+                                                <input type="text" class="form-control"
+                                                       id="customer_name"
+                                                       name="customer_name"
+                                                       placeholder="">
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <label for="car_no"
+                                                       class="control-label">ค้นหาตามทะเบียนรถยนต์</label>
+                                                <i class="fa fa-car"
+                                                   aria-hidden="true"></i>
+                                                <input type="text" class="form-control"
+                                                       id="car_no"
+                                                       name="car_no"
+                                                       placeholder="">
+                                            </div>
+
+                                        </div>
+
                                     </div>
-                                    <div class="form-group">
-                                        <label for="car_no">ค้นหาตามทะเบียนรถยนต์</label>
-                                        <input type="text" name="car_no" id="car_no" class="form-control">
+
+
+                                    <div class="modal-body">
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label for="doc_date_start"
+                                                       class="control-label">จากวันที่</label>
+                                                <i class="fa fa-calendar"
+                                                   aria-hidden="true"></i>
+                                                <input type="text" class="form-control"
+                                                       id="doc_date_start"
+                                                       name="doc_date_start"
+                                                       required="required"
+                                                       readonly="true"
+                                                       placeholder="จากวันที่">
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <label for="doc_date_to"
+                                                       class="control-label">ถึงวันที่</label>
+                                                <i class="fa fa-calendar"
+                                                   aria-hidden="true"></i>
+                                                <input type="text" class="form-control"
+                                                       id="doc_date_to"
+                                                       name="doc_date_to"
+                                                       required="required"
+                                                       readonly="true"
+                                                       placeholder="ถึงวันที่">
+                                            </div>
+
+
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success"
+                                                id="btnExport"> Export <i
+                                                    class="fa fa-check"></i>
+                                        </button>
+
                                     </div>
-                                    <button type="submit" class="btn btn-success"
-                                            id="btnExport"> Export <i
-                                                class="fa fa-check"></i>
-                                    </button>
+
                                 </form>
                             </div>
                         </div>
@@ -85,30 +143,37 @@ if (strlen($_SESSION['alogin']) == "") {
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/select2/dist/js/select2.min.js"></script>
 <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
-<!--script>
+
+<script>
     $(document).ready(function () {
-        $("#BtnExport").click(function () {
-            const customer_name = $("#customer_name").val();
-            const car_no = $("#car_no").val();
-            $.ajax({
-                url: "export_process/export_data_sale_return_document_cp3.php",
-                type: "POST",
-                data: { customer_name: customer_name, car_no: car_no },
-                beforeSend: function () {
-                    $("#BtnExport").text("Exporting...").prop("disabled", true);
-                },
-                success: function (response) {
-                    alert("Export Success: " + response);
-                },
-                error: function (xhr, status, error) {
-                    alert("Error: " + error);
-                },
-                complete: function () {
-                    $("#BtnExport").text("Export").prop("disabled", false);
-                }
-            });
+        let today = new Date();
+        let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
+        $('#doc_date_start').val(doc_date);
+        $('#doc_date_to').val(doc_date);
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#doc_date_start').datepicker({
+            format: "dd-mm-yyyy",
+            todayHighlight: true,
+            language: "th",
+            autoclose: true
         });
     });
-</script-->
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#doc_date_to').datepicker({
+            format: "dd-mm-yyyy",
+            todayHighlight: true,
+            language: "th",
+            autoclose: true
+        });
+    });
+</script>
+
 </body>
 </html>
