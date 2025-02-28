@@ -112,9 +112,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        placeholder="ถึงวันที่">
                                             </div>
 
-
                                         </div>
-
+                                    </div>
+                                    <div class="modal-body">
                                         <button type="submit" class="btn btn-success"
                                                 id="btnExport"> Export <i
                                                     class="fa fa-check"></i>
@@ -201,7 +201,6 @@ if (strlen($_SESSION['alogin']) == "") {
         });
     });
 </script>
-
 
 
 </body>

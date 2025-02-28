@@ -240,6 +240,33 @@ if (strlen($_SESSION['alogin']) == "") {
 
     </script>
 
+    <script>
+        $(document).ready(function () {
+            function formatDate(date) {
+                let day = String(date.getDate()).padStart(2, '0');
+                let month = String(date.getMonth() + 1).padStart(2, '0');
+                let year = date.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+
+            let today = new Date();
+            let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+            // กำหนดค่าให้ฟิลด์วันที่
+            $('#doc_date_start').val(formatDate(firstDayOfMonth)); // วันที่ 1 ของเดือนปัจจุบัน
+            $('#doc_date_to').val(formatDate(today)); // วันที่ปัจจุบัน
+
+            // เปิดใช้งาน datepicker
+            $('.datepicker').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true,
+                todayBtn: true
+            });
+        });
+    </script>
+
     </body>
 
     </html>
