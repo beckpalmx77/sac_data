@@ -14,26 +14,36 @@ include('../util/month_util.php');
 
 $customer_name = $_POST["customer_name"] ?? '';
 $car_no = $_POST["car_no"] ?? '';
+$date_option = $_POST['date_option'] ?? '';
 $doc_date_start = $_POST['doc_date_start'] ?? '';
 $doc_date_to = $_POST['doc_date_to'] ?? '';
 
-if (!empty($doc_date_start)) {
-    $doc_date_start = substr($doc_date_start, 6, 4) . "/" . substr($doc_date_start, 3, 2) . "/" . substr($doc_date_start, 0, 2);
-}
-if (!empty($doc_date_to)) {
-    $doc_date_to = substr($doc_date_to, 6, 4) . "/" . substr($doc_date_to, 3, 2) . "/" . substr($doc_date_to, 0, 2);
+$where_date = "";
+
+if ($date_option === 'range') {
+    if (!empty($doc_date_start)) {
+        $doc_date_start = substr($doc_date_start, 6, 4) . "/" . substr($doc_date_start, 3, 2) . "/" . substr($doc_date_start, 0, 2);
+    }
+    if (!empty($doc_date_to)) {
+        $doc_date_to = substr($doc_date_to, 6, 4) . "/" . substr($doc_date_to, 3, 2) . "/" . substr($doc_date_to, 0, 2);
+    }
+    if (!empty($doc_date_start) && !empty($doc_date_to)) {
+        $where_date = " AND DI_DATE BETWEEN :doc_date_start AND :doc_date_to ";
+    }
 }
 
 // ใช้ bindParam เพื่อความปลอดภัย
 $sql_and = " AND ADDRBOOK.ADDB_COMPANY LIKE :customer_name AND ADDRBOOK.ADDB_SEARCH LIKE :car_no ";
-$where_date = " AND DI_DATE BETWEEN :doc_date_start AND :doc_date_to ";
+
 $String_Sql = $str_sql_comm . $sql_and . $where_date . $str_sql_order;
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->bindValue(':customer_name', '%' . $customer_name . '%', PDO::PARAM_STR);
 $query->bindValue(':car_no', '%' . $car_no . '%', PDO::PARAM_STR);
-$query->bindValue(':doc_date_start', $doc_date_start, PDO::PARAM_STR);
-$query->bindValue(':doc_date_to', $doc_date_to, PDO::PARAM_STR);
+if ($date_option === 'range' && !empty($doc_date_start) && !empty($doc_date_to)) {
+    $query->bindValue(':doc_date_start', $doc_date_start, PDO::PARAM_STR);
+    $query->bindValue(':doc_date_to', $doc_date_to, PDO::PARAM_STR);
+}
 $query->execute();
 
 

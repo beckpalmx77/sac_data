@@ -82,6 +82,25 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                     </div>
 
+                                    <div class="modal-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label>ช่วงเวลา</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="date_option" id="all_time" value="all" checked>
+                                                    <label class="form-check-label" for="all_time">
+                                                        ทุกช่วงเวลา
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="date_option" id="select_range" value="range">
+                                                    <label class="form-check-label" for="select_range">
+                                                        เลือกตามช่วงวันที่
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="modal-body">
 
@@ -96,7 +115,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        name="doc_date_start"
                                                        required="required"
                                                        readonly="true"
-                                                       placeholder="จากวันที่">
+                                                       placeholder="">
                                             </div>
 
                                             <div class="col-sm-3">
@@ -109,7 +128,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        name="doc_date_to"
                                                        required="required"
                                                        readonly="true"
-                                                       placeholder="ถึงวันที่">
+                                                       placeholder="">
                                             </div>
 
                                         </div>
@@ -144,37 +163,6 @@ if (strlen($_SESSION['alogin']) == "") {
 <script src="vendor/select2/dist/js/select2.min.js"></script>
 <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
 
-<!--script>
-    $(document).ready(function () {
-        let today = new Date();
-        let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
-        $('#doc_date_start').val(doc_date);
-        $('#doc_date_to').val(doc_date);
-    });
-</script-->
-
-<!--script>
-    $(document).ready(function () {
-        $('#doc_date_start').datepicker({
-            format: "dd-mm-yyyy",
-            todayHighlight: true,
-            language: "th",
-            autoclose: true
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('#doc_date_to').datepicker({
-            format: "dd-mm-yyyy",
-            todayHighlight: true,
-            language: "th",
-            autoclose: true
-        });
-    });
-</script-->
-
 <script>
     $(document).ready(function () {
         function formatDate(date) {
@@ -184,12 +172,20 @@ if (strlen($_SESSION['alogin']) == "") {
             return `${day}-${month}-${year}`;
         }
 
-        let today = new Date();
-        let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        function getDefaultDates() {
+            let today = new Date();
+            let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            return {
+                start: formatDate(firstDayOfMonth),
+                end: formatDate(today)
+            };
+        }
 
-        // กำหนดค่าให้ฟิลด์วันที่
-        $('#doc_date_start').val(formatDate(firstDayOfMonth)); // วันที่ 1 ของเดือนปัจจุบัน
-        $('#doc_date_to').val(formatDate(today)); // วันที่ปัจจุบัน
+        let defaultDates = getDefaultDates();
+
+        // ตั้งค่าวันที่เริ่มต้น
+        $('#doc_date_start').val(defaultDates.start);
+        $('#doc_date_to').val(defaultDates.end);
 
         // เปิดใช้งาน datepicker
         $('.datepicker').datepicker({
@@ -199,9 +195,27 @@ if (strlen($_SESSION['alogin']) == "") {
             autoclose: true,
             todayBtn: true
         });
+
+        function toggleDateInputs() {
+            if ($("#all_time").is(":checked")) {
+                $("#doc_date_start, #doc_date_to").prop("disabled", true).val("");
+            } else {
+                $("#doc_date_start, #doc_date_to").prop("disabled", false);
+                // ตั้งค่ากลับไปเป็นวันที่ 1 ของเดือนปัจจุบันและวันที่ปัจจุบัน
+                $('#doc_date_start').val(defaultDates.start);
+                $('#doc_date_to').val(defaultDates.end);
+            }
+        }
+
+        // เรียกใช้งานเมื่อโหลดหน้าเว็บ
+        toggleDateInputs();
+
+        // ตรวจจับการเปลี่ยนค่า radio button
+        $("input[name='date_option']").change(function () {
+            toggleDateInputs();
+        });
     });
 </script>
-
 
 </body>
 </html>

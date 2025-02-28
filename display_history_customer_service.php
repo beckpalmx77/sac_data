@@ -82,6 +82,25 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                     </div>
 
+                                    <div class="modal-body">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">
+                                                <label>ช่วงเวลา</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="date_option" id="all_time" value="all" checked>
+                                                    <label class="form-check-label" for="all_time">
+                                                        ทุกช่วงเวลา
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="date_option" id="select_range" value="range">
+                                                    <label class="form-check-label" for="select_range">
+                                                        เลือกตามช่วงวันที่
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="modal-body">
 
@@ -96,7 +115,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        name="doc_date_start"
                                                        required="required"
                                                        readonly="true"
-                                                       placeholder="จากวันที่">
+                                                       placeholder="">
                                             </div>
 
                                             <div class="col-sm-3">
@@ -109,7 +128,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        name="doc_date_to"
                                                        required="required"
                                                        readonly="true"
-                                                       placeholder="ถึงวันที่">
+                                                       placeholder="">
                                             </div>
 
                                         </div>
@@ -182,66 +201,24 @@ if (strlen($_SESSION['alogin']) == "") {
 
 <script>
     $(document).ready(function () {
-        function formatDate(date) {
-            let day = String(date.getDate()).padStart(2, '0');
-            let month = String(date.getMonth() + 1).padStart(2, '0');
-            let year = date.getFullYear();
-            return `${day}-${month}-${year}`;
-        }
-
-        let today = new Date();
-        let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-
-        // กำหนดค่าให้ฟิลด์วันที่
-        $('#doc_date_start').val(formatDate(firstDayOfMonth)); // วันที่ 1 ของเดือนปัจจุบัน
-        $('#doc_date_to').val(formatDate(today)); // วันที่ปัจจุบัน
-
-        // เปิดใช้งาน datepicker
-        $('.datepicker').datepicker({
-            format: "dd-mm-yyyy",
-            todayHighlight: true,
-            language: "th",
-            autoclose: true,
-            todayBtn: true
-        });
-    });
-</script>
-
-<!--script>
-
-    $("#BtnDisplay").click(function () {
-
-        if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
-            alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
-        } else {
-            let main_menu = document.getElementById("main_menu").value;
-            let sub_menu = document.getElementById("sub_menu").value;
-            let customer_name = document.getElementById("customer_name").value;
-            let car_no = document.getElementById("car_no").value;
-            let doc_date_start = document.getElementById("doc_date_start").value;
-            let doc_date_to = document.getElementById("doc_date_to").value;
-            let url = "show_history_customer_service_data_detail?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
-                + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no
-                + '&doc_date_start=' + doc_date_start + '&doc_date_to=' + doc_date_to
-                + '&action=QUERY';
-            window.open(url, '_blank');
-        }
-
-    });
-
-</script-->
-
-<script>
-    $(document).ready(function () {
         $("#BtnDisplay").click(function () {
             let customer_name = $("#customer_name").val().trim();
             let car_no = $("#car_no").val().trim();
             let doc_date_start = $("#doc_date_start").val().trim();
             let doc_date_to = $("#doc_date_to").val().trim();
+            let date_option = $("input[name='date_option']:checked").val();
+
+            //alert(date_option);
 
             // ตรวจสอบว่าอย่างน้อยต้องกรอกค่าหนึ่งช่อง
             if (customer_name === "" && car_no === "") {
                 alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
+                return;
+            }
+
+            // ตรวจสอบว่าถ้าเลือกช่วงวันที่ ต้องมีค่าทั้งสองช่อง
+            if (date_option === "range" && (doc_date_start === "" || doc_date_to === "")) {
+                alert("กรุณาเลือกช่วงวันที่ให้ครบถ้วน");
                 return;
             }
 
@@ -253,6 +230,7 @@ if (strlen($_SESSION['alogin']) == "") {
                 + '&sub_menu=' + encodeURIComponent(sub_menu)
                 + '&customer_name=' + encodeURIComponent(customer_name)
                 + '&car_no=' + encodeURIComponent(car_no)
+                + '&date_option=' + encodeURIComponent(date_option)
                 + '&doc_date_start=' + encodeURIComponent(doc_date_start)
                 + '&doc_date_to=' + encodeURIComponent(doc_date_to)
                 + '&action=QUERY';
@@ -261,6 +239,60 @@ if (strlen($_SESSION['alogin']) == "") {
         });
     });
 
+</script>
+
+<script>
+    $(document).ready(function () {
+        function formatDate(date) {
+            let day = String(date.getDate()).padStart(2, '0');
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+
+        function getDefaultDates() {
+            let today = new Date();
+            let firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            return {
+                start: formatDate(firstDayOfMonth),
+                end: formatDate(today)
+            };
+        }
+
+        let defaultDates = getDefaultDates();
+
+        // ตั้งค่าวันที่เริ่มต้น
+        $('#doc_date_start').val(defaultDates.start);
+        $('#doc_date_to').val(defaultDates.end);
+
+        // เปิดใช้งาน datepicker
+        $('.datepicker').datepicker({
+            format: "dd-mm-yyyy",
+            todayHighlight: true,
+            language: "th",
+            autoclose: true,
+            todayBtn: true
+        });
+
+        function toggleDateInputs() {
+            if ($("#all_time").is(":checked")) {
+                $("#doc_date_start, #doc_date_to").prop("disabled", true).val("");
+            } else {
+                $("#doc_date_start, #doc_date_to").prop("disabled", false);
+                // ตั้งค่ากลับไปเป็นวันที่ 1 ของเดือนปัจจุบันและวันที่ปัจจุบัน
+                $('#doc_date_start').val(defaultDates.start);
+                $('#doc_date_to').val(defaultDates.end);
+            }
+        }
+
+        // เรียกใช้งานเมื่อโหลดหน้าเว็บ
+        toggleDateInputs();
+
+        // ตรวจจับการเปลี่ยนค่า radio button
+        $("input[name='date_option']").change(function () {
+            toggleDateInputs();
+        });
+    });
 </script>
 
 </body>
