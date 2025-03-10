@@ -55,18 +55,12 @@ if ($query->rowCount() == 0) {
 $data = "ลำดับที่,วัน,เดือน,ปี,เลขที่เอกสาร,รหัสลูกค้า,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,เลขไมล์,รหัสสินค้า,ชื่อสินค้า,จำนวน,ราคาต่อหน่วย,จำนวนเงิน\n";
 
 $line = 0;
-
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-    if (!$row) {
-        continue; // ข้าม loop ถ้าไม่มีข้อมูล
-    }
-
     $line++;
-    $month_name = $month_arr[$row['DI_MONTH']] ?? ''; // ตรวจสอบค่าก่อนใช้งาน
-    $year = $row['DI_YEAR'] ?? '';
-    $TRD_QTY = ($row['TRD_Q_FREE'] > 0) ? ($row['TRD_QTY'] + $row['TRD_Q_FREE']) : ($row['TRD_QTY'] ?? 0);
+    $month_name = $month_arr[$row['DI_MONTH']];
+    $year = $row['DI_YEAR'];
+    $TRD_QTY = ($row['TRD_Q_FREE'] > 0) ? $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
 
-    // ตรวจสอบก่อนดึงข้อมูล
     $sql_cust_string = "
         SELECT ADDRBOOK.ADDB_PHONE
         FROM ARADDRESS
@@ -74,51 +68,51 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         WHERE ADDRBOOK.ADDB_COMPANY LIKE :company AND ARADDRESS.ARA_DEFAULT = 'Y' 
     ";
     $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
-    $statement_cust_sqlsvr->bindValue(':company', '%' . ($row['ADDB_COMPANY'] ?? '') . '%', PDO::PARAM_STR);
+    $statement_cust_sqlsvr->bindValue(':company', '%' . $row['ADDB_COMPANY'] . '%', PDO::PARAM_STR);
     $statement_cust_sqlsvr->execute();
 
     $addb_phone = "";
-    $result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC);
-    if ($result_sqlsvr_cust) {
-        $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] ?? "";
+    if ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] === null ? "" : $result_sqlsvr_cust['ADDB_PHONE'];
     }
 
     $sql_cust_string2 = "
-        SELECT TOP 1 ARFILE.AR_CODE
-        FROM ARFILE        
-        WHERE ARFILE.AR_NAME = :company;
-    ";
+    SELECT TOP 1 ARFILE.AR_CODE
+    FROM ARFILE        
+    WHERE ARFILE.AR_NAME = :company;
+";
     $statement_cust_sqlsvr2 = $conn_sqlsvr->prepare($sql_cust_string2);
-    $statement_cust_sqlsvr2->bindValue(':company', $row['ADDB_COMPANY'] ?? '', PDO::PARAM_STR);
+    $statement_cust_sqlsvr2->bindValue(':company', $row['ADDB_COMPANY'], PDO::PARAM_STR);
     $statement_cust_sqlsvr2->execute();
 
     $AR_CODE = "";
-    $result_sqlsvr_cust2 = $statement_cust_sqlsvr2->fetch(PDO::FETCH_ASSOC);
-    if ($result_sqlsvr_cust2) {
-        $AR_CODE = $result_sqlsvr_cust2['AR_CODE'] ?? "";
+    if ($result_sqlsvr_cust2 = $statement_cust_sqlsvr2->fetch(PDO::FETCH_ASSOC)) {
+        $AR_CODE = $result_sqlsvr_cust2['AR_CODE'] === null ? "" : $result_sqlsvr_cust2['AR_CODE'];
     }
 
-    $ADDB_COMPANY = $row['ADDB_COMPANY'] ?? "";
-    $ADDB_ADDB_1 = $row['ADDB_ADDB_1'] ?? "";
-    $ADDB_ADDB_2 = $row['ADDB_ADDB_2'] ?? "";
-    $ADDB_ADDB_3 = $row['ADDB_ADDB_3'] ?? "";
-    $ADDB_BRANCH = $row['ADDB_BRANCH'] ?? "";
 
-    $data .= "$line,{$row['DI_DAY']},$month_name,$year," .
-        str_replace(",", " ", $row['DI_REF'] ?? '') . "," .
-        str_replace(",", " ", $AR_CODE) . "," .
-        str_replace(",", " ", $ADDB_COMPANY) . "," .
-        str_replace(",", " ", $addb_phone) . "," .
-        str_replace(",", " ", $ADDB_BRANCH) . "," .
-        str_replace(",", " ", $ADDB_ADDB_1 . " " . $ADDB_ADDB_2) . "," .
-        str_replace(",", " ", $ADDB_ADDB_3) . "," .
-        str_replace(",", " ", $row['SKU_CODE'] ?? '') . "," .
-        str_replace(",", " ", $row['SKU_NAME'] ?? '') . "," .
-        str_replace(",", " ", $TRD_QTY) . "," .
-        str_replace(",", " ", $row['TRD_U_PRC'] ?? '') . "," .
-        str_replace(",", " ", $row['TRD_B_AMT'] ?? '') . "\n";
+    $ADDB_COMPANY = $row['ADDB_COMPANY'] === null ? "" : $row['ADDB_COMPANY'];
+    $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] === null ? "" : $result_sqlsvr_cust['ADDB_PHONE'];
+    $ADDB_ADDB_1 = $row['ADDB_ADDB_1'] === null ? "" : $row['ADDB_ADDB_1'];
+    $ADDB_ADDB_2 = $row['ADDB_ADDB_2'] === null ? "" : $row['ADDB_ADDB_2'];
+    $ADDB_ADDB_3 = $row['ADDB_ADDB_3'] === null ? "" : $row['ADDB_ADDB_3'];
+    $ADDB_BRANCH = $row['ADDB_BRANCH'] === null ? "" : $row['ADDB_BRANCH'];
+
+
+    $data .= "$line,{$row['DI_DAY']},$month_name,$year,";
+    $data .= str_replace(",", " ", $row['DI_REF']) . ",";
+    $data .= str_replace(",", " ", $AR_CODE) . ",";
+    $data .= str_replace(",", " ", $ADDB_COMPANY) . ",";
+    $data .= str_replace(",", " ", $addb_phone) . ",";
+    $data .= str_replace(",", " ", $ADDB_BRANCH) . ",";
+    $data .= str_replace(",", " ", $ADDB_ADDB_1 . " " . $ADDB_ADDB_2) . ",";
+    $data .= str_replace(",", " ", $ADDB_ADDB_3) . ",";
+    $data .= str_replace(",", " ", $row['SKU_CODE']) . ",";
+    $data .= str_replace(",", " ", $row['SKU_NAME']) . ",";
+    $data .= str_replace(",", " ", $TRD_QTY) . ",";
+    $data .= str_replace(",", " ", $row['TRD_U_PRC']) . ",";
+    $data .= str_replace(",", " ", $row['TRD_B_AMT']) . "\n";
 }
-
 
 // ตรวจสอบว่าไฟล์ถูกสร้างขึ้นหรือไม่
 //file_put_contents("test.csv", $data);
