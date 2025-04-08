@@ -95,6 +95,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <label for="WH_CODE">เลือกสาขา :</label>
                                                                             <select name="WH_CODE" id="WH_CODE" class="form-control" required>
                                                                                 <option value="-">ทั้งหมด SAC-CP-BTC</option>
+                                                                                <option value="SAC">SAC</option>
                                                                                 <?php foreach ($BranchRecords as $row) { ?>
                                                                                     <option value="<?php echo $row["WH_CODE"]; ?>">
                                                                                         <?php echo $row["branch_name"]; ?>
