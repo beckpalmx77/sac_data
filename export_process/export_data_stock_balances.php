@@ -57,7 +57,7 @@ ORDER BY
     WL.WL_CODE
 ";
 
-$data = "คลังสินค้า,สินค้า,WH_CODE,WL_CODE,หน่วยนับ,จำนวน\n";
+$data = "รหัสสินค้า,สินค้า,WH_CODE,WL_CODE,หน่วยนับ,จำนวน\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
