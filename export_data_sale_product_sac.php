@@ -4,7 +4,7 @@ if (strlen($_SESSION['alogin']) == "") {
     header("Location: index");
 } else {
 
-    include("config/connect_db2.php");
+    include("config/connect_db.php");
 
     $month_num = str_replace('0', '', date('m'));
 
@@ -27,7 +27,7 @@ if (strlen($_SESSION['alogin']) == "") {
     $MonthRecords = $stmt_month->fetchAll();
 
     $sql_year = " SELECT DISTINCT(DI_YEAR) AS DI_YEAR
- FROM ims_data_sale_sac_all WHERE DI_YEAR >= 2019
+ FROM ims_product_sale_cockpit WHERE DI_YEAR >= 2019
  order by DI_YEAR desc ";
     $stmt_year = $conn->prepare($sql_year);
     $stmt_year->execute();

@@ -65,5 +65,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 // แปลง UTF-8 เป็น TIS-620 สำหรับ Excel
 $data = iconv("UTF-8", "TIS-620//IGNORE", $data);
 echo $data;
+
+$conn = null;
+
 exit();
 
