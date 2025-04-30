@@ -46,11 +46,11 @@ ORDER BY
     WL.WL_CODE
 ";
 
-
+/*
 $my_file = fopen("D-AAA.txt", "w") or die("Unable to open file!");
 fwrite($my_file, $String_Sql);
 fclose($my_file);
-
+*/
 
 $data = "รหัสสินค้า,สินค้า,WH_CODE,WL_CODE,หน่วยนับ,จำนวน\n";
 
