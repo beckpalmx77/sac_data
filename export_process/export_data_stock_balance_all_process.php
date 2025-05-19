@@ -83,9 +83,14 @@ ORDER BY
     WL.WL_CODE
 ";
 
+//file_put_contents('sql_debug_front.log', print_r($_POST, true) . PHP_EOL, FILE_APPEND);
+//file_put_contents('sql_debug_back.log', $String_Sql . PHP_EOL, FILE_APPEND);
+
 // ดึงข้อมูล
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
+
+
 
 // สร้าง CSV
 $data = "รหัสสินค้า,สินค้า,WH_CODE,WL_CODE,หน่วยนับ,จำนวน\n";

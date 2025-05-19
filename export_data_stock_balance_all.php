@@ -7,7 +7,6 @@ if (strlen($_SESSION['alogin']) == "") {
     exit;
 }
 
-// ดึงข้อมูลทั้งหมด
 $stmt1 = $conn_sqlsvr->prepare("SELECT DISTINCT ICCAT_CODE, ICCAT_NAME FROM ICCAT ORDER BY ICCAT_CODE ASC");
 $stmt1->execute();
 $iccats = $stmt1->fetchAll(PDO::FETCH_ASSOC);
@@ -28,6 +27,36 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="th">
 
+<head>
+    <meta charset="UTF-8">
+    <title>Export Filter</title>
+
+    <!-- ใส่ CSS เพิ่มขนาดตัวอักษรและ checkbox -->
+    <style>
+        label {
+            font-size: 1.25rem;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            margin-right: 8px;
+            transform: scale(1.3);
+            vertical-align: middle;
+        }
+
+        fieldset legend {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .btn {
+            font-size: 1.25rem;
+            padding: 10px 24px;
+        }
+    </style>
+</head>
+
 <body id="page-top">
 <div id="wrapper">
     <?php include('includes/Side-Bar.php'); ?>
@@ -47,7 +76,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
                             <div class="card-body">
                                 <form method="post" action="export_process/export_data_stock_balance_all_process.php">
 
-                                    <!-- ฟิลเตอร์ ICCAT -->
+                                    <!-- ICCAT -->
                                     <fieldset class="border p-2 mb-3">
                                         <legend class="w-auto px-2">เลือกหมวดหมู่สินค้า (ICCAT)</legend>
                                         <div class="row">
@@ -64,7 +93,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </fieldset>
 
-                                    <!-- ฟิลเตอร์ BRAND -->
+                                    <!-- BRAND -->
                                     <fieldset class="border p-2 mb-3">
                                         <legend class="w-auto px-2">เลือกยี่ห้อสินค้า (BRAND)</legend>
                                         <div class="row">
@@ -81,7 +110,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </fieldset>
 
-                                    <!-- ฟิลเตอร์ WAREHOUSE -->
+                                    <!-- WAREHOUSE -->
                                     <fieldset class="border p-2 mb-3">
                                         <legend class="w-auto px-2">เลือกคลังสินค้า (WAREHOUSE)</legend>
                                         <div class="row">
@@ -98,7 +127,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </fieldset>
 
-                                    <!-- ฟิลเตอร์ WARELOCATION -->
+                                    <!-- WARELOCATION -->
                                     <fieldset class="border p-2 mb-3">
                                         <legend class="w-auto px-2">เลือกตำแหน่งจัดเก็บ (WARELOCATION)</legend>
                                         <div class="row">
@@ -115,7 +144,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </fieldset>
 
-                                    <div class="text-right">
+                                    <div class="text-right mt-4">
                                         <button type="submit" class="btn btn-success">
                                             Export <i class="fa fa-download"></i>
                                         </button>
@@ -145,7 +174,6 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="vendor/bootstrap-datepicker/locales/bootstrap-datepicker.th.min.js"></script>
-
 <link rel="stylesheet" href="vendor/bootstrap-datepicker/css/bootstrap-datepicker.css"/>
 
 <script>
