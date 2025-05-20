@@ -78,7 +78,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
                                     <!-- ICCAT -->
                                     <fieldset class="border p-2 mb-3">
-                                        <legend class="w-auto px-2">เลือกหมวดหมู่สินค้า (ICCAT)</legend>
+                                        <legend class="w-auto px-2 text-info">เลือกหมวดหมู่สินค้า (ICCAT)</legend>
                                         <div class="row">
                                             <?php foreach ($iccats as $row): ?>
                                                 <div class="col-md-6">
@@ -95,7 +95,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
                                     <!-- BRAND -->
                                     <fieldset class="border p-2 mb-3">
-                                        <legend class="w-auto px-2">เลือกยี่ห้อสินค้า (BRAND)</legend>
+                                        <legend class="w-auto px-2 text-success">เลือกยี่ห้อสินค้า (BRAND)</legend>
                                         <div class="row">
                                             <?php foreach ($brands as $row): ?>
                                                 <div class="col-md-6">
@@ -112,7 +112,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
                                     <!-- WAREHOUSE -->
                                     <fieldset class="border p-2 mb-3">
-                                        <legend class="w-auto px-2">เลือกคลังสินค้า (WAREHOUSE)</legend>
+                                        <legend class="w-auto px-2 text-primary">เลือกคลังสินค้า (WAREHOUSE)</legend>
                                         <div class="row">
                                             <?php foreach ($warehouses as $row): ?>
                                                 <div class="col-md-6">
@@ -129,7 +129,7 @@ $warelocations = $stmt4->fetchAll(PDO::FETCH_ASSOC);
 
                                     <!-- WARELOCATION -->
                                     <fieldset class="border p-2 mb-3">
-                                        <legend class="w-auto px-2">เลือกตำแหน่งจัดเก็บ (WARELOCATION)</legend>
+                                        <legend class="w-auto px-2 text-danger">เลือกตำแหน่งจัดเก็บ (WARELOCATION)</legend>
                                         <div class="row">
                                             <?php foreach ($warelocations as $row): ?>
                                                 <div class="col-md-6">
