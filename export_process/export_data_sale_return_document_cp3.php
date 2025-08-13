@@ -19,6 +19,7 @@ $doc_date_start = $_POST['doc_date_start'] ?? '';
 $doc_date_to = $_POST['doc_date_to'] ?? '';
 
 $where_date = "";
+$where_params = []; // เก็บ parameters สำหรับ bind
 
 if ($date_option === 'range') {
     if (!empty($doc_date_start)) {
@@ -29,21 +30,32 @@ if ($date_option === 'range') {
     }
     if (!empty($doc_date_start) && !empty($doc_date_to)) {
         $where_date = " AND DI_DATE BETWEEN :doc_date_start AND :doc_date_to ";
+        $where_params[':doc_date_start'] = $doc_date_start;
+        $where_params[':doc_date_to'] = $doc_date_to;
     }
 }
 
-// ใช้ bindParam เพื่อความปลอดภัย
-$sql_and = " AND ADDRBOOK.ADDB_COMPANY LIKE :customer_name AND ADDRBOOK.ADDB_SEARCH LIKE :car_no ";
+// สร้างเงื่อนไข SQL สำหรับ customer_name และ car_no อย่างมีเงื่อนไข
+$sql_and = "";
+if (!empty($customer_name)) {
+    $sql_and .= " AND ADDRBOOK.ADDB_COMPANY LIKE :customer_name ";
+    $where_params[':customer_name'] = '%' . $customer_name . '%';
+}
+if (!empty($car_no)) {
+    $sql_and .= " AND ADDRBOOK.ADDB_SEARCH LIKE :car_no ";
+    $where_params[':car_no'] = '%' . $car_no . '%';
+}
+
 
 $String_Sql = $str_sql_comm . $sql_and . $where_date . $str_sql_order;
 
 $query = $conn_sqlsvr->prepare($String_Sql);
-$query->bindValue(':customer_name', '%' . $customer_name . '%', PDO::PARAM_STR);
-$query->bindValue(':car_no', '%' . $car_no . '%', PDO::PARAM_STR);
-if ($date_option === 'range' && !empty($doc_date_start) && !empty($doc_date_to)) {
-    $query->bindValue(':doc_date_start', $doc_date_start, PDO::PARAM_STR);
-    $query->bindValue(':doc_date_to', $doc_date_to, PDO::PARAM_STR);
+
+// Bind parameters ตามที่สร้างไว้ใน $where_params
+foreach ($where_params as $param_name => $param_value) {
+    $query->bindValue($param_name, $param_value, PDO::PARAM_STR);
 }
+
 $query->execute();
 
 
@@ -71,7 +83,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
         SELECT ADDRBOOK.ADDB_PHONE
         FROM ARADDRESS
         LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
-        WHERE ADDRBOOK.ADDB_COMPANY LIKE :company AND ARADDRESS.ARA_DEFAULT = 'Y' 
+        WHERE ADDRBOOK.ADDB_COMPANY LIKE :company AND ARADDRESS.ARA_DEFAULT = 'Y'
     ";
     $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
     $statement_cust_sqlsvr->bindValue(':company', '%' . ($row['ADDB_COMPANY'] ?? '') . '%', PDO::PARAM_STR);
@@ -85,7 +97,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 
     $sql_cust_string2 = "
         SELECT TOP 1 ARFILE.AR_CODE
-        FROM ARFILE        
+        FROM ARFILE
         WHERE ARFILE.AR_NAME = :company;
     ";
     $statement_cust_sqlsvr2 = $conn_sqlsvr->prepare($sql_cust_string2);
