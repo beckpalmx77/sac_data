@@ -17,7 +17,30 @@ $sql_sqlsvr = $select_query . $sql_cond . $sql_order;
 $stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
 $stmt_sqlsvr->execute();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+echo "กำลังอ่านข้อมูลจาก MSSQL...\n";
+$all_rows = $stmt_sqlsvr->fetchAll(PDO::FETCH_ASSOC);
+$total_rows = count($all_rows);
+echo "พบข้อมูลทั้งหมด: $total_rows รายการ\n";
+
+if ($total_rows == 0) {
+    echo "ไม่พบข้อมูลในการนำเข้า\n";
+    exit;
+}
+
+$count_insert = 0;
+$count_insert2 = 0;
+$count_update = 0;
+$count_update2 = 0;
+$current = 0;
+
+echo "กำลังนำเข้าข้อมูล...\n";
+
+foreach ($all_rows as $result_sqlsvr) {
+    $current++;
+    
+    if ($current % 100 == 0 || $current == $total_rows) {
+        echo "\r[{$current}/{$total_rows}] กำลังประมวลผล... ";
+    }
 
     $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $result_sqlsvr["SKU_CODE"] ."'"
         . " AND product_key = '" . $result_sqlsvr["SKU_KEY"] . "'"
@@ -39,7 +62,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
         $query->execute();
-        echo " Update DB1 OK ";
+        $count_update++;
 
         $query2 = $conn2->prepare($sql);
         $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
@@ -47,7 +70,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
         $query2->execute();
-        echo " Update DB2 OK ";
+        $count_update2++;
 
     } else {
 
@@ -66,7 +89,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $lastInsertId = $conn->lastInsertId();
 
         if ($lastInsertId) {
-            echo " Save DB1 OK ";
+            $count_insert++;
 
             $query2 = $conn2->prepare($sql);
             $query2->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
@@ -80,16 +103,21 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
             $lastInsertId2 = $conn2->lastInsertId();
             if ($lastInsertId2) {
-                echo " Save DB2 OK ";
-            } else {
-                echo " Error DB2 ";
+                $count_insert2++;
             }
-        } else {
-            echo " Error DB1 ";
         }
 
     }
 }
+
+echo "\n";
+echo "=== สรุปผลการทำงาน ===\n";
+echo "อ่านข้อมูลจาก MSSQL: $total_rows รายการ\n";
+echo "อัพเดท DB1 (sac_data): $count_update รายการ\n";
+echo "อัพเดท DB2 (sac_data2): $count_update2 รายการ\n";
+echo "เพิ่มใหม่ DB1 (sac_data): $count_insert รายการ\n";
+echo "เพิ่มใหม่ DB2 (sac_data2): $count_insert2 รายการ\n";
+echo "เสร็จสิ้นการทำงาน\n";
 
 $conn_sqlsvr = null;
 
