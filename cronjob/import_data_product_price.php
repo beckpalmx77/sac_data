@@ -5,6 +5,7 @@ error_reporting(~0);
 
 include("../config/connect_sqlserver.php");
 include("../config/connect_db.php");
+include("../config/connect_db2s.php");
 include("../cond_file/query-product-price-main.php");
 
 $sql_sqlsvr = $select_query . $sql_cond . $sql_order;
@@ -32,24 +33,26 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
             . " WHERE product_id = '" . $result_sqlsvr["SKU_CODE"] . "'"
             . " AND product_key = '" . $result_sqlsvr["SKU_KEY"] . "'"
             . " AND price_code = '" . $result_sqlsvr["ARPRB_CODE"] . "'";
-        //$myfile = fopen("myqeury_file1.txt", "w") or die("Unable to open file!");
-        //fwrite($myfile, $sql);
-        //fclose($myfile);
         $query = $conn->prepare($sql);
         $query->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
         $query->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
         $query->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
         $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
         $query->execute();
-        echo " Update OK ";
+        echo " Update DB1 OK ";
+
+        $query2 = $conn2->prepare($sql);
+        $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
+        $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
+        $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
+        $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+        $query2->execute();
+        echo " Update DB2 OK ";
 
     } else {
 
         $sql = "INSERT INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 
                 VALUES (:product_key,:product_id,:pgroup_id,:name_t,:brand_id,:price_code,:price)";
-        //$myfile = fopen("myqeury_file2.txt", "w") or die("Unable to open file!");
-        //fwrite($myfile, $sql);
-        //fclose($myfile);
         $query = $conn->prepare($sql);
         $query->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
         $query->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
@@ -63,9 +66,26 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $lastInsertId = $conn->lastInsertId();
 
         if ($lastInsertId) {
-            echo " Save OK ";
+            echo " Save DB1 OK ";
+
+            $query2 = $conn2->prepare($sql);
+            $query2->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
+            $query2->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
+            $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
+            $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
+            $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
+            $query2->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
+            $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+            $query2->execute();
+
+            $lastInsertId2 = $conn2->lastInsertId();
+            if ($lastInsertId2) {
+                echo " Save DB2 OK ";
+            } else {
+                echo " Error DB2 ";
+            }
         } else {
-            echo " Error ";
+            echo " Error DB1 ";
         }
 
     }
