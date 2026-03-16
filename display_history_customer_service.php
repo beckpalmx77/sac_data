@@ -163,31 +163,46 @@ if (strlen($_SESSION['alogin']) == "") {
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/select2/dist/js/select2.min.js"></script>
 <script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <script>
-    $(document).ready(function () {
-
-        $("#selCustomer").select2({
-            ajax: {
-                url: "model/get_customer_ajax.php",
-                type: "post",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        searchTerm: params.term // search term
-                    };
-                },
-                processResults: function (response) {
-                    return {
-                        results: response
-                    };
-                },
-                cache: true
+$(document).ready(function() {
+    var currentPage = 1;
+    var cache = {};
+    
+    $("#customer_name").autocomplete({
+        source: function(request, response) {
+            var term = request.term;
+            
+            if (term in cache) {
+                response(cache[term]);
+                return;
             }
-        });
+            
+            $.ajax({
+                url: "model/get_customer_ADDRBOOK.php",
+                dataType: "json",
+                data: {
+                    term: term,
+                    page: currentPage
+                },
+                success: function(data) {
+                    cache[term] = data.results;
+                    response(data.results);
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error: " + error);
+                    response([]);
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            console.log("Selected: " + ui.item.value);
+        }
     });
-
+});
 </script>
 
 <script>

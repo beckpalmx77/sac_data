@@ -87,16 +87,11 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 </div>
                                                                             </div>
 
-                                                                            <label for="AR_CODE">เลือกลูกค้า :</label>
-                                                                            <input type="hidden" name="AR_CODE" id="AR_CODE"
-                                                                                   class="form-control">
-                                                                            <input type="hidden" name="AR_NAME" id="AR_NAME"
-                                                                                   class="form-control">
-                                                                            <select id='selCustomer' class='form-control'
-                                                                                    onchange="Onchange_AR_CODE();">
-                                                                                <option value='0'>- ค้นหารายชื่อลูกค้า -
-                                                                                </option>
-                                                                            </select>
+                                                                            <label for="AR_NAME">ค้นหาลูกค้า :</label>
+                                                                            <input type="text" name="AR_NAME"
+                                                                                   class="form-control"
+                                                                                   id="customer_name"
+                                                                                   placeholder="พิมพ์ชื่อลูกค้า...">
 
                                                                         </div>
                                                                         <div class="col-sm-12">
@@ -181,6 +176,8 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <script src="vendor/select2/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- select2 css -->
     <link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
@@ -240,45 +237,44 @@ if (strlen($_SESSION['alogin']) == "") {
 
 
     <script>
-        $(document).ready(function () {
-
-            $("#selCustomer").select2({
-                ajax: {
-                    url: "model/get_customer_ajax.php",
-                    type: "post",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            searchTerm: params.term // search term
-                        };
-                    },
-                    processResults: function (response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
+        $(document).ready(function() {
+            var cache = {};
+            
+            $("#customer_name").autocomplete({
+                source: function(request, response) {
+                    var term = request.term;
+                    
+                    if (term in cache) {
+                        response(cache[term]);
+                        return;
+                    }
+                    
+                    $.ajax({
+                        url: "model/get_customer_ADDRBOOK.php",
+                        dataType: "json",
+                        data: {
+                            term: term
+                        },
+                        success: function(data) {
+                            cache[term] = data.results;
+                            response(data.results);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("Error: " + error);
+                            response([]);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    console.log("Selected: " + ui.item.value);
+                },
+                change: function(event, ui) {
+                    // AR_NAME is already set from input value
                 }
             });
         });
-
     </script>
-
-
-    <script>
-
-        function Onchange_AR_CODE() {
-
-            $('#AR_NAME').val($("#selCustomer").val());
-
-        }
-    </script>
-
-
-
-
-    </body>
 
     </html>
 

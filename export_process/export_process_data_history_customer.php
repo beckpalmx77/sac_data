@@ -75,9 +75,15 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_SEARCH , TRANSTKD.T
 $sql_string = $sql_data_selectDetail . $order_by ;
 
 /*
-    $myfile = fopen("qry_file_mysql_server2.txt", "w") or die("Unable to open file!");
-    fwrite($myfile, $sql_string);
-    fclose($myfile);
+$myfile = fopen("query_export_history_customer.txt", "w") or die("Unable to open file!");
+fwrite($myfile, "=== Main Query ===\n");
+fwrite($myfile, $sql_string);
+fwrite($myfile, "\n\n=== Parameters (From Form) ===\n");
+fwrite($myfile, "customer_name: " . $customer_name . "\n");
+fwrite($myfile, "car_no: " . $car_no . "\n");
+fwrite($myfile, "doc_date_start: " . $doc_date_start . "\n");
+fwrite($myfile, "doc_date_to: " . $doc_date_to . "\n");
+fclose($myfile);
 */
 
 $statement_sqlsvr = $conn_sqlsvr->prepare($sql_string);
