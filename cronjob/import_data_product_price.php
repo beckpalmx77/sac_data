@@ -19,6 +19,7 @@ $stmt_sqlsvr->execute();
 
 echo "กำลังอ่านข้อมูลจาก MSSQL...\n";
 $all_rows = $stmt_sqlsvr->fetchAll(PDO::FETCH_ASSOC);
+$stmt_sqlsvr->closeCursor();
 $total_rows = count($all_rows);
 echo "พบข้อมูลทั้งหมด: $total_rows รายการ\n";
 
@@ -43,7 +44,7 @@ foreach ($all_rows as $result_sqlsvr) {
     $current++;
     
     if ($current % 100 == 0 || $current == $total_rows) {
-        echo "\r[{$current}/{$total_rows}] Insert:{$count_insert}/{$count_update} Update:{$count_insert2}/{$count_update2} ";
+        echo "\r[{$current}/{$total_rows}] DB1:I:{$count_insert} U:{$count_update} | DB2:I:{$count_insert2} U:{$count_update2} ";
     }
 
     $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 

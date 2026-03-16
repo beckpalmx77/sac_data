@@ -35,6 +35,7 @@ try {
     
     // นับจำนวนข้อมูลทั้งหมด
     $all_rows = $stmt_ms->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_ms->closeCursor();
     $total_rows = count($all_rows);
     echo "พบข้อมูลทั้งหมด: $total_rows รายการ\n";
     
