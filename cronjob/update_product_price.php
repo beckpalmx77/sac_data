@@ -58,6 +58,10 @@ try {
     $count_updated = 0;
     $count_updated2 = 0;
     $current = 0;
+    $batch_size = 500;
+
+    $conn->beginTransaction();
+    $conn2->beginTransaction();
 
     // 4. Loop ข้อมูล
     echo "กำลังอัพเดทข้อมูล...\n";
@@ -80,27 +84,29 @@ try {
         ];
 
         // Update DB1
-        if ($stmt_my->execute($params)) {
-            // ใน PDO ใช้ rowCount() แทน affected_rows
-            if ($stmt_my->rowCount() > 0) {
-                $count_updated++;
-            }
-        } else {
-            // กรณี execute ไม่ผ่าน
-            $errorInfo = $stmt_my->errorInfo();
-            echo "Error updating SKU (DB1): " . $sku_code . " - " . $errorInfo[2] . "\n";
+        $stmt_my->execute($params);
+        if ($stmt_my->rowCount() > 0) {
+            $count_updated++;
         }
 
         // Update DB2
-        if ($stmt_my2->execute($params)) {
-            if ($stmt_my2->rowCount() > 0) {
-                $count_updated2++;
-            }
-        } else {
-            $errorInfo2 = $stmt_my2->errorInfo();
-            echo "Error updating SKU (DB2): " . $sku_code . " - " . $errorInfo2[2] . "\n";
+        $stmt_my2->execute($params);
+        if ($stmt_my2->rowCount() > 0) {
+            $count_updated2++;
+        }
+
+        // Commit ทุก batch_size รายการ
+        if ($current % $batch_size == 0) {
+            $conn->commit();
+            $conn2->commit();
+            $conn->beginTransaction();
+            $conn2->beginTransaction();
         }
     }
+
+    // Commit ส่วนที่เหลือ
+    $conn->commit();
+    $conn2->commit();
 
     echo "\n";
     echo "=== สรุปผลการทำงาน ===\n";

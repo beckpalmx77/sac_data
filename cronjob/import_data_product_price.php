@@ -32,8 +32,12 @@ $count_insert2 = 0;
 $count_update = 0;
 $count_update2 = 0;
 $current = 0;
+$batch_size = 500;
 
 echo "กำลังนำเข้าข้อมูล...\n";
+
+$conn->beginTransaction();
+$conn2->beginTransaction();
 
 foreach ($all_rows as $result_sqlsvr) {
     $current++;
@@ -42,73 +46,58 @@ foreach ($all_rows as $result_sqlsvr) {
         echo "\r[{$current}/{$total_rows}] กำลังประมวลผล... ";
     }
 
-    $sql_find = "SELECT * FROM ims_product WHERE product_id = '" . $result_sqlsvr["SKU_CODE"] ."'"
-        . " AND product_key = '" . $result_sqlsvr["SKU_KEY"] . "'"
-        . " AND price_code = '" . $result_sqlsvr["ARPRB_CODE"] . "'";
+    $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 
+            VALUES (:product_key,:product_id,:pgroup_id,:name_t,:brand_id,:price_code,:price)";
+    $query = $conn->prepare($sql);
+    $query->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
+    $query->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
+    $query->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
+    $query->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
+    $query->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
+    $query->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
+    $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+    $query->execute();
 
-    //$myfile = fopen("myqeury_file_find.txt", "w") or die("Unable to open file!");
-    //fwrite($myfile, $sql_find);
-    //fclose($myfile);
-
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        $sql = "UPDATE ims_product SET name_t=:name_t , brand_id=:brand_id , pgroup_id=:pgroup_id , price=:price "
-            . " WHERE product_id = '" . $result_sqlsvr["SKU_CODE"] . "'"
-            . " AND product_key = '" . $result_sqlsvr["SKU_KEY"] . "'"
-            . " AND price_code = '" . $result_sqlsvr["ARPRB_CODE"] . "'";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
-        $query->execute();
-        $count_update++;
-
-        $query2 = $conn2->prepare($sql);
-        $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-        $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
-        $query2->execute();
-        $count_update2++;
-
-    } else {
-
-        $sql = "INSERT INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 
-                VALUES (:product_key,:product_id,:pgroup_id,:name_t,:brand_id,:price_code,:price)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
+    $affected = $query->rowCount();
+    if ($affected > 0) {
+        if ($affected == 1) {
             $count_insert++;
-
-            $query2 = $conn2->prepare($sql);
-            $query2->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
-            $query2->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-            $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-            $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-            $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-            $query2->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
-            $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
-            $query2->execute();
-
-            $lastInsertId2 = $conn2->lastInsertId();
-            if ($lastInsertId2) {
-                $count_insert2++;
-            }
+        } else {
+            $count_update++;
         }
+    }
 
+    $query2 = $conn2->prepare($sql);
+    $query2->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
+    $query2->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
+    $query2->bindParam(':pgroup_id', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
+    $query2->bindParam(':name_t', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
+    $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
+    $query2->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
+    $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+    $query2->execute();
+
+    $affected2 = $query2->rowCount();
+    if ($affected2 > 0) {
+        if ($affected2 == 1) {
+            $count_insert2++;
+        } else {
+            $count_update2++;
+        }
+    }
+
+    // Commit ทุก batch_size รายการ
+    if ($current % $batch_size == 0) {
+        $conn->commit();
+        $conn2->commit();
+        $conn->beginTransaction();
+        $conn2->beginTransaction();
     }
 }
+
+// Commit ส่วนที่เหลือ
+$conn->commit();
+$conn2->commit();
 
 echo "\n";
 echo "=== สรุปผลการทำงาน ===\n";
@@ -120,4 +109,6 @@ echo "เพิ่มใหม่ DB2 (sac_data2): $count_insert2 รายก�
 echo "เสร็จสิ้นการทำงาน\n";
 
 $conn_sqlsvr = null;
+$conn = null;
+$conn2 = null;
 
