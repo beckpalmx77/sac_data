@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include('../config/connect_sqlserver.php');
 include("../config/connect_db.php");
 date_default_timezone_set('Asia/Bangkok');
@@ -9,11 +11,14 @@ $filename = "Data_Customer_History-" . date('m/d/Y H:i:s', time()) . ".csv";
 @header('Content-Encoding: UTF-8');
 @header("Content-Disposition: attachment; filename=" . $filename);
 
-$customer_name = $_POST["AR_NAME"];
-$car_no = $_POST["car_no"];
+$customer_name = $_POST["AR_NAME"] ?? "ชัยชาญ อ้นเพียรเอก";
+$car_no = $_POST["car_no"] ?? "";
 
-$doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
-$doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
+$doc_date_start_input = $_POST["doc_date_start"] ?? "01-03-2569";
+$doc_date_to_input = $_POST["doc_date_to"] ?? date('d-m-Y');
+
+$doc_date_start = substr($doc_date_start_input, 6, 4) . "/" . substr($doc_date_start_input, 3, 2) . "/" . substr($doc_date_start_input, 0, 2);
+$doc_date_to = substr($doc_date_to_input, 6, 4) . "/" . substr($doc_date_to_input, 3, 2) . "/" . substr($doc_date_to_input, 0, 2);
 
 $addb_phone = "";
 
@@ -74,7 +79,6 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_SEARCH , TRANSTKD.T
 
 $sql_string = $sql_data_selectDetail . $order_by ;
 
-/*
 $myfile = fopen("query_export_history_customer.txt", "w") or die("Unable to open file!");
 fwrite($myfile, "=== Main Query ===\n");
 fwrite($myfile, $sql_string);
@@ -84,10 +88,8 @@ fwrite($myfile, "car_no: " . $car_no . "\n");
 fwrite($myfile, "doc_date_start: " . $doc_date_start . "\n");
 fwrite($myfile, "doc_date_to: " . $doc_date_to . "\n");
 fclose($myfile);
-*/
 
-$statement_sqlsvr = $conn_sqlsvr->prepare($sql_string);
-$statement_sqlsvr->execute();
+$statement_sqlsvr = $conn_sqlsvr->query($sql_string);
 $line = 0 ;
 while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
@@ -98,8 +100,7 @@ while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         FROM ARADDRESS
         LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
         WHERE ADDRBOOK.ADDB_COMPANY LIKE '%" . $result_sqlsvr_detail['ADDB_COMPANY'] . "%' AND ARADDRESS.ARA_DEFAULT = 'Y' ";
-    $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
-    $statement_cust_sqlsvr->execute();
+    $statement_cust_sqlsvr = $conn_sqlsvr->query($sql_cust_string);
     while ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $addb_phone = "^" . $result_sqlsvr_cust['ADDB_PHONE'];
     }
@@ -122,8 +123,8 @@ while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
 }
 
-// $data = iconv("utf-8", "tis-620", $data);
-$data = iconv("utf-8", "windows-874//IGNORE", $data);
+echo "\xEF\xBB\xBF"; // UTF-8 BOM
+$data = $data;
 echo $data;
 
 
