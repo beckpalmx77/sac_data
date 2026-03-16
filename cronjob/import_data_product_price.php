@@ -36,6 +36,7 @@ $current = 0;
 $batch_size = 500;
 
 echo "กำลังนำเข้าข้อมูล...\n";
+ob_implicit_flush(true);
 
 $conn->beginTransaction();
 $conn2->beginTransaction();
@@ -45,6 +46,8 @@ foreach ($all_rows as $result_sqlsvr) {
     
     if ($current % 100 == 0 || $current == $total_rows) {
         echo "\r[{$current}/{$total_rows}] DB1:I:{$count_insert} U:{$count_update} | DB2:I:{$count_insert2} U:{$count_update2} ";
+        @ob_flush();
+        flush();
     }
 
     $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 
