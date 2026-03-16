@@ -43,7 +43,7 @@ foreach ($all_rows as $result_sqlsvr) {
     $current++;
     
     if ($current % 100 == 0 || $current == $total_rows) {
-        echo "\r[{$current}/{$total_rows}] กำลังประมวลผล... ";
+        echo "\r[{$current}/{$total_rows}] Insert:{$count_insert}/{$count_update} Update:{$count_insert2}/{$count_update2} ";
     }
 
     $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 

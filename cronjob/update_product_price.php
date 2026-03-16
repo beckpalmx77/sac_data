@@ -73,7 +73,7 @@ try {
 
         // แสดงความคืบหน้าทุก 100 รายการ
         if ($current % 100 == 0 || $current == $total_rows) {
-            echo "\r[{$current}/{$total_rows}] กำลังประมวลผล... ";
+            echo "\r[{$current}/{$total_rows}] DB1:{$count_updated} DB2:{$count_updated2} ";
         }
 
         // การส่งค่าแบบ PDO execute (แทนที่ bind_param เดิม)
