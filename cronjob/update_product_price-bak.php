@@ -48,7 +48,15 @@ try {
         exit;
     }
 
-    // 3. อัพเดทข้อมูลด้วย exec โดยตรง (เร็วกว่า prepare)
+    // 3. เตรียมคำสั่ง UPDATE สำหรับ MySQL (PDO)
+    // ใช้เครื่องหมาย : แทน ? เพื่อความชัดเจนใน PDO
+    $my_sql = "
+        UPDATE ims_product 
+        SET quantity = :qty
+        WHERE product_id = :sku
+    ";
+
+    $stmt_my = $conn->prepare($my_sql);
     $count_updated = 0;
 
     // 4. Loop ข้อมูล
@@ -64,9 +72,22 @@ try {
             echo "   กำลังประมวลผล: [$current/$total_rows] อัพเดทแล้ว: $count_updated รายการ\r";
         }
 
-        // ใช้ exec โดยตรง (เร็วกว่า prepare + execute)
-        $conn->exec("UPDATE ims_product SET quantity = '$total_qty' WHERE product_id = '$sku_code'");
-        $count_updated++;
+        // การส่งค่าแบบ PDO execute (แทนที่ bind_param เดิม)
+        $params = [
+            ':qty'  => $total_qty,
+            ':sku'  => $sku_code
+        ];
+
+        if ($stmt_my->execute($params)) {
+            // ใน PDO ใช้ rowCount() แทน affected_rows
+            if ($stmt_my->rowCount() > 0) {
+                $count_updated++;
+            }
+        } else {
+            // กรณี execute ไม่ผ่าน
+            $errorInfo = $stmt_my->errorInfo();
+            echo "Error updating SKU: " . $sku_code . " - " . $errorInfo[2] . "\n";
+        }
     }
 
     echo "\n3. อัพเดทเสร็จสิ้น\n";
