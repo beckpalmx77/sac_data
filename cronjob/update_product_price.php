@@ -1,5 +1,11 @@
 <?php
+date_default_timezone_set("Asia/Bangkok");
+
 // 1. Include การเชื่อมต่อฐานข้อมูล
+$start_time = microtime(true);
+$start_datetime = date("Y-m-d H:i:s");
+echo "=== เริ่มต้นงาน: $start_datetime ===\n\n";
+
 include '../config/connect_db2.php';        // ตัวแปร $conn (MySQL - ตรวจพบว่าเป็น PDO)
 include '../config/connect_sqlserver.php'; // ตัวแปร $conn_sqlsvr (MSSQL - เป็น PDO)
 
@@ -91,6 +97,17 @@ try {
     die("Database Error: " . $e->getMessage());
 }
 
-// 5. ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
+// 5. คำนวณเวลาที่ใช้
+$end_time = microtime(true);
+$end_datetime = date("Y-m-d H:i:s");
+$duration = $end_time - $start_time;
+
+echo "\n=== สรุปผลการทำงาน ===\n";
+echo "เริ่มต้น: $start_datetime\n";
+echo "สิ้นสุด: $end_datetime\n";
+echo "ใช้เวลาทั้งหมด: " . number_format($duration, 2) . " วินาที\n";
+echo "=======================\n";
+
+// ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
 $conn_sqlsvr = null;
 $conn = null;
