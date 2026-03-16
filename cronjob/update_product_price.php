@@ -82,9 +82,19 @@ $end_datetime = date("Y-m-d H:i:s");
 $duration = $end_time - $start_time;
 
 echo "\n=== สรุปผลการทำงาน ===\n";
+// แปลงวินาทีเป็น ชั่วโมง นาที วินาที
+$hours = floor($duration / 3600);
+$minutes = floor(($duration % 3600) / 60);
+$seconds = floor($duration % 60);
+
+$time_text = "";
+if ($hours > 0) $time_text .= "$hours ชั่วโมง ";
+if ($minutes > 0) $time_text .= "$minutes นาที ";
+$time_text .= "$seconds วินาที";
+
 echo "เริ่มต้น: $start_datetime\n";
 echo "สิ้นสุด: $end_datetime\n";
-echo "ใช้เวลาทั้งหมด: " . number_format($duration, 2) . " วินาที\n";
+echo "ใช้เวลาทั้งหมด: $time_text\n";
 echo "=======================\n";
 
 // ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
