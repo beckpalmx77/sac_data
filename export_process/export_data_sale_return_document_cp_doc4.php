@@ -15,24 +15,24 @@ function write_sql_log($sql, $params) {
         mkdir($log_dir, 0777, true);
     }
 
-    $log_file = $log_dir . "/query_log_" . date('Y-m-d') . ".log";
+    $log_file = $log_dir . "/a-query_log_" . date('Y-m-d') . ".log";
     $timestamp = date('Y-m-d H:i:s');
     $log_content = "[$timestamp] EXECUTED QUERY:\n$full_sql\n" . str_repeat("-", 50) . "\n";
 
     file_put_contents($log_file, $log_content, FILE_APPEND);
 }
 
-// --- ส่วนที่ 2: ตั้งค่า Header สำหรับ Download CSV ---
 $filename = "Data_Customer-Service-" . date('Y-m-d_H-i-s') . ".csv";
+
 header('Content-Type: text/csv; charset=UTF-8');
 header("Content-Disposition: attachment; filename=$filename");
 
-// เชื่อมต่อฐานข้อมูลและดึงไฟล์ตั้งค่า
+// เชื่อมต่อฐานข้อมูล
 include('../config/connect_sqlserver.php');
 include('../cond_file/query_customer_history_service.php');
 include('../util/month_util.php');
 
-// รับค่าจาก Form
+
 $customer_name = $_POST["customer_name"] ?? '';
 $car_no = $_POST["car_no"] ?? '';
 $date_option = $_POST['date_option'] ?? '';
@@ -40,7 +40,7 @@ $doc_date_start = $_POST['doc_date_start'] ?? '';
 $doc_date_to = $_POST['doc_date_to'] ?? '';
 
 $where_date = "";
-$where_params = [];
+$where_params = []; // เก็บ parameters สำหรับ bind
 
 if ($date_option === 'range') {
     if (!empty($doc_date_start)) {
@@ -56,73 +56,108 @@ if ($date_option === 'range') {
     }
 }
 
-// สร้างเงื่อนไข SQL เสริม
+// สร้างเงื่อนไข SQL สำหรับ customer_name และ car_no อย่างมีเงื่อนไข
 $sql_and = "";
 if (!empty($customer_name)) {
-    $sql_and .= " AND REPLACE(REPLACE(ADDRBOOK.ADDB_COMPANY, '  ', ' '), ' ', '%') LIKE :customer_name ";
-    $where_params[':customer_name'] = '%' . str_replace(' ', '%', $customer_name) . '%';
+    $sql_and .= " AND ADDRBOOK.ADDB_COMPANY LIKE :customer_name ";
+    $where_params[':customer_name'] = '%' . $customer_name . '%';
 }
 if (!empty($car_no)) {
     $sql_and .= " AND ADDRBOOK.ADDB_SEARCH LIKE :car_no ";
     $where_params[':car_no'] = '%' . $car_no . '%';
 }
 
-// รวม Query ทั้งหมด
-$String_Sql = $str_sql_comm . $sql_and . $where_date . $str_sql_order;
-
 // บันทึก Log ก่อน Execute
-// write_sql_log($String_Sql, $where_params);
+write_sql_log($String_Sql, $where_params);
+
+$String_Sql = $str_sql_comm . $sql_and . $where_date . $str_sql_order;
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 
-// Bind parameters
+// Bind parameters ตามที่สร้างไว้ใน $where_params
 foreach ($where_params as $param_name => $param_value) {
     $query->bindValue($param_name, $param_value, PDO::PARAM_STR);
 }
 
 $query->execute();
 
+
 // ตรวจสอบว่ามีข้อมูลหรือไม่
 if ($query->rowCount() == 0) {
     die("❌ ไม่พบข้อมูลในฐานข้อมูล");
 }
 
-// ส่วนหัว CSV
 $data = "ลำดับที่,วัน,เดือน,ปี,เลขที่เอกสาร,รหัสลูกค้า,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,เลขไมล์,รหัสสินค้า,ชื่อสินค้า,จำนวน,ราคาต่อหน่วย,จำนวนเงิน\n";
 
 $line = 0;
+
 while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+    if (!$row) {
+        continue; // ข้าม loop ถ้าไม่มีข้อมูล
+    }
+
     $line++;
-    $month_name = $month_arr[$row['DI_MONTH']] ?? '';
+    $month_name = $month_arr[$row['DI_MONTH']] ?? ''; // ตรวจสอบค่าก่อนใช้งาน
     $year = $row['DI_YEAR'] ?? '';
     $TRD_QTY = ($row['TRD_Q_FREE'] > 0) ? ($row['TRD_QTY'] + $row['TRD_Q_FREE']) : ($row['TRD_QTY'] ?? 0);
 
-    // ดึงเบอร์โทรศัพท์
-    $sql_cust_string = "SELECT ADDRBOOK.ADDB_PHONE FROM ARADDRESS LEFT JOIN ADDRBOOK ON ADDB_KEY = ARA_ADDB WHERE ADDB_COMPANY LIKE :company AND ARA_DEFAULT = 'Y'";
-    $stmt_phone = $conn_sqlsvr->prepare($sql_cust_string);
-    $stmt_phone->bindValue(':company', '%' . ($row['ADDB_COMPANY'] ?? '') . '%', PDO::PARAM_STR);
-    $stmt_phone->execute();
-    $res_phone = $stmt_phone->fetch(PDO::FETCH_ASSOC);
-    $addb_phone = $res_phone['ADDB_PHONE'] ?? "";
+    // ตรวจสอบก่อนดึงข้อมูล
+    $sql_cust_string = "
+        SELECT ADDRBOOK.ADDB_PHONE
+        FROM ARADDRESS
+        LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+        WHERE ADDRBOOK.ADDB_COMPANY LIKE :company AND ARADDRESS.ARA_DEFAULT = 'Y'
+    ";
+    $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
+    $statement_cust_sqlsvr->bindValue(':company', '%' . ($row['ADDB_COMPANY'] ?? '') . '%', PDO::PARAM_STR);
+    $statement_cust_sqlsvr->execute();
 
-    // ดึงรหัสลูกค้า
-    $sql_cust_string2 = "SELECT TOP 1 ARFILE.AR_CODE FROM ARFILE WHERE ARFILE.AR_NAME = :company";
-    $stmt_ar = $conn_sqlsvr->prepare($sql_cust_string2);
-    $stmt_ar->bindValue(':company', $row['ADDB_COMPANY'] ?? '', PDO::PARAM_STR);
-    $stmt_ar->execute();
-    $res_ar = $stmt_ar->fetch(PDO::FETCH_ASSOC);
-    $AR_CODE = $res_ar['AR_CODE'] ?? "";
+    $addb_phone = "";
+    $result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC);
+    if ($result_sqlsvr_cust) {
+        $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'] ?? "";
+    }
 
-    // เตรียมข้อมูล String ป้องกันเครื่องหมาย Comma ใน CSV
-    $ADDB_COMPANY = str_replace(",", " ", $row['ADDB_COMPANY'] ?? "");
-    $DI_REF = str_replace(",", " ", $row['DI_REF'] ?? '');
-    $SKU_CODE = str_replace(",", " ", $row['SKU_CODE'] ?? '');
-    $SKU_NAME = str_replace(",", " ", $row['SKU_NAME'] ?? '');
+    $sql_cust_string2 = "
+        SELECT TOP 1 ARFILE.AR_CODE
+        FROM ARFILE
+        WHERE ARFILE.AR_NAME = :company;
+    ";
+    $statement_cust_sqlsvr2 = $conn_sqlsvr->prepare($sql_cust_string2);
+    $statement_cust_sqlsvr2->bindValue(':company', $row['ADDB_COMPANY'] ?? '', PDO::PARAM_STR);
+    $statement_cust_sqlsvr2->execute();
 
-    $data .= "$line,{$row['DI_DAY']},$month_name,$year,$DI_REF,$AR_CODE,$ADDB_COMPANY,$addb_phone,{$row['ADDB_BRANCH']},{$row['ADDB_ADDB_1']} {$row['ADDB_ADDB_2']},{$row['ADDB_ADDB_3']},$SKU_CODE,$SKU_NAME,$TRD_QTY,{$row['TRD_U_PRC']},{$row['TRD_B_AMT']}\n";
+    $AR_CODE = "";
+    $result_sqlsvr_cust2 = $statement_cust_sqlsvr2->fetch(PDO::FETCH_ASSOC);
+    if ($result_sqlsvr_cust2) {
+        $AR_CODE = $result_sqlsvr_cust2['AR_CODE'] ?? "";
+    }
+
+    $ADDB_COMPANY = $row['ADDB_COMPANY'] ?? "";
+    $ADDB_ADDB_1 = $row['ADDB_ADDB_1'] ?? "";
+    $ADDB_ADDB_2 = $row['ADDB_ADDB_2'] ?? "";
+    $ADDB_ADDB_3 = $row['ADDB_ADDB_3'] ?? "";
+    $ADDB_BRANCH = $row['ADDB_BRANCH'] ?? "";
+
+    $data .= "$line,{$row['DI_DAY']},$month_name,$year," .
+        str_replace(",", " ", $row['DI_REF'] ?? '') . "," .
+        str_replace(",", " ", $AR_CODE) . "," .
+        str_replace(",", " ", $ADDB_COMPANY) . "," .
+        str_replace(",", " ", $addb_phone) . "," .
+        str_replace(",", " ", $ADDB_BRANCH) . "," .
+        str_replace(",", " ", $ADDB_ADDB_1 . " " . $ADDB_ADDB_2) . "," .
+        str_replace(",", " ", $ADDB_ADDB_3) . "," .
+        str_replace(",", " ", $row['SKU_CODE'] ?? '') . "," .
+        str_replace(",", " ", $row['SKU_NAME'] ?? '') . "," .
+        str_replace(",", " ", $TRD_QTY) . "," .
+        str_replace(",", " ", $row['TRD_U_PRC'] ?? '') . "," .
+        str_replace(",", " ", $row['TRD_B_AMT'] ?? '') . "\n";
 }
 
-// พิมพ์ BOM เพื่อให้ Excel อ่านภาษาไทยออก และพ่นข้อมูล CSV
-echo "\xEF\xBB\xBF";
+
+// ตรวจสอบว่าไฟล์ถูกสร้างขึ้นหรือไม่
+//file_put_contents("test.csv", $data);
+echo "\xEF\xBB\xBF"; // BOM UTF-8
 echo $data;
+
 exit();
