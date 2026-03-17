@@ -62,7 +62,7 @@ TRANSTKD ,
 SKUMASTER
  
 WHERE
-ADDRBOOK.ADDB_COMPANY like '%". $customer_name . "%' AND
+REPLACE(REPLACE(ADDRBOOK.ADDB_COMPANY, '  ', ' '), ' ', '%') like '%" . str_replace(" ", "%", $customer_name) . "%' AND
 ADDRBOOK.ADDB_SEARCH like '%". $car_no . "%' AND
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
