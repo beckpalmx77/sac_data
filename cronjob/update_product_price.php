@@ -83,9 +83,9 @@ $duration = $end_time - $start_time;
 
 echo "\n=== สรุปผลการทำงาน ===\n";
 // แปลงวินาทีเป็น ชั่วโมง นาที วินาที
-$hours = floor($duration / 3600);
-$minutes = floor(($duration % 3600) / 60);
-$seconds = floor($duration % 60);
+$hours = (int)floor($duration / 3600);
+$minutes = (int)floor(($duration % 3600) / 60);
+$seconds = (int)floor($duration % 60);
 
 $time_text = "";
 if ($hours > 0) $time_text .= "$hours ชั่วโมง ";
