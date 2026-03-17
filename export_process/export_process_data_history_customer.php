@@ -80,7 +80,7 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_SEARCH , TRANSTKD.T
 
 $sql_string = $sql_data_selectDetail . $order_by ;
 
-
+/*
 $myfile = fopen("query_export_history_customer.txt", "w") or die("Unable to open file!");
 fwrite($myfile, "=== Main Query ===\n");
 fwrite($myfile, $sql_string);
@@ -90,7 +90,7 @@ fwrite($myfile, "car_no: " . $car_no . "\n");
 fwrite($myfile, "doc_date_start: " . $doc_date_start . "\n");
 fwrite($myfile, "doc_date_to: " . $doc_date_to . "\n");
 fclose($myfile);
-
+*/
 
 $statement_sqlsvr = $conn_sqlsvr->query($sql_string);
 $line = 0 ;
