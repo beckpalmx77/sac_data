@@ -87,7 +87,26 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     <div class="">
                                                                         <input type="text" name="customer_name"
                                                                                class="form-control"
-                                                                               id="customer_name" value="">
+                                                                               id="customer_name" value=""
+                                                                               placeholder="พิมพ์ชื่อลูกค้า...">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group has-success">
+                                                                    <label for="success" class="control-label">ค้นหาตามวันที่</label>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" name="doc_date_start"
+                                                                                   class="form-control"
+                                                                                   id="doc_date_start" value=""
+                                                                                   placeholder="จากวันที่" readonly>
+                                                                        </div>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" name="doc_date_to"
+                                                                                   class="form-control"
+                                                                                   id="doc_date_to" value=""
+                                                                                   placeholder="ถึงวันที่" readonly>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
 
@@ -178,6 +197,8 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <script src="vendor/select2/dist/js/select2.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- select2 css -->
     <link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
@@ -204,31 +225,71 @@ if (strlen($_SESSION['alogin']) == "") {
     <script src="js/popup.js"></script>
 
     <script>
-        $(document).ready(function () {
-
-            $("#selCustomer").select2({
-                ajax: {
-                    url: "model/get_customer_ajax.php",
-                    type: "post",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            searchTerm: params.term // search term
-                        };
-                    },
-                    processResults: function (response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
+        $(document).ready(function() {
+            var cache = {};
+            
+            $("#customer_name").autocomplete({
+                source: function(request, response) {
+                    var term = request.term;
+                    
+                    if (term in cache) {
+                        response(cache[term]);
+                        return;
+                    }
+                    
+                    $.ajax({
+                        url: "model/get_customer_ADDRBOOK.php",
+                        dataType: "json",
+                        data: {
+                            term: term
+                        },
+                        success: function(data) {
+                            cache[term] = data.results;
+                            response(data.results);
+                        },
+                        error: function(xhr, status, error) {
+                            console.log("Error: " + error);
+                            response([]);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, ui) {
+                    console.log("Selected: " + ui.item.value);
                 }
             });
         });
-
     </script>
 
+    <script>
+        $(document).ready(function () {
+            let today = new Date();
+            let firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            let day = String(today.getDate()).padStart(2, '0');
+            let month = String(today.getMonth() + 1).padStart(2, '0');
+            let year = today.getFullYear();
+            
+            let firstDayStr = '01' + '-' + month + '-' + year;
+            let todayStr = day + '-' + month + '-' + year;
+            
+            $('#doc_date_start').val(firstDayStr);
+            $('#doc_date_to').val(todayStr);
+            
+            $('#doc_date_start').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+            $('#doc_date_to').datepicker({
+                format: "dd-mm-yyyy",
+                todayHighlight: true,
+                language: "th",
+                autoclose: true
+            });
+        });
+    </script>
 
     <script>
 
@@ -275,16 +336,20 @@ if (strlen($_SESSION['alogin']) == "") {
 
         $("#BtnSale").click(function () {
 
-            if (document.getElementById('customer_name').value === "" && document.getElementById('car_no').value === "") {
+            let customer_name = document.getElementById("customer_name").value;
+            let car_no = document.getElementById("car_no").value;
+            let doc_date_start = document.getElementById("doc_date_start").value;
+            let doc_date_to = document.getElementById("doc_date_to").value;
+            
+            if (customer_name === "" && car_no === "") {
                 alert("กรุณาป้อนชื่อลูกค้า หรือ หมายเลขทะเบียนรถ");
             } else {
                 let main_menu = document.getElementById("main_menu").value;
                 let sub_menu = document.getElementById("sub_menu").value;
-                let customer_name = document.getElementById("customer_name").value;
-                let car_no = document.getElementById("car_no").value;
                 let sku_name = document.getElementById("sku_name").value;
                 let url = "show_history_customer_data_detail?title=ค้นหาประวัติการใช้บริการของลูกค้า (History of customer service)"
                     + '&main_menu=' + main_menu + '&sub_menu=' + sub_menu + '&customer_name=' + customer_name + '&car_no=' + car_no + '&sku_name=' + sku_name
+                    + '&doc_date_start=' + doc_date_start + '&doc_date_to=' + doc_date_to
                     + '&action=QUERY';
                 OpenPopupCenter(url, "", "");
             }
