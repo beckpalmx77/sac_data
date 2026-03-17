@@ -55,6 +55,17 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
     $doc_date_to = $_POST['doc_date_to'] ?? '';
     $where_date = "";
 
+    $where_clauses = array();
+
+    if (!empty($customer_name)) {
+        $customer_name_search = str_replace(' ', '%', $customer_name);
+        $where_clauses[] = "REPLACE(REPLACE(ADDRBOOK.ADDB_COMPANY, '  ', ' '), ' ', '%') LIKE '%" . $customer_name_search . "%'";
+    }
+
+    if (!empty($car_no)) {
+        $where_clauses[] = "ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%'";
+    }
+
     if ($date_option === 'range') {
         if (!empty($doc_date_start)) {
             $doc_date_start = substr($doc_date_start, 6, 4) . "/" . substr($doc_date_start, 3, 2) . "/" . substr($doc_date_start, 0, 2);
@@ -63,8 +74,14 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
             $doc_date_to = substr($doc_date_to, 6, 4) . "/" . substr($doc_date_to, 3, 2) . "/" . substr($doc_date_to, 0, 2);
         }
         if (!empty($doc_date_start) && !empty($doc_date_to)) {
-            $where_date = " AND DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "'";
+            $where_clauses[] = "DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "'";
         }
+    }
+
+    if (count($where_clauses) > 0) {
+        $where_sql = " AND " . implode(" AND ", $where_clauses);
+    } else {
+        $where_sql = " AND 1=0 ";
     }
 
     $addb_phone = "";
@@ -105,16 +122,14 @@ TRANSTKD ,
 SKUMASTER
  
 WHERE
-ADDRBOOK.ADDB_COMPANY like '%" . $customer_name . "%' AND
-ADDRBOOK.ADDB_SEARCH like '%" . $car_no . "%' AND
 TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
 (ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
 (ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
 (DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
 (DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
 (TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) " . $where_date
-        . " ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
+(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) " . $where_sql . "
+ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
 
     $stmt = $conn_sqlsvr->prepare($sql_data_select, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
     $stmt->execute();
