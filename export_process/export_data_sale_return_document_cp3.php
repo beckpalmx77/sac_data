@@ -97,21 +97,8 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $year = $row['DI_YEAR'] ?? '';
     $TRD_QTY = ($row['TRD_Q_FREE'] > 0) ? ($row['TRD_QTY'] + $row['TRD_Q_FREE']) : ($row['TRD_QTY'] ?? 0);
 
-    // ดึงเบอร์โทรศัพท์
-    $sql_cust_string = "SELECT ADDRBOOK.ADDB_PHONE FROM ARADDRESS LEFT JOIN ADDRBOOK ON ADDB_KEY = ARA_ADDB WHERE ADDB_COMPANY LIKE :company AND ARA_DEFAULT = 'Y'";
-    $stmt_phone = $conn_sqlsvr->prepare($sql_cust_string);
-    $stmt_phone->bindValue(':company', '%' . ($row['ADDB_COMPANY'] ?? '') . '%', PDO::PARAM_STR);
-    $stmt_phone->execute();
-    $res_phone = $stmt_phone->fetch(PDO::FETCH_ASSOC);
-    $addb_phone = $res_phone['ADDB_PHONE'] ?? "";
-
-    // ดึงรหัสลูกค้า
-    $sql_cust_string2 = "SELECT TOP 1 ARFILE.AR_CODE FROM ARFILE WHERE ARFILE.AR_NAME = :company";
-    $stmt_ar = $conn_sqlsvr->prepare($sql_cust_string2);
-    $stmt_ar->bindValue(':company', $row['ADDB_COMPANY'] ?? '', PDO::PARAM_STR);
-    $stmt_ar->execute();
-    $res_ar = $stmt_ar->fetch(PDO::FETCH_ASSOC);
-    $AR_CODE = $res_ar['AR_CODE'] ?? "";
+    $addb_phone = $row['ADDB_PHONE_MAIN'] ?? "";
+    $AR_CODE = $row['AR_CODE_MAIN'] ?? "";
 
     // เตรียมข้อมูล String ป้องกันเครื่องหมาย Comma ใน CSV
     $ADDB_COMPANY = str_replace(",", " ", $row['ADDB_COMPANY'] ?? "");

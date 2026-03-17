@@ -54,9 +54,7 @@ if ($_POST["action"] === 'GET_HISTORY_DETAIL') {
     $doc_date_start = $_POST['doc_date_start'];
     $doc_date_to = $_POST['doc_date_to'];
 
-    $addb_phone = "";
-
-    $where_clauses = array();
+$addb_phone = "";
     
     if (!empty($customer_name)) {
         $customer_name_search = str_replace(' ', '%', $customer_name);
@@ -94,6 +92,7 @@ ADDRBOOK.ADDB_ADDB_2 ,
 ADDRBOOK.ADDB_ADDB_3 ,  
 ADDRBOOK.ADDB_COMPANY ,
 ADDRBOOK.ADDB_PHONE ,
+ISNULL(PHONE.ADDB_PHONE, '') AS ADDB_PHONE_MAIN,
 DOCINFO.DI_REF , 
 DOCINFO.DI_DATE,
 DAY(DI_DATE) AS DI_DAY ,
@@ -111,22 +110,22 @@ TRANSTKD.TRD_B_VAT,
 TRANSTKD.TRD_B_AMT
 
 FROM 
-ADDRBOOK,
-ARADDRESS,
-ARDETAIL,
-DOCINFO ,
-TRANSTKH ,
-TRANSTKD ,
-SKUMASTER
+ADDRBOOK
+INNER JOIN ARADDRESS ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+INNER JOIN ARDETAIL ON ARDETAIL.ARD_AR = ARADDRESS.ARA_AR
+INNER JOIN DOCINFO ON DOCINFO.DI_KEY = ARDETAIL.ARD_DI
+INNER JOIN TRANSTKH ON DOCINFO.DI_KEY = TRANSTKH.TRH_DI
+INNER JOIN TRANSTKD ON TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH
+INNER JOIN SKUMASTER ON TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY
+LEFT JOIN (
+    SELECT ARADDRESS.ARA_AR, ADDRBOOK.ADDB_PHONE
+    FROM ARADDRESS
+    INNER JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+    WHERE ARADDRESS.ARA_DEFAULT = 'Y'
+) AS PHONE ON ARADDRESS.ARA_AR = PHONE.ARA_AR
  
 WHERE
-TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
-(ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
-(ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
-(DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
-(DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
-(TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY)
+TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY
 " . $where_sql . "
 
  ORDER BY ADDRBOOK.ADDB_COMPANY , TRD_KEY DESC , SKUMASTER.SKU_CODE ";
@@ -173,22 +172,11 @@ TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND
             $TRD_QTY = $row['TRD_Q_FREE'] > 0 ? $row['TRD_QTY'] = $row['TRD_QTY'] + $row['TRD_Q_FREE'] : $row['TRD_QTY'];
             $line_no++;
 
-            $sql_cust_string = "
-            SELECT ADDRBOOK.ADDB_PHONE,ARADDRESS.ARA_ADDB
-            FROM ARADDRESS
-            LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
-            WHERE ADDRBOOK.ADDB_COMPANY LIKE '%" . $row['ADDB_COMPANY'] . "%' AND ARADDRESS.ARA_DEFAULT = 'Y' ";
-            $statement_cust_sqlsvr = $conn_sqlsvr->prepare($sql_cust_string);
-            $statement_cust_sqlsvr->execute();
-            while ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
-                $addb_phone = $result_sqlsvr_cust['ADDB_PHONE'];
-            }
-
             $data[] = array(
                 "line_no" => $line_no,
                 "DI_REF" => $row['DI_REF'],
                 "DI_DATE" => $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'],
-                "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . $addb_phone,
+                "ADDB_COMPANY" => $row['ADDB_COMPANY'] . "  " . ($row['ADDB_PHONE_MAIN'] ?? ''),
                 "ADDB_BRANCH" => $row['ADDB_BRANCH']===null?"-":$row['ADDB_BRANCH'],
                 "ADDB_ADDB" => $row['ADDB_ADDB_1'] . "-" . $row['ADDB_ADDB_2'],
                 "KM" => $row['ADDB_ADDB_3'],
