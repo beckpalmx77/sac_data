@@ -26,7 +26,7 @@ $sql_cmd = "";
 
 $data = "ลำดับที่,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,หมายเลขโทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ/รุ่น,เลขไมล์,รหัสสินค้า,ชื่อสินค้า,จำนวน,จำนวนเงิน(บาท)\n";
 
-$sql_data_selectDetail =  "  SELECT 
+$sql_data_selectDetail =  "  SELECT TOP 5000
 TRANSTKD.TRD_KEY , 
 ADDRBOOK.ADDB_KEY , 
 ADDRBOOK.ADDB_BRANCH , 
@@ -36,6 +36,7 @@ ADDRBOOK.ADDB_ADDB_2 ,
 ADDRBOOK.ADDB_ADDB_3 ,
 ADDRBOOK.ADDB_COMPANY ,
 ADDRBOOK.ADDB_PHONE ,
+ISNULL(PHONE.ADDB_PHONE, '') AS ADDB_PHONE_MAIN,
 DOCINFO.DI_REF , 
 DOCINFO.DI_DATE,
 DAY(DI_DATE) AS DI_DAY ,
@@ -53,24 +54,24 @@ TRANSTKD.TRD_B_VAT,
 TRANSTKD.TRD_B_AMT
 
 FROM 
-ADDRBOOK,
-ARADDRESS,
-ARDETAIL,
-DOCINFO ,
-TRANSTKH ,
-TRANSTKD ,
-SKUMASTER
+ADDRBOOK
+INNER JOIN ARADDRESS ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+INNER JOIN ARDETAIL ON ARDETAIL.ARD_AR = ARADDRESS.ARA_AR
+INNER JOIN DOCINFO ON DOCINFO.DI_KEY = ARDETAIL.ARD_DI
+INNER JOIN TRANSTKH ON DOCINFO.DI_KEY = TRANSTKH.TRH_DI
+INNER JOIN TRANSTKD ON TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH
+INNER JOIN SKUMASTER ON TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY
+LEFT JOIN (
+    SELECT ARADDRESS.ARA_AR, ADDRBOOK.ADDB_PHONE
+    FROM ARADDRESS
+    INNER JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
+    WHERE ARADDRESS.ARA_DEFAULT = 'Y'
+) AS PHONE ON ARADDRESS.ARA_AR = PHONE.ARA_AR
  
 WHERE
 REPLACE(REPLACE(ADDRBOOK.ADDB_COMPANY, '  ', ' '), ' ', '%') like '%" . str_replace(" ", "%", $customer_name) . "%' AND
 ADDRBOOK.ADDB_SEARCH like '%". $car_no . "%' AND
-(ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB) AND 
-TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY AND 
-(ARDETAIL.ARD_AR = ARADDRESS.ARA_AR) AND 
-(DOCINFO.DI_KEY = ARDETAIL.ARD_DI) AND 
-(DOCINFO.DI_KEY = TRANSTKH.TRH_DI) AND 
-(TRANSTKH.TRH_KEY = TRANSTKD.TRD_TRH) AND 
-(TRANSTKD.TRD_SKU = SKUMASTER.SKU_KEY) AND DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' ";
+DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' ";
 
 $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_SEARCH , TRANSTKD.TRD_KEY , SKUMASTER.SKU_CODE ";
 
@@ -79,7 +80,7 @@ $order_by = " ORDER BY ADDRBOOK.ADDB_COMPANY , ADDRBOOK.ADDB_SEARCH , TRANSTKD.T
 
 $sql_string = $sql_data_selectDetail . $order_by ;
 
-/*
+
 $myfile = fopen("query_export_history_customer.txt", "w") or die("Unable to open file!");
 fwrite($myfile, "=== Main Query ===\n");
 fwrite($myfile, $sql_string);
@@ -89,7 +90,7 @@ fwrite($myfile, "car_no: " . $car_no . "\n");
 fwrite($myfile, "doc_date_start: " . $doc_date_start . "\n");
 fwrite($myfile, "doc_date_to: " . $doc_date_to . "\n");
 fclose($myfile);
-*/
+
 
 $statement_sqlsvr = $conn_sqlsvr->query($sql_string);
 $line = 0 ;
@@ -97,23 +98,13 @@ while ($result_sqlsvr_detail = $statement_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
 
     $line++;
 
-    $sql_cust_string = "
-        SELECT ADDRBOOK.ADDB_PHONE,ARADDRESS.ARA_ADDB
-        FROM ARADDRESS
-        LEFT JOIN ADDRBOOK ON ADDRBOOK.ADDB_KEY = ARADDRESS.ARA_ADDB
-        WHERE ADDRBOOK.ADDB_COMPANY LIKE '%" . $result_sqlsvr_detail['ADDB_COMPANY'] . "%' AND ARADDRESS.ARA_DEFAULT = 'Y' ";
-    $statement_cust_sqlsvr = $conn_sqlsvr->query($sql_cust_string);
-    while ($result_sqlsvr_cust = $statement_cust_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
-        $addb_phone = "^" . $result_sqlsvr_cust['ADDB_PHONE'];
-    }
-
     $TRD_QTY = $result_sqlsvr_detail['TRD_Q_FREE'] > 0 ? $result_sqlsvr_detail['TRD_QTY'] = $result_sqlsvr_detail['TRD_QTY'] + $result_sqlsvr_detail['TRD_Q_FREE'] : $result_sqlsvr_detail['TRD_QTY'];
 
     $data .= $line . ",";
     $data .= $result_sqlsvr_detail['DI_REF'] . ",";
     $data .= $result_sqlsvr_detail['DI_DAY'] . "/" . $result_sqlsvr_detail['DI_MONTH'] . "/" . $result_sqlsvr_detail['DI_YEAR'] . ",";
     $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_COMPANY']) . ",";
-    $data .= str_replace(",", "^", $addb_phone===null?"-":$addb_phone) . ",";
+    $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_PHONE_MAIN']===null?"-":$result_sqlsvr_detail['ADDB_PHONE_MAIN']) . ",";
     $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_SEARCH']===null?"-":$result_sqlsvr_detail['ADDB_SEARCH']) . ",";
     $data .= str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_1']) . "  "
         . str_replace(",", "^", $result_sqlsvr_detail['ADDB_ADDB_2']) . ",";
