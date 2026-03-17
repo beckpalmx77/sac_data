@@ -39,8 +39,20 @@ switch ($branch) {
         break;
 }
 
-$doc_date_start = substr($_POST['doc_date_start'], 6, 4) . "/" . substr($_POST['doc_date_start'], 3, 2) . "/" . substr($_POST['doc_date_start'], 0, 2);
-$doc_date_to = substr($_POST['doc_date_to'], 6, 4) . "/" . substr($_POST['doc_date_to'], 3, 2) . "/" . substr($_POST['doc_date_to'], 0, 2);
+$doc_date_start_input = $_POST['doc_date_start'] ?? "";
+$doc_date_to_input = $_POST['doc_date_to'] ?? "";
+
+if (!empty($doc_date_start_input) && strlen($doc_date_start_input) == 10 && substr($doc_date_start_input, 2, 1) == '-') {
+    $doc_date_start = substr($doc_date_start_input, 6, 4) . "/" . substr($doc_date_start_input, 3, 2) . "/" . substr($doc_date_start_input, 0, 2);
+} else {
+    $doc_date_start = "";
+}
+
+if (!empty($doc_date_to_input) && strlen($doc_date_to_input) == 10 && substr($doc_date_to_input, 2, 1) == '-') {
+    $doc_date_to = substr($doc_date_to_input, 6, 4) . "/" . substr($doc_date_to_input, 3, 2) . "/" . substr($doc_date_to_input, 0, 2);
+} else {
+    $doc_date_to = "";
+}
 
 $month_arr = array(
     "01" => "มกราคม",
@@ -67,9 +79,11 @@ if ($product_cat !== '-') {
     $query_cat = " AND ICCAT_CODE = '" . $product_cat . "' ";
 }
 
-$String_Sql = $select_query_daily . $select_query_daily_cond . " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' "
-    . $query_daily_cond_ext . $query_cat
-    . $select_query_daily_order;
+$String_Sql = $select_query_daily . $select_query_daily_cond;
+if (!empty($doc_date_start) && !empty($doc_date_to)) {
+    $String_Sql .= " AND DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "' ";
+}
+$String_Sql .= $query_daily_cond_ext . $query_cat . $select_query_daily_order;
 
 /*
 $my_file = fopen("sql_string.txt", "w") or die("Unable to open file!");
