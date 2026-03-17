@@ -110,7 +110,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        class="control-label">จากวันที่</label>
                                                 <i class="fa fa-calendar"
                                                    aria-hidden="true"></i>
-                                                <input type="text" class="form-control datepicker"
+                                                <input type="text" class="form-control"
                                                        id="doc_date_start"
                                                        name="doc_date_start"
                                                        required="required"
@@ -123,7 +123,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                        class="control-label">ถึงวันที่</label>
                                                 <i class="fa fa-calendar"
                                                    aria-hidden="true"></i>
-                                                <input type="text" class="form-control datepicker"
+                                                <input type="text" class="form-control"
                                                        id="doc_date_to"
                                                        name="doc_date_to"
                                                        required="required"
@@ -157,13 +157,33 @@ if (strlen($_SESSION['alogin']) == "") {
 
 </div>
 
-<!-- Scripts -->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
 <script src="vendor/select2/dist/js/select2.min.js"></script>
-<script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- select2 css -->
+<link href='js/select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+
+<!-- select2 script -->
+<script src='js/select2/dist/js/select2.min.js'></script>
+<!-- Bootstrap Datepicker -->
+<script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<!-- Bootstrap Touchspin -->
+<script src="vendor/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
+<!-- ClockPicker -->
+<script src="vendor/clock-picker/clockpicker.js"></script>
+<!-- RuangAdmin Javascript -->
+<script src="js/myadmin.min.js"></script>
+<!-- Javascript for this page -->
+
+<script src="vendor/date-picker-1.9/js/bootstrap-datepicker.js"></script>
+<script src="vendor/date-picker-1.9/locales/bootstrap-datepicker.th.min.js"></script>
+<!--link href="vendor/date-picker-1.9/css/date_picker_style.css" rel="stylesheet"/-->
+<link href="vendor/date-picker-1.9/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
 <script>
     $(document).ready(function () {
@@ -185,17 +205,21 @@ if (strlen($_SESSION['alogin']) == "") {
 
         let defaultDates = getDefaultDates();
 
-        // ตั้งค่าวันที่เริ่มต้น
         $('#doc_date_start').val(defaultDates.start);
         $('#doc_date_to').val(defaultDates.end);
 
-        // เปิดใช้งาน datepicker
-        $('.datepicker').datepicker({
+        $('#doc_date_start').datepicker({
             format: "dd-mm-yyyy",
             todayHighlight: true,
             language: "th",
-            autoclose: true,
-            todayBtn: true
+            autoclose: true
+        });
+
+        $('#doc_date_to').datepicker({
+            format: "dd-mm-yyyy",
+            todayHighlight: true,
+            language: "th",
+            autoclose: true
         });
 
         function toggleDateInputs() {
@@ -203,16 +227,13 @@ if (strlen($_SESSION['alogin']) == "") {
                 $("#doc_date_start, #doc_date_to").prop("disabled", true).val("");
             } else {
                 $("#doc_date_start, #doc_date_to").prop("disabled", false);
-                // ตั้งค่ากลับไปเป็นวันที่ 1 ของเดือนปัจจุบันและวันที่ปัจจุบัน
                 $('#doc_date_start').val(defaultDates.start);
                 $('#doc_date_to').val(defaultDates.end);
             }
         }
 
-        // เรียกใช้งานเมื่อโหลดหน้าเว็บ
         toggleDateInputs();
 
-        // ตรวจจับการเปลี่ยนค่า radio button
         $("input[name='date_option']").change(function () {
             toggleDateInputs();
         });
