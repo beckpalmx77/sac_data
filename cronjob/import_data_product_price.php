@@ -3,10 +3,10 @@
 ini_set('display_errors', 1);
 error_reporting(~0);
 
-include("../config/connect_sqlserver.php");
-include("../config/connect_db.php");
-include("../config/connect_db2s.php");
-include("../cond_file/query-product-price-main.php");
+include(dirname(__DIR__) . "/config/connect_sqlserver.php");
+include(dirname(__DIR__) . "/config/connect_db.php");
+include(dirname(__DIR__) . "/config/connect_db2s.php");
+include(dirname(__DIR__) . "/cond_file/query-product-price-main.php");
 
 $sql_sqlsvr = $select_query . $sql_cond . $sql_order;
 
@@ -44,14 +44,14 @@ $conn2->beginTransaction();
 foreach ($all_rows as $result_sqlsvr) {
     $current++;
     
-    if ($current % 100 == 0 || $current == $total_rows) {
+    if ($current % 1 == 0 || $current == $total_rows) {
         echo "\r[{$current}/{$total_rows}] DB1:I:{$count_insert} U:{$count_update} | DB2:I:{$count_insert2} U:{$count_update2} ";
         @ob_flush();
         flush();
     }
 
-    $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price) 
-            VALUES (:product_key,:product_id,:pgroup_id,:name_t,:brand_id,:price_code,:price)";
+    $sql = "REPLACE INTO ims_product(product_key,product_id,pgroup_id,name_t,brand_id,price_code,price,unit_name) 
+            VALUES (:product_key,:product_id,:pgroup_id,:name_t,:brand_id,:price_code,:price,:unit_name)";
     $query = $conn->prepare($sql);
     $query->bindParam(':product_key', $result_sqlsvr["SKU_KEY"], PDO::PARAM_STR);
     $query->bindParam(':product_id', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
@@ -60,6 +60,7 @@ foreach ($all_rows as $result_sqlsvr) {
     $query->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
     $query->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
     $query->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+    $query->bindParam(':unit_name', $result_sqlsvr["UTQ_NAME"], PDO::PARAM_STR);
     $query->execute();
 
     $affected = $query->rowCount();
@@ -79,6 +80,7 @@ foreach ($all_rows as $result_sqlsvr) {
     $query2->bindParam(':brand_id', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
     $query2->bindParam(':price_code', $result_sqlsvr["ARPRB_CODE"], PDO::PARAM_STR);
     $query2->bindParam(':price', $result_sqlsvr["ARPLU_U_PRC"], PDO::PARAM_STR);
+    $query2->bindParam(':unit_name', $result_sqlsvr["UTQ_NAME"], PDO::PARAM_STR);
     $query2->execute();
 
     $affected2 = $query2->rowCount();

@@ -60,7 +60,7 @@ try {
         $total_qty = $row['TOTAL_QTY'];
 
         // แสดงความคืบหน้าทุก 100 รายการ
-        if ($current % 100 == 0 || $current == $total_rows) {
+        if ($current % 1 == 0 || $current == $total_rows) {
             echo "   กำลังประมวลผล: [$current/$total_rows] อัพเดทแล้ว: $count_updated รายการ\r";
         }
 
@@ -83,18 +83,22 @@ $duration = $end_time - $start_time;
 
 echo "\n=== สรุปผลการทำงาน ===\n";
 // แปลงวินาทีเป็น ชั่วโมง นาที วินาที
+/*
 $hours = (int)floor($duration / 3600);
 $minutes = (int)floor(($duration % 3600) / 60);
 $seconds = (int)floor($duration % 60);
+*/
 
+/*
 $time_text = "";
 if ($hours > 0) $time_text .= "$hours ชั่วโมง ";
 if ($minutes > 0) $time_text .= "$minutes นาที ";
 $time_text .= "$seconds วินาที";
+*/
 
 echo "เริ่มต้น: $start_datetime\n";
 echo "สิ้นสุด: $end_datetime\n";
-echo "ใช้เวลาทั้งหมด: $time_text\n";
+echo "ใช้เวลาทั้งหมด: $duration วินาที\n";
 echo "=======================\n";
 
 // ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
