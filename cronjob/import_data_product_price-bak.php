@@ -43,7 +43,7 @@ $conn2->beginTransaction();
 
 foreach ($all_rows as $result_sqlsvr) {
     $current++;
-
+    
     if ($current % 1 == 0 || $current == $total_rows) {
         echo "\r[{$current}/{$total_rows}] DB1:I:{$count_insert} U:{$count_update} | DB2:I:{$count_insert2} U:{$count_update2} ";
         @ob_flush();
