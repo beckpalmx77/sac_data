@@ -69,7 +69,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <input type="text" class="form-control"
                                                                                    id="ar_name"
                                                                                    name="ar_name"
-                                                                                   placeholder="ค้นหาชื่อลูกค้า">
+                                                                                   placeholder="พิมพ์ชื่อลูกค้า...">
                                                                         </div>
 
                                                                         <div class="col-sm-3">
@@ -78,7 +78,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <input type="text" class="form-control"
                                                                                    id="province"
                                                                                    name="province"
-                                                                                   placeholder="ค้นหาจังหวัด">
+                                                                                   placeholder="พิมพ์ชื่อจังหวัด...">
                                                                         </div>
 
                                                                         <div class="col-sm-3">
@@ -87,7 +87,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <input type="text" class="form-control"
                                                                                    id="phone"
                                                                                    name="phone"
-                                                                                   placeholder="ค้นหาเบอร์โทรศัพท์">
+                                                                                   placeholder="พิมพ์เบอร์โทรศัพท์...">
                                                                         </div>
 
                                                                     </div>
@@ -100,7 +100,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <input type="text" class="form-control"
                                                                                    id="slmn_code"
                                                                                    name="slmn_code"
-                                                                                   placeholder="รหัสพนักงานขาย">
+                                                                                   placeholder="พิมพ์ชื่อพนักงานขาย...">
                                                                         </div>
 
                                                                     </div>
@@ -212,7 +212,40 @@ if (strlen($_SESSION['alogin']) == "") {
                         }
                     });
                 },
-                minLength: 2
+                minLength: 1
+            });
+
+            $("#province").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "model/get_province.php",
+                        dataType: "json",
+                        data: {term: request.term},
+                        success: function (data) {
+                            response(data.results);
+                        }
+                    });
+                },
+                minLength: 1
+            });
+
+            $("#slmn_code").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "model/get_salesman.php",
+                        dataType: "json",
+                        data: {term: request.term},
+                        success: function (data) {
+                            response(data.results);
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    var code = ui.item.value.split(' - ')[0];
+                    $(this).val(code);
+                    return false;
+                }
             });
         });
     </script>
