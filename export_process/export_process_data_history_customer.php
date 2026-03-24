@@ -62,6 +62,25 @@ INNER JOIN ADDRBOOK ON TRANSTKH.TRH_SHIP_ADDB = ADDRBOOK.ADDB_KEY
 " . $where_sql . " DOCINFO.DI_DATE BETWEEN '" . $doc_date_start . "' AND '" . $doc_date_to . "'
 ORDER BY DOCINFO.DI_DATE DESC, ADDRBOOK.ADDB_SEARCH ASC";
 
+// ==========================================
+// ส่วนการเขียนไฟล์ Text Log (SQL Debug)
+// ==========================================
+
+/*
+$log_filename = "logs/sql_log_" . date('Ymd') . ".txt"; // ตั้งชื่อไฟล์ log ตามวันที่
+if (!is_dir('logs')) { mkdir('logs', 0777, true); } // สร้างโฟลเดอร์ logs ถ้ายังไม่มี
+
+$log_content = "--- Log Entry: " . date('Y-m-d H:i:s') . " ---\n";
+$log_content .= "Input Customer: " . $customer_name . "\n";
+$log_content .= "Input Car No: " . $car_no . "\n";
+$log_content .= "Date Range: " . $doc_date_start . " to " . $doc_date_to . "\n";
+$log_content .= "Full SQL:\n" . $sql_string . "\n";
+$log_content .= "-------------------------------------------\n\n";
+*/
+
+//file_put_contents($log_filename, $log_content, FILE_APPEND); // บันทึกต่อท้ายไฟล์เดิม
+// ==========================================
+
 // สร้างหัวตาราง CSV (ใช้ Double Quote ครอบเพื่อกันเพี้ยน)
 $data = "No.,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ทะเบียนรถ,รหัสสินค้า,รายการ,จำนวน,ราคา/หน่วย,ฐานภาษี,ภาษี,ยอดสุทธิ\n";
 
