@@ -6,7 +6,7 @@ $start_time = microtime(true);
 $start_datetime = date("Y-m-d H:i:s");
 echo "=== เริ่มต้นงาน: $start_datetime ===\n\n";
 
-include '../config/connect_db2.php';        // ตัวแปร $conn (MySQL - ตรวจพบว่าเป็น PDO)
+include '../config/connect_db.php';        // ตัวแปร $conn (MySQL - ตรวจพบว่าเป็น PDO)
 include '../config/connect_sqlserver.php'; // ตัวแปร $conn_sqlsvr (MSSQL - เป็น PDO)
 
 // 2. คำสั่ง SQL สำหรับดึงข้อมูลจาก MSSQL
