@@ -1,79 +1,104 @@
 <?php
-// ตั้งค่าให้ Script ทำงานได้ไม่จำกัดเวลา (สำหรับข้อมูล 1.7 ล้านแถว)
+// 1. ตั้งค่า Environment สำหรับข้อมูลขนาดใหญ่ (1.7 ล้านแถว)
 set_time_limit(0);
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '1024M');
 
 require_once('../config/connect_db.php');
 
 if (!$conn) {
-    die("[ERROR] Connection failed: " . mysqli_connect_error() . PHP_EOL);
+    die("[ERROR] " . date('H:i:s') . " - Connection failed: " . mysqli_connect_error() . PHP_EOL);
 }
 
-// ฟังก์ชันสำหรับแสดงข้อความออกหน้าจอ DOS
+// ฟังก์ชันสำหรับแสดง Log ออกหน้าจอ DOS
 function cli_log($message) {
     echo "[" . date('H:i:s') . "] " . $message . PHP_EOL;
 }
 
 try {
-    cli_log("--------------------------------------------------");
-    cli_log("เริ่มกระบวนการจัดการข้อมูลซ้ำในตาราง ims_product");
-    cli_log("--------------------------------------------------");
+    cli_log("==================================================");
+    cli_log("START: กระบวนการจัดการข้อมูลซ้ำในตาราง ims_product");
+    cli_log("==================================================");
 
-    // 1. นับจำนวนก่อนเริ่ม
-    $sql_count = "SELECT COUNT(*) as total FROM ims_product";
+    // --- ส่วนที่ 1: ตรวจสอบและนับจำนวนก่อนเริ่ม ---
+    $sql_total = "SELECT COUNT(*) as total FROM ims_product";
+
+    // คำนวณหาจำนวน Row ที่ซ้ำ (นับเฉพาะส่วนเกินที่จะถูกลบ)
+    $sql_duplicate = "SELECT SUM(duplicate_count - 1) as total_dup
+                      FROM (
+                          SELECT COUNT(*) as duplicate_count
+                          FROM ims_product
+                          GROUP BY product_id, pgroup_id, brand_id, name_t, price_code
+                          HAVING COUNT(*) > 1
+                      ) as dup_table";
+
     if ($conn instanceof mysqli) {
-        $res = $conn->query($sql_count);
-        $total_before = $res->fetch_assoc()['total'];
+        $total_before = $conn->query($sql_total)->fetch_assoc()['total'];
+        $res_dup = $conn->query($sql_duplicate)->fetch_assoc();
+        $duplicate_to_delete = $res_dup['total_dup'] ?? 0;
     } else {
-        $stmt = $conn->query($sql_count);
-        $total_before = $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        $total_before = $conn->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
+        $res_dup = $conn->query($sql_duplicate)->fetch(PDO::FETCH_ASSOC);
+        $duplicate_to_delete = $res_dup['total_dup'] ?? 0;
     }
 
-    cli_log("อ่านข้อมูลพบทั้งหมด: " . number_format($total_before) . " รายการ");
-    cli_log("กำลังคัดกรองข้อมูลซ้ำ (อาจใช้เวลาสักครู่)...");
+    cli_log("สถิติก่อนเริ่ม:");
+    cli_log(" - ข้อมูลทั้งหมดในตาราง: " . number_format($total_before) . " รายการ");
+    cli_log(" - ตรวจพบรายการที่ซ้ำ: " . number_format($duplicate_to_delete) . " รายการ");
 
-    // 2. ใช้ Temporary Table เพื่อความเร็วสูงสุดในกรณีข้อมูลหลักล้าน
+    if ($duplicate_to_delete <= 0) {
+        cli_log("ไม่พบข้อมูลซ้ำในระบบ จบการทำงาน.");
+        cli_log("==================================================");
+        exit;
+    }
+
+    // --- ส่วนที่ 2: เริ่มกระบวนการลบ (Execute) ---
+    cli_log("กำลังดำเนินการลบข้อมูลที่ซ้ำ...");
+
+    // 2.1 สร้างตารางชั่วคราวเก็บค่า Unique
     $sql_temp = "CREATE TEMPORARY TABLE temp_ims_product AS 
                  SELECT DISTINCT product_id, pgroup_id, brand_id, name_t, price_code 
                  FROM ims_product";
 
+    // 2.2 ล้างตารางหลัก
     $sql_del = "TRUNCATE TABLE ims_product";
 
+    // 2.3 ย้ายข้อมูลกลับ
     $sql_restore = "INSERT INTO ims_product (product_id, pgroup_id, brand_id, name_t, price_code) 
                     SELECT * FROM temp_ims_product";
 
-    // รันคำสั่ง SQL
     if ($conn instanceof mysqli) {
+        cli_log("Step 1: คัดกรองข้อมูลลงตารางชั่วคราว...");
         $conn->query($sql_temp);
-        cli_log("สร้างตารางชั่วคราวสำเร็จ...");
 
+        cli_log("Step 2: ล้างข้อมูลตารางเดิม (Truncate)...");
         $conn->query($sql_del);
-        cli_log("ล้างข้อมูลตารางเดิมเรียบร้อย...");
 
+        cli_log("Step 3: ย้ายข้อมูลกลับเข้าตารางหลัก...");
         $conn->query($sql_restore);
-        cli_log("ย้ายข้อมูลที่คัดกรองแล้วกลับเข้าตารางหลัก...");
 
-        $res_after = $conn->query($sql_count);
-        $total_after = $res_after->fetch_assoc()['total'];
+        $total_after = $conn->query($sql_total)->fetch_assoc()['total'];
     } else {
+        cli_log("Step 1: คัดกรองข้อมูลลงตารางชั่วคราว...");
         $conn->exec($sql_temp);
+
+        cli_log("Step 2: ล้างข้อมูลตารางเดิม (Truncate)...");
         $conn->exec($sql_del);
+
+        cli_log("Step 3: ย้ายข้อมูลกลับเข้าตารางหลัก...");
         $conn->exec($sql_restore);
 
-        $stmt_after = $conn->query($sql_count);
-        $total_after = $stmt_after->fetch(PDO::FETCH_ASSOC)['total'];
+        $total_after = $conn->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
-    $deleted = $total_before - $total_after;
+    $actual_deleted = $total_before - $total_after;
 
-    // 3. สรุปผล
-    cli_log("--------------------------------------------------");
-    cli_log("เสร็จสิ้นการทำงาน!");
-    cli_log("จำนวนข้อมูลเริ่มต้น: " . number_format($total_before));
-    cli_log("จำนวนข้อมูลคงเหลือ: " . number_format($total_after));
-    cli_log("จำนวนที่ลบออก (ซ้ำ): " . number_format($deleted));
-    cli_log("--------------------------------------------------");
+    // --- ส่วนที่ 3: สรุปผลลัพธ์ ---
+    cli_log("==================================================");
+    cli_log("เสร็จสิ้นภารกิจ!");
+    cli_log("จำนวนที่ลบออกไปจริง: " . number_format($actual_deleted) . " รายการ");
+    cli_log("คงเหลือข้อมูลใช้งาน: " . number_format($total_after) . " รายการ");
+    cli_log("==================================================");
 
 } catch (Exception $e) {
-    cli_log("เกิดข้อผิดพลาด: " . $e->getMessage());
+    cli_log("[CRITICAL ERROR] " . $e->getMessage());
 }
