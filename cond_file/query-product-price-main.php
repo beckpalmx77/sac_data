@@ -51,6 +51,16 @@ INNER JOIN PRICETAG T WITH (NOLOCK) ON A.ARPLU_TAG = T.TAG_KEY
 INNER JOIN ARPRICETAB TAB WITH (NOLOCK) ON A.ARPLU_ARPRB = TAB.ARPRB_KEY
 ";
 
-$sql_cond = " WHERE 1=1 "; // คุณสามารถเพิ่มเงื่อนไขการกรองอื่นๆ ต่อจากตรงนี้ได้
+$sql_cond = " WHERE (
+    C.ICCAT_CODE LIKE '1SAC%' OR 
+    C.ICCAT_CODE LIKE '2SAC%' OR 
+    C.ICCAT_CODE LIKE '3SAC%' OR 
+    C.ICCAT_CODE LIKE '4SAC%' OR 
+    C.ICCAT_CODE LIKE '5SAC%' OR 
+    C.ICCAT_CODE LIKE '6SAC%' OR 
+    C.ICCAT_CODE LIKE '7SAC%' OR 
+    C.ICCAT_CODE LIKE '8SAC%' OR 
+    C.ICCAT_CODE LIKE '9SAC%'
+) "; // คุณสามารถเพิ่มเงื่อนไขการกรองอื่นๆ ต่อจากตรงนี้ได้
 
 $sql_order = " ORDER BY TAB.ARPRB_CODE";
