@@ -46,7 +46,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     <div class="panel-body">
 
                                                         <form id="from_data" method="post"
-                                                              action="export_process/export_process_data_history_customer.php"
+                                                              action="export_process/export_process_data_history_customer_direct.php"
                                                               enctype="multipart/form-data">
 
                                                             <div class="modal-body">

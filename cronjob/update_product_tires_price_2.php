@@ -6,7 +6,7 @@ $start_time = microtime(true);
 $start_datetime = date("Y-m-d H:i:s");
 echo "=== เริ่มต้นงาน: $start_datetime ===\n\n";
 
-include '../config/connect_db.php';        // ตัวแปร $conn (MySQL - sac_data)
+include '../config/connect_db2s.php';       // ตัวแปร $conn2 (MySQL - sac_data2)
 include '../config/connect_sqlserver.php'; // ตัวแปร $conn_sqlsvr (MSSQL - เป็น PDO)
 
 // 2. คำสั่ง SQL สำหรับดึงข้อมูลจาก MSSQL
@@ -53,7 +53,7 @@ try {
     $batch_size = 500;
     $batch_data = [];
 
-    echo "2. กำลังอัพเดทข้อมูล (sac_data)...\n";
+    echo "2. กำลังอัพเดทข้อมูล (sac_data2)...\n";
     $current = 0;
 
     foreach ($all_rows as $row) {
@@ -68,10 +68,6 @@ try {
             if (!empty($batch_data)) {
                 $when_cases = implode(" ", $batch_data);
                 
-                $product_ids = array_map(function($row) use ($all_rows) {
-                    return "'" . $row['SKU_CODE'] . "'";
-                }, array_slice($all_rows, $current - count($batch_data), count($batch_data)));
-
                 // Get all product_ids for this batch
                 $product_ids = [];
                 for ($i = $current - count($batch_data); $i < $current; $i++) {
@@ -82,10 +78,11 @@ try {
                 $sql_update = "UPDATE ims_product SET quantity = CASE product_id $when_cases END WHERE product_id IN ($product_id_list)";
                 
                 try {
-                    $conn->exec($sql_update);
+                    $conn2->exec($sql_update);
                     $count_updated += count($batch_data);
                 } catch (PDOException $e) {
-                    error_log("Batch update error: " . $e->getMessage());
+                    error_log("Batch update error sac_data2: " . $e->getMessage());
+                    echo "Error sac_data2: " . $e->getMessage() . "\n";
                 }
 
                 $batch_data = [];
@@ -93,8 +90,6 @@ try {
 
             // แสดงความคืบหน้าทุก batch
             echo "   กำลังประมวลผล: [$current/$total_rows] อัพเดทแล้ว: $count_updated รายการ\r";
-            ob_flush();
-            flush();
         }
     }
 
@@ -118,4 +113,4 @@ echo "=======================\n";
 
 // ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
 $conn_sqlsvr = null;
-$conn = null;
+$conn2 = null;

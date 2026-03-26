@@ -1,4 +1,5 @@
 php import_data_brand.php
 php import_data_product_price.php
+php import_data_product_price_2.php
 php update_product_tires_price.php
 php delete_dup_ims_product.php

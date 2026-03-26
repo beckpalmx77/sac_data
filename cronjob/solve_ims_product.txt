@@ -1,0 +1,55 @@
+================================================================================
+สรุปการแก้ไขปัญหา Insert/Update ข้อมูล MySQL Database sac_data และ sac_data2
+Table: ims_product
+ไฟล์: import_data_product_price.php และ update_product_tires_price.php
+วันที่: 2026-03-26
+================================================================================
+
+1. ตรวจสอบโครงสร้าง Table ims_product
+--------------------------------------------------------------------------------
+- Primary Key: id (int, auto_increment)
+- Unique Key: unique_product_set (product_id, pgroup_id, brand_id, name_t, price_code)
+- Fields ที่สำคัญ: product_key, product_id, pgroup_id, brand_id, name_t, 
+  price_code, price, unit_name, quantity
+
+2. ปัญหาที่พบ
+--------------------------------------------------------------------------------
+
+2.1 ไฟล์ import_data_product_price.php
+- ปัญหา: INSERT ... ON DUPLICATE KEY UPDATE อัพเดทเฉพาะบาง field 
+  (product_key, price, unit_name) ทำให้ข้อมูลเก่าไม่ถูกอัพเดทครบ
+- ปัญหา: ไม่มี error handling ที่ดี ถ้าเกิด error จะหยุดการทำงานทันที
+- ปัญหา: ใช้ @ob_flush() ซึ่งเป็นวิธีที่ไม่ดี
+
+2.2 ไฟล์ update_product_tires_price.php
+- ปัญหา: ใช้ exec() ใน loop ทีละ row ทำให้การทำงานช้ามาก
+- ปัญหา: ไม่มีการ update ข้อมูลใน sac_data2 ($conn2) - ทำให้ข้อมูลไม่ตรงกัน
+- ปัญหา: แสดง progress ทุก row ($current % 1 == 0) ทำให้ output เยอะเกินไป
+- ปัญหา: ไม่มี error handling
+
+3. การแก้ไข
+--------------------------------------------------------------------------------
+
+3.1 ไฟล์ import_data_product_price.php
+- แก้ไข ON DUPLICATE KEY UPDATE ให้อัพเดททุก field ที่เกี่ยวข้อง
+  (product_key, pgroup_id, name_t, brand_id, price_code, price, unit_name)
+- เพิ่ม try-catch error handling
+- เพิ่มตัวนับจำนวน insert/update และ error
+- แก้ไข @ob_flush() เป็น ob_flush()
+
+3.2 ไฟล์ update_product_tires_price.php
+- เพิ่ม include connect_db2s.php เพื่อเชื่อมต่อ sac_data2
+- เปลี่ยนจาก loop แบบ row-by-row เป็น batch update (500 rows/batch)
+- ใช้ CASE WHEN ในการ update หลาย row พร้อมกัน
+- เพิ่มการ update ทั้ง $conn (sac_data) และ $conn2 (sac_data2)
+- แก้ไข progress ให้แสดงทุก batch แทนทุก row
+- เพิ่ม error handling ด้วย try-catch
+
+4. ข้อแนะนำเพิ่มเติม
+--------------------------------------------------------------------------------
+- ควรเพิ่ม index สำหรับ product_id เพื่อเพิ่มความเร็วในการ query
+- ควรเพิ่ม log file สำหรับบันทึก error ที่เกิดขึ้น
+- ควรตรวจสอบ connection ก่อนเริ่มทำงาน
+- ควรเพิ่ม transaction สำหรับ batch update เพื่อป้องกันข้อมูลไม่สมบูรณ์
+
+================================================================================
