@@ -4,3 +4,4 @@ php import_data_product_price_2.php
 php update_product_tires_price.php
 php update_product_tires_price_2.php
 php delete_dup_ims_product.php
+php delete_dup_ims_product_2.php

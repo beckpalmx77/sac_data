@@ -3,9 +3,9 @@
 set_time_limit(0);
 ini_set('memory_limit', '1024M');
 
-require_once('../config/connect_db.php');
+require_once('../config/connect_db2s.php');
 
-if (!$conn) {
+if (!$conn2) {
     die("[ERROR] " . date('H:i:s') . " - Connection failed: " . mysqli_connect_error() . PHP_EOL);
 }
 
@@ -31,13 +31,13 @@ try {
                           HAVING COUNT(*) > 1
                       ) as dup_table";
 
-    if ($conn instanceof mysqli) {
-        $total_before = $conn->query($sql_total)->fetch_assoc()['total'];
-        $res_dup = $conn->query($sql_duplicate)->fetch_assoc();
+    if ($conn2 instanceof mysqli) {
+        $total_before = $conn2->query($sql_total)->fetch_assoc()['total'];
+        $res_dup = $conn2->query($sql_duplicate)->fetch_assoc();
         $duplicate_to_delete = $res_dup['total_dup'] ?? 0;
     } else {
-        $total_before = $conn->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
-        $res_dup = $conn->query($sql_duplicate)->fetch(PDO::FETCH_ASSOC);
+        $total_before = $conn2->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
+        $res_dup = $conn2->query($sql_duplicate)->fetch(PDO::FETCH_ASSOC);
         $duplicate_to_delete = $res_dup['total_dup'] ?? 0;
     }
 
@@ -66,28 +66,28 @@ try {
     $sql_restore = "INSERT INTO ims_product (product_key, product_id, pgroup_id, brand_id, name_t, price_code, price, unit_name) 
                     SELECT product_key, product_id, pgroup_id, brand_id, name_t, price_code, price, unit_name FROM temp_ims_product";
 
-    if ($conn instanceof mysqli) {
+    if ($conn2 instanceof mysqli) {
         cli_log("Step 1: คัดกรองข้อมูลลงตารางชั่วคราว...");
-        $conn->query($sql_temp);
+        $conn2->query($sql_temp);
 
         cli_log("Step 2: ล้างข้อมูลตารางเดิม (Truncate)...");
-        $conn->query($sql_del);
+        $conn2->query($sql_del);
 
         cli_log("Step 3: ย้ายข้อมูลกลับเข้าตารางหลัก...");
-        $conn->query($sql_restore);
+        $conn2->query($sql_restore);
 
-        $total_after = $conn->query($sql_total)->fetch_assoc()['total'];
+        $total_after = $conn2->query($sql_total)->fetch_assoc()['total'];
     } else {
         cli_log("Step 1: คัดกรองข้อมูลลงตารางชั่วคราว...");
-        $conn->exec($sql_temp);
+        $conn2->exec($sql_temp);
 
         cli_log("Step 2: ล้างข้อมูลตารางเดิม (Truncate)...");
-        $conn->exec($sql_del);
+        $conn2->exec($sql_del);
 
         cli_log("Step 3: ย้ายข้อมูลกลับเข้าตารางหลัก...");
-        $conn->exec($sql_restore);
+        $conn2->exec($sql_restore);
 
-        $total_after = $conn->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
+        $total_after = $conn2->query($sql_total)->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
     $actual_deleted = $total_before - $total_after;

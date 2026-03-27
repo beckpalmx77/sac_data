@@ -6,7 +6,7 @@ $start_time = microtime(true);
 $start_datetime = date("Y-m-d H:i:s");
 echo "=== เริ่มต้นงาน: $start_datetime ===\n\n";
 
-include '../config/connect_db2.php';        // ตัวแปร $conn (MySQL - sac_data)
+include '../config/connect_db2s.php';        // ตัวแปร $conn2 (MySQL - sac_data2)
 include '../config/connect_sqlserver.php'; // ตัวแปร $conn_sqlsvr (MSSQL - เป็น PDO)
 
 // 2. คำสั่ง SQL สำหรับดึงข้อมูลจาก MSSQL
@@ -82,7 +82,7 @@ try {
                 $sql_update = "UPDATE ims_product SET quantity = CASE product_id $when_cases END WHERE product_id IN ($product_id_list)";
 
                 try {
-                    $conn->exec($sql_update);
+                    $conn2->exec($sql_update);
                     $count_updated += count($batch_data);
                 } catch (PDOException $e) {
                     error_log("Batch update error: " . $e->getMessage());
@@ -120,4 +120,4 @@ echo "=======================\n";
 
 // ปิดการเชื่อมต่อ (PDO ใช้การกำหนดเป็น null)
 $conn_sqlsvr = null;
-$conn = null;
+$conn2 = null;
