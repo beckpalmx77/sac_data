@@ -1,2 +1,2 @@
-php import_data_customer_ar.php
 php import_data_customer_ar_2.php
+php import_data_customer_ar.php
