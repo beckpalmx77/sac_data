@@ -93,7 +93,9 @@ try {
 
             // แสดงความคืบหน้าทุก batch
             echo "   กำลังประมวลผล: [$current/$total_rows] อัพเดทแล้ว: $count_updated รายการ\r";
-            ob_flush();
+            if (ob_get_level() > 0) {
+                ob_flush();
+            }
             flush();
         }
     }
