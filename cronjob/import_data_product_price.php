@@ -43,14 +43,15 @@ foreach ($all_rows as $result_sqlsvr) {
     $price_code = $result_sqlsvr["ARPRB_CODE"];
     $price = $result_sqlsvr["ARPLU_U_PRC"];
     $unit_name = $result_sqlsvr["UTQ_NAME"];
+    $group_desc = str_replace(["'", "\\"], ["''", "\\\\"], $result_sqlsvr["ICCAT_NAME"]);
 
-    $values_db[] = "('$product_key','$product_id','$pgroup_id','$name_t','$brand_id','$price_code','$price','$unit_name')";
+    $values_db[] = "('$product_key','$product_id','$pgroup_id','$name_t','$brand_id','$price_code','$price','$unit_name','$group_desc')";
 
     if ($current % $batch_size == 0 || $current == $total_rows) {
         $values_str_db = implode(",", $values_db);
 
         try {
-            $sql = "INSERT INTO ims_product (product_key,product_id,pgroup_id,name_t,brand_id,price_code,price,unit_name) 
+            $sql = "INSERT INTO ims_product (product_key,product_id,pgroup_id,name_t,brand_id,price_code,price,unit_name,group_desc) 
                     VALUES $values_str_db
                     ON DUPLICATE KEY UPDATE 
                         product_key = VALUES(product_key),
@@ -59,7 +60,8 @@ foreach ($all_rows as $result_sqlsvr) {
                         brand_id = VALUES(brand_id),
                         price_code = VALUES(price_code),
                         price = VALUES(price),
-                        unit_name = VALUES(unit_name)";
+                        unit_name = VALUES(unit_name),
+                        group_desc = VALUES(group_desc)";
             $conn->exec($sql);
 
         } catch (PDOException $e) {
