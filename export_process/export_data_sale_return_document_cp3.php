@@ -19,7 +19,7 @@ function write_sql_log($sql, $params) {
     $timestamp = date('Y-m-d H:i:s');
     $log_content = "[$timestamp] EXECUTED QUERY:\n$full_sql\n" . str_repeat("-", 50) . "\n";
 
-    file_put_contents($log_file, $log_content, FILE_APPEND);
+    //file_put_contents($log_file, $log_content, FILE_APPEND);
 }
 
 // --- ส่วนที่ 2: ตั้งค่า Header สำหรับ Download CSV ---
