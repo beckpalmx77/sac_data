@@ -32,9 +32,9 @@ if ($customer_name) $where_clauses[] = $where_customer;
 
 $where_sql = "";
 if (!empty($where_clauses)) {
-    $where_sql = "WHERE " . implode(" AND ", $where_clauses) . " AND ";
+    $where_sql = "WHERE DOCINFO.DI_REF NOT LIKE 'BK%' AND " . implode(" AND ", $where_clauses) . " AND ";
 } else {
-    $where_sql = "WHERE ";
+    $where_sql = "WHERE DOCINFO.DI_REF NOT LIKE 'BK%' ";
 }
 
 $sql_string = "
@@ -46,6 +46,9 @@ SELECT DISTINCT TOP 5000
     YEAR(DOCINFO.DI_DATE) AS DI_YEAR,
     ADDRBOOK.ADDB_COMPANY,
     ADDRBOOK.ADDB_SEARCH,
+    ADDRBOOK.ADDB_ADDB_1,
+    ADDRBOOK.ADDB_ADDB_2,
+    ADDRBOOK.ADDB_ADDB_3,
     SKUMASTER.SKU_CODE,
     SKUMASTER.SKU_NAME,
     TRANSTKD.TRD_QTY,
@@ -82,7 +85,7 @@ $log_content .= "-------------------------------------------\n\n";
 // ==========================================
 
 // สร้างหัวตาราง CSV (ใช้ Double Quote ครอบเพื่อกันเพี้ยน)
-$data = "No.,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ทะเบียนรถ,รหัสสินค้า,รายการ,จำนวน,ราคา/หน่วย,ฐานภาษี,ภาษี,ยอดสุทธิ\n";
+$data = "No.,เลขที่เอกสาร,วันที่,ชื่อลูกค้า,ยี่ห้อ,รุ่น,ทะเบียนรถ,รหัสสินค้า,รายการ,จำนวน,ราคา/หน่วย,ฐานภาษี,ภาษี,ยอดสุทธิ\n";
 
 $statement_sqlsvr = $conn_sqlsvr->query($sql_string);
 $line = 0;
@@ -96,6 +99,8 @@ if ($statement_sqlsvr) {
         $data .= '"' . $row['DI_REF'] . '",';
         $data .= '"' . $row['DI_DAY'] . "/" . $row['DI_MONTH'] . "/" . $row['DI_YEAR'] . '",';
         $data .= '"' . str_replace('"', '""', $row['ADDB_COMPANY']) . '",';
+        $data .= '"' . str_replace('"', '""', $row['ADDB_ADDB_1']) . '",';
+        $data .= '"' . str_replace('"', '""', $row['ADDB_ADDB_2']) . '",';
         $data .= '"' . str_replace('"', '""', $row['ADDB_SEARCH']) . '",'; // แสดงทะเบียนรถแยกคัน
         $data .= '"' . $row['SKU_CODE'] . '",';
         $data .= '"' . str_replace('"', '""', $row['SKU_NAME']) . '",';
