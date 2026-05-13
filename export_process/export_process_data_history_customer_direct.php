@@ -81,7 +81,7 @@ $log_content .= "Full SQL:\n" . $sql_string . "\n";
 $log_content .= "-------------------------------------------\n\n";
 
 
-file_put_contents($log_filename, $log_content, FILE_APPEND); // บันทึกต่อท้ายไฟล์เดิม
+//file_put_contents($log_filename, $log_content, FILE_APPEND); // บันทึกต่อท้ายไฟล์เดิม
 // ==========================================
 
 // สร้างหัวตาราง CSV (ใช้ Double Quote ครอบเพื่อกันเพี้ยน)
