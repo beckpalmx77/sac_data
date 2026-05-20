@@ -83,6 +83,8 @@ foreach ($all_rows as $result_sqlsvr) {
     }
 }
 
+
+
 echo "\n";
 echo "=== สรุปผลการทำงาน ===\n";
 echo "อ่านข้อมูลจาก MSSQL: $total_rows รายการ\n";

@@ -32,9 +32,9 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
     if ($nRows > 0) {
         $sql = "UPDATE ims_customer_ar SET tax_id=:tax_id,f_name=:f_name,credit=:credit,
         phone=:phone,address=:address,tumbol=:tumbol,amphure=:amphure,province=:province,zipcode=:zipcode,ARCD_NAME=:ARCD_NAME,
-        sale_name=:sale_name,contact_name=:contact_name,ADDB_KEY=:ADDB_KEY,ADDB_BRANCH=:ADDB_BRANCH
+        sale_name=:sale_name,contact_name=:contact_name,ADDB_KEY=:ADDB_KEY,ADDB_BRANCH=:ADDB_BRANCH,price_code=:ARCD_ARPRBCODE
         WHERE customer_id = :customer_id ";
-        echo "Update Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . "\n\r";
+        echo "Update Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . " | " . $result_sqlsvr["ARCD_ARPRBCODE"] . "\n\r";
         $query = $conn->prepare($sql);
         $query->bindParam(':tax_id', $result_sqlsvr["ADDB_TAX_ID"], PDO::PARAM_STR);
         $query->bindParam(':f_name', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
@@ -50,16 +50,17 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':contact_name', $contact_name, PDO::PARAM_STR);
         $query->bindParam(':ADDB_KEY', $result_sqlsvr["ADDB_KEY"], PDO::PARAM_STR);
         $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
+        $query->bindParam(':ARCD_ARPRBCODE', $result_sqlsvr["ARCD_ARPRBCODE"], PDO::PARAM_STR);
         $query->bindParam(':customer_id', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
         $query->execute();
     } else {
 
-        echo "Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . "\n\r";
+        echo "Customer : " . $result_sqlsvr["ARCAT_CODE"] . " | " . $result_sqlsvr["AR_CODE"] . " | " . $result_sqlsvr["AR_NAME"] . " | " . $result_sqlsvr["ARCD_ARPRBCODE"] . "\n\r";
 
         $sql = "INSERT INTO ims_customer_ar(customer_id,tax_id,f_name,credit,phone,address,tumbol,amphure,province
-        ,zipcode,ARCD_NAME,sale_name,contact_name,ADDB_KEY,ADDB_BRANCH)
+        ,zipcode,ARCD_NAME,sale_name,contact_name,ADDB_KEY,ADDB_BRANCH,price_code)
         VALUES (:customer_id,:tax_id,:f_name,:credit,:phone,:address,:tumbol,:amphure,:province
-        ,:zipcode,:ARCD_NAME,:sale_name,:contact_name,:ADDB_KEY,:ADDB_BRANCH)";
+        ,:zipcode,:ARCD_NAME,:sale_name,:contact_name,:ADDB_KEY,:ADDB_BRANCH,:ARCD_ARPRBCODE)";
         $query = $conn->prepare($sql);
         $query->bindParam(':customer_id', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
         $query->bindParam(':tax_id', $result_sqlsvr["ADDB_TAX_ID"], PDO::PARAM_STR);
@@ -76,6 +77,7 @@ while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
         $query->bindParam(':contact_name', $contact_name, PDO::PARAM_STR);
         $query->bindParam(':ADDB_KEY', $result_sqlsvr["ADDB_KEY"], PDO::PARAM_STR);
         $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
+        $query->bindParam(':ARCD_ARPRBCODE', $result_sqlsvr["ARCD_ARPRBCODE"], PDO::PARAM_STR);
         $query->execute();
 
         $lastInsertId = $conn->lastInsertId();
