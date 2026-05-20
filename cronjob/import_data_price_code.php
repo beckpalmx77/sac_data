@@ -28,7 +28,6 @@ try {
         $price_detail = trim($result["ARPRB_NAME"]);
         $status = trim($result["ARPRB_ENABLE"]);
 
-        // แก้ไขบั๊กจากของเดิม: เปลี่ยน $brand_id เป็น $price_code
         if (empty($price_code)) continue;
 
         // รันคำสั่ง SQL
