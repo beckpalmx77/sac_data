@@ -1,8 +1,18 @@
 <?php
 include('includes/Header.php');
+include('config/connect_sqlserver.php');
+
 if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
 } else {
+
+    $sql_cat = "SELECT ICCAT_CODE, ICCAT_NAME FROM ICCAT 
+            WHERE ICCAT_CODE NOT IN ('TATA-001', 'RR.เสื้อผ้า', 'TATA-006')
+            ORDER BY ICCAT_CODE";
+    $stmt_cat = $conn_sqlsvr->prepare($sql_cat);
+    $stmt_cat->execute();
+    $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
+
     ?>
 
     <!DOCTYPE html>
@@ -54,7 +64,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                 <div class="modal-body">
                                                                     <div class="form-group row">
 
-                                                                        <div class="form-group">
+                                                                        <div class="form-group col-md-12">
                                                                             <label for="price_code"
                                                                                    class="control-label">Select Price Code</label>
                                                                             <select id="price_code" name="price_code"
@@ -69,6 +79,33 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                         </div>
 
 
+                                                                    </div>
+
+                                                                    <div class="form-group row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label for="iccat_code" class="control-label text-primary"><b>เลือกกลุ่มสินค้า (ICCAT_CODE)</b></label>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 mb-2">
+                                                                                    <div class="custom-control custom-checkbox">
+                                                                                        <input type="checkbox" class="custom-control-input" id="select_all">
+                                                                                        <label class="custom-control-label" for="select_all"><b>เลือกทั้งหมด</b></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <?php foreach ($categories as $cat) { ?>
+                                                                                    <div class="col-md-4 mb-2">
+                                                                                        <div class="custom-control custom-checkbox">
+                                                                                            <input type="checkbox" name="iccat_code[]" 
+                                                                                                   value="<?php echo $cat['ICCAT_CODE']; ?>" 
+                                                                                                   class="custom-control-input iccat_checkbox" 
+                                                                                                   id="cat_<?php echo $cat['ICCAT_CODE']; ?>">
+                                                                                            <label class="custom-control-label" for="cat_<?php echo $cat['ICCAT_CODE']; ?>">
+                                                                                                <?php echo $cat['ICCAT_CODE'] . " - " . $cat['ICCAT_NAME']; ?>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <?php } ?>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
 
@@ -167,6 +204,27 @@ if (strlen($_SESSION['alogin']) == "") {
             let doc_date = getDay2Digits(today) + "-" + getMonth2Digits(today) + "-" + today.getFullYear();
             $('#doc_date_start').val(doc_date);
             $('#doc_date_to').val(doc_date);
+
+            // Select All logic
+            $('#select_all').on('click', function () {
+                if (this.checked) {
+                    $('.iccat_checkbox').each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    $('.iccat_checkbox').each(function () {
+                        this.checked = false;
+                    });
+                }
+            });
+
+            $('.iccat_checkbox').on('click', function () {
+                if ($('.iccat_checkbox:checked').length == $('.iccat_checkbox').length) {
+                    $('#select_all').prop('checked', true);
+                } else {
+                    $('#select_all').prop('checked', false);
+                }
+            });
         });
     </script>
 

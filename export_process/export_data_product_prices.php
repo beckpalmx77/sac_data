@@ -11,6 +11,7 @@ include('../config/connect_sqlserver.php');
 include('../cond_file/query-product-price-main.php');
 
 $price_code = $_POST['price_code'];
+$iccat_code = $_POST['iccat_code'];
 
 switch ($price_code) {
     case "SAC":
@@ -27,7 +28,12 @@ switch ($price_code) {
         break;
 }
 
-$sql_cond = "WHERE ICCAT_CODE NOT LIKE 'TA%' ";
+if (isset($iccat_code) && !empty($iccat_code)) {
+    $iccat_list = "'" . implode("','", $iccat_code) . "'";
+    $sql_cond = " WHERE C.ICCAT_CODE IN ($iccat_list) ";
+} else {
+    $sql_cond = " WHERE C.ICCAT_CODE  NOT LIKE 'TATA-001' ";
+}
 
 
 $String_Sql = $select_query . $sql_cond . $sql_cond_ext . $sql_order;
