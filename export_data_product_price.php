@@ -87,7 +87,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             <div class="row">
                                                                                 <div class="col-md-12 mb-2">
                                                                                     <div class="custom-control custom-checkbox">
-                                                                                        <input type="checkbox" class="custom-control-input" id="select_all">
+                                                                                        <input type="checkbox" class="custom-control-input" id="select_all" checked>
                                                                                         <label class="custom-control-label" for="select_all"><b>เลือกทั้งหมด</b></label>
                                                                                     </div>
                                                                                 </div>
@@ -97,7 +97,7 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                             <input type="checkbox" name="iccat_code[]" 
                                                                                                    value="<?php echo $cat['ICCAT_CODE']; ?>" 
                                                                                                    class="custom-control-input iccat_checkbox" 
-                                                                                                   id="cat_<?php echo $cat['ICCAT_CODE']; ?>">
+                                                                                                   id="cat_<?php echo $cat['ICCAT_CODE']; ?>" checked>
                                                                                             <label class="custom-control-label" for="cat_<?php echo $cat['ICCAT_CODE']; ?>">
                                                                                                 <?php echo $cat['ICCAT_CODE'] . " - " . $cat['ICCAT_NAME']; ?>
                                                                                             </label>
