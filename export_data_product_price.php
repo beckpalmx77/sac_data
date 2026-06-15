@@ -119,9 +119,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                     </div>
                                                                 </div>
 
-
-                                                             </div>
-
                                                             <div class="modal-footer">
                                                                 <!--button type="button" class="btn btn-danger"
                                                                         id="btnClose">Close <i
