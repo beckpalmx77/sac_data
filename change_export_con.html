@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>สรุปการแก้ไขระบบ Export Product Price</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; line-height: 1.6; padding: 20px; color: #333; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; margin-top: 25px; }
+        ul { list-style-type: square; }
+        li { margin-bottom: 10px; }
+        .file-name { font-weight: bold; color: #e67e22; }
+        .code-block { background: #f4f4f4; border-left: 5px solid #bdc3c7; padding: 10px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>สรุปการแก้ไขระบบ Export Product Price (ICCAT_CODE Filter)</h1>
+
+    <h2>1. ไฟล์หน้าจอหลัก: <span class="file-name">export_data_product_price.php</span></h2>
+    <ul>
+        <li><b>เพิ่มระบบเลือกกลุ่มสินค้า:</b> ดึงข้อมูล ICCAT_CODE ทั้งหมดจากฐานข้อมูล SQL Server มาแสดงเป็น Checkbox</li>
+        <li><b>ระบบเลือกทั้งหมด (Select All):</b> เพิ่ม Checkbox "เลือกทั้งหมด" พร้อม JavaScript เพื่อให้เลือก/ไม่เลือกทุกรายการได้ในคลิกเดียว</li>
+        <li><b>ค่าเริ่มต้น:</b> ตั้งค่าให้เลือกทุก Checkbox (Default Checked) เมื่อเปิดหน้าจอ</li>
+        <li><b>การกรองข้อมูล:</b> ยกเว้นกลุ่มสินค้าที่ไม่ต้องการแสดงในรายการ ได้แก่:
+            <ul>
+                <li>TATA-001</li>
+                <li>RR.เสื้อผ้า</li>
+                <li>TATA-006</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>2. ไฟล์ประมวลผลหลังบ้าน: <span class="file-name">export_process/export_data_product_prices.php</span></h2>
+    <ul>
+        <li><b>รองรับเงื่อนไขใหม่:</b> ปรับปรุงให้รับค่า <code>iccat_code[]</code> จากหน้าจอ</li>
+        <li><b>ปรับ Query:</b> ใช้คำสั่ง <code>IN (...)</code> เมื่อมีการเลือก Checkbox เพื่อให้ได้ข้อมูลตามกลุ่มที่เลือกจริง</li>
+        <li><b>กรณีไม่ได้เลือก:</b> หากไม่มีการเลือก Checkbox เลย ระบบจะดึงข้อมูลทั้งหมด (1=1)</li>
+    </ul>
+
+    <h2>3. การทำความสะอาดโค้ด (Cleanup): <span class="file-name">cond_file/query-product-price-main.php</span></h2>
+    <ul>
+        <li><b>ยกเลิกเงื่อนไข Hardcode:</b> ลบเงื่อนไขเดิมที่จำกัดเฉพาะ 1SAC% - 9SAC% ออก</li>
+        <li><b>เปลี่ยนเป็น Dynamic:</b> เพื่อให้ระบบรองรับการเลือกกลุ่มสินค้าได้อย่างอิสระผ่านหน้าจอ</li>
+    </ul>
+
+    <hr>
+    <p><i>วันที่แก้ไข: 15 มิถุนายน 2569</i></p>
+</body>
+</html>
