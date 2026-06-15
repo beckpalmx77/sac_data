@@ -62,9 +62,9 @@ if (strlen($_SESSION['alogin']) == "") {
                                                             <div class="modal-body">
 
                                                                 <div class="modal-body">
-                                                                    <div class="form-group row">
 
-                                                                        <div class="form-group col-md-12">
+                                                                    <div class="form-group row align-items-end">
+                                                                        <div class="col-md-4">
                                                                             <label for="price_code"
                                                                                    class="control-label">Select Price Code</label>
                                                                             <select id="price_code" name="price_code"
@@ -77,11 +77,21 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                 <option>COCKPIT</option>
                                                                             </select>
                                                                         </div>
-
-
+                                                                        <div class="col-md-4">
+                                                                            <input type="hidden" name="id" id="id"/>
+                                                                            <input type="hidden" name="save_status"
+                                                                                   id="save_status"/>
+                                                                            <input type="hidden" name="action" id="action"
+                                                                                   value=""/>
+                                                                            <button type="submit" class="btn btn-success"
+                                                                                    id="btnExport"> Export <i
+                                                                                        class="fa fa-check"></i>
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
 
                                                                     <div class="form-group row">
+
                                                                         <div class="form-group col-md-12">
                                                                             <label for="iccat_code" class="control-label text-primary"><b>เลือกกลุ่มสินค้า (ICCAT_CODE)</b></label>
                                                                             <div class="row">
@@ -113,15 +123,6 @@ if (strlen($_SESSION['alogin']) == "") {
                                                              </div>
 
                                                             <div class="modal-footer">
-                                                                <input type="hidden" name="id" id="id"/>
-                                                                <input type="hidden" name="save_status"
-                                                                       id="save_status"/>
-                                                                <input type="hidden" name="action" id="action"
-                                                                       value=""/>
-                                                                <button type="submit" class="btn btn-success"
-                                                                        id="btnExport"> Export <i
-                                                                            class="fa fa-check"></i>
-                                                                </button>
                                                                 <!--button type="button" class="btn btn-danger"
                                                                         id="btnClose">Close <i
                                                                             class="fa fa-times"></i>
