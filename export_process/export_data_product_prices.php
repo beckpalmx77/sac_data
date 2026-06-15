@@ -27,6 +27,8 @@ switch ($price_code) {
         break;
 }
 
+$sql_cond = "WHERE ICCAT_CODE NOT LIKE 'TA%' ";
+
 
 $String_Sql = $select_query . $sql_cond . $sql_cond_ext . $sql_order;
 
@@ -34,7 +36,7 @@ $String_Sql = $select_query . $sql_cond . $sql_cond_ext . $sql_order;
 //fwrite($my_file, $String_Sql);
 //fclose($my_file);
 
-$data = "No.,SKU_CODE,SKU_NAME,UTQ_NAME,ARPLU_U_PRC,ARPRB_CODE,ARPRB_NAME\n";
+$data = "No.,SKU_CODE,SKU_NAME,UTQ_NAME,ARPLU_U_PRC,ICCAT_CODE,ARPRB_CODE,ARPRB_NAME\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
@@ -55,6 +57,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= str_replace(",", "^", $row['SKU_NAME']) . ",";
     $data .= str_replace(",", "^", $row['UTQ_NAME']) . ",";
     $data .= str_replace(",", "^", $row['ARPLU_U_PRC']) . ",";
+    $data .= str_replace(",", "^", $row['ICCAT_CODE']) . ",";
     $data .= str_replace(",", "^", $row['ARPRB_CODE']) . ",";
 
     //$my_file = fopen("D-sac_str_return.txt", "w") or die("Unable to open file!");
