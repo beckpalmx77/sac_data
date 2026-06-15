@@ -61,9 +61,7 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                             <div class="modal-body">
 
-                                                                <div class="modal-body">
-
-                                                                    <div class="form-group row align-items-end">
+                                                                    <div class="form-group row">
                                                                         <div class="col-md-4">
                                                                             <label for="price_code"
                                                                                    class="control-label">Select Price Code</label>
@@ -78,15 +76,17 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                             </select>
                                                                         </div>
                                                                         <div class="col-md-4">
-                                                                            <input type="hidden" name="id" id="id"/>
-                                                                            <input type="hidden" name="save_status"
-                                                                                   id="save_status"/>
-                                                                            <input type="hidden" name="action" id="action"
-                                                                                   value=""/>
-                                                                            <button type="submit" class="btn btn-success"
-                                                                                    id="btnExport"> Export <i
-                                                                                        class="fa fa-check"></i>
-                                                                            </button>
+                                                                            <div style="margin-top: 32px;">
+                                                                                <input type="hidden" name="id" id="id"/>
+                                                                                <input type="hidden" name="save_status"
+                                                                                       id="save_status"/>
+                                                                                <input type="hidden" name="action" id="action"
+                                                                                       value=""/>
+                                                                                <button type="submit" class="btn btn-success"
+                                                                                        id="btnExport"> Export <i
+                                                                                            class="fa fa-check"></i>
+                                                                                </button>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
 
