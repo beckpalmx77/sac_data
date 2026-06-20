@@ -12,7 +12,7 @@ include('../cond_file/doc_info_customer_ar.php');
 
 $String_Sql = $select_query . $sql_cond . $sql_order;
 
-$data = "AR_CODE,AR_NAME,ADDB_PROVINCE\n";
+$data = "No.,AR_CODE,AR_NAME,ADDB_PROVINCE\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->execute();
