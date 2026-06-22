@@ -61,8 +61,8 @@ if (strlen($_SESSION['alogin']) == "") {
                                                                                     class="form-control"
                                                                                     data-live-search="true"
                                                                                     title="Please select">
-                                                                                <option value="SAC">SAC</option>
                                                                                 <option value="CP">CP</option>
+                                                                                <option value="SAC">SAC</option>
                                                                                 <option value="BTC">BTC</option>
                                                                             </select>
                                                                         </div>
