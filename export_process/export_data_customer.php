@@ -21,6 +21,7 @@ SELECT
     ADDB_BILL.ADDB_ADDB_3 AS AMPHURE,
     ADDB_BILL.ADDB_PROVINCE AS PROVINCE,
     ADDB_BILL.ADDB_POST AS ZIPCODE,
+    ADDB_BILL.ADDB_PHONE AS PHONE,
     ADDB_VEH.ADDB_SEARCH AS VEHICLE_REG_NO,
     ADDB_VEH.ADDB_ADDB_1 AS VEHICLE_BRAND,
     ADDB_VEH.ADDB_ADDB_2 AS VEHICLE_MODEL
@@ -44,7 +45,7 @@ WHERE ARFILE.AR_KEY >= 0
 ORDER BY ARCAT.ARCAT_CODE ASC, ARFILE.AR_CODE ASC
 ";
 
-$data = "ลำดับ,รหัสลูกค้า,ชื่อลูกค้า,ที่อยู่,ตำบล/แขวง,อำเภอ/เขต,จังหวัด,รหัสไปรษณีย์,ทะเบียนรถ,ยี่ห้อรถ,รุ่นรถ\n";
+$data = "ลำดับ,รหัสลูกค้า,ชื่อลูกค้า,ที่อยู่,ตำบล/แขวง,อำเภอ/เขต,จังหวัด,รหัสไปรษณีย์,เบอร์โทรศัพท์,ทะเบียนรถ,ยี่ห้อรถ,รุ่นรถ\n";
 
 $query = $conn_sqlsvr->prepare($String_Sql);
 $query->bindParam(':com_code', $com_code_param, PDO::PARAM_STR);
@@ -63,6 +64,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     $data .= '"' . str_replace('"', '""', $row['AMPHURE'] ?? '') . '",';
     $data .= '"' . str_replace('"', '""', $row['PROVINCE'] ?? '') . '",';
     $data .= '"' . str_replace('"', '""', $row['ZIPCODE'] ?? '') . '",';
+    $data .= '"' . str_replace('"', '""', $row['PHONE'] ?? '') . '",';
     $data .= '"' . str_replace('"', '""', $row['VEHICLE_REG_NO'] ?? '') . '",';
     $data .= '"' . str_replace('"', '""', $row['VEHICLE_BRAND'] ?? '') . '",';
     $data .= '"' . str_replace('"', '""', $row['VEHICLE_MODEL'] ?? '') . "\"\n";
