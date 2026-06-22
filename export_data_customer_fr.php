@@ -56,12 +56,14 @@ if (strlen($_SESSION['alogin']) == "") {
 
                                                                         <div class="form-group">
                                                                             <label for="com_code"
-                                                                                   class="control-label">Select Company</label>
+                                                                                   class="control-label">Select Company (รหัสลูกค้า)</label>
                                                                             <select id="com_code" name="com_code"
                                                                                     class="form-control"
                                                                                     data-live-search="true"
                                                                                     title="Please select">
-                                                                                <option>SAC</option>
+                                                                                <option value="SAC">SAC</option>
+                                                                                <option value="CP">CP</option>
+                                                                                <option value="BTC">BTC</option>
                                                                             </select>
                                                                         </div>
 
