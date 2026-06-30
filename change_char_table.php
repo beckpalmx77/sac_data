@@ -120,9 +120,63 @@ if (strlen($_SESSION['alogin']) == "") {
                                                     flush();
                                                 }
 
+                                                // 4. Rebuild Performance Indexes
+                                                echo "<div class='mt-3 mb-2'><strong>4. ตรวจสอบและสร้างดัชนีเพิ่มประสิทธิภาพ (Rebuilding Performance Indexes)...</strong></div>";
+                                                $indexes = [
+                                                    [
+                                                        'table' => 'ims_product_sale_cockpit',
+                                                        'name' => 'idx_sale_cp_date',
+                                                        'columns' => 'DI_DATE(10)'
+                                                    ],
+                                                    [
+                                                        'table' => 'ims_product_sale_cockpit',
+                                                        'name' => 'idx_sale_cp_year_month',
+                                                        'columns' => 'DI_YEAR(10), DI_MONTH(10)'
+                                                    ],
+                                                    [
+                                                        'table' => 'ims_product_sale_cockpit',
+                                                        'name' => 'idx_sale_cp_year_branch',
+                                                        'columns' => 'DI_YEAR(10), BRANCH(30)'
+                                                    ],
+                                                    [
+                                                        'table' => 'ims_product_sale_cockpit_day',
+                                                        'name' => 'idx_sale_cp_day_ymb',
+                                                        'columns' => 'year(10), month(10), branch(30)'
+                                                    ]
+                                                ];
+
+                                                echo "<div style='max-height: 200px; overflow-y: auto; background: #f8f9fc; padding: 15px; border-radius: 5px; border: 1px solid #e3e6f0;'>";
+                                                foreach ($indexes as $idx) {
+                                                    echo "<div><i class='fa fa-key text-info'></i> ดัชนี: {$idx['name']} บนตาราง {$idx['table']} ";
+                                                    try {
+                                                        $check = $conn->prepare("
+                                                            SELECT COUNT(*) 
+                                                            FROM information_schema.statistics 
+                                                            WHERE table_schema = DATABASE() 
+                                                              AND table_name = :table 
+                                                              AND index_name = :name
+                                                        ");
+                                                        $check->execute(['table' => $idx['table'], 'name' => $idx['name']]);
+                                                        $exists = $check->fetchColumn();
+
+                                                        if (!$exists) {
+                                                            $conn->exec("CREATE INDEX `{$idx['name']}` ON `{$idx['table']}` ({$idx['columns']})");
+                                                            echo "<span class='text-success small'>[สร้างสำเร็จ]</span>";
+                                                        } else {
+                                                            echo "<span class='text-secondary small'>[มีอยู่แล้ว]</span>";
+                                                        }
+                                                    } catch (Exception $e) {
+                                                        echo "<span class='text-danger small'>[ผิดพลาด: " . $e->getMessage() . "]</span>";
+                                                    }
+                                                    echo "</div>";
+                                                    if (ob_get_level()) ob_flush();
+                                                    flush();
+                                                }
+                                                echo "</div>";
+
                                                 echo "<div class='alert alert-success mt-4'>";
                                                 echo "<h4><i class='fa fa-check-circle'></i> ดำเนินการเสร็จสิ้นสมบูรณ์!</h4>";
-                                                echo "ฐานข้อมูลของคุณรองรับภาษาไทยสมบูรณ์แบบและ Emoji เรียบร้อยแล้ว";
+                                                echo "ฐานข้อมูลของคุณรองรับภาษาไทยสมบูรณ์แบบและสร้าง Index เพิ่มประสิทธิภาพเรียบร้อยแล้ว";
                                                 echo "</div>";
                                                 echo "<a href='change_char_table.php' class='btn btn-secondary mt-2'><i class='fa fa-arrow-left'></i> กลับหน้าหลัก</a>";
 
