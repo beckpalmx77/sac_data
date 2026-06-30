@@ -149,32 +149,19 @@ if (strlen($_SESSION['alogin']) == "") {
                                         $statement_daily = $conn->query($sql_daily);
                                         $results_daily = $statement_daily->fetchAll(PDO::FETCH_ASSOC);
 
-                                        foreach ($results_daily as $row_daily) {
-
-                                        $sql_target = " SELECT * FROM ims_sale_target WHERE target_month = '" . date("n") . "' AND target_year = '" . date("Y") . "'"
-                                        . " AND sale_id = '" . $row_daily['BRANCH'] . "'"
-                                        . " ORDER BY target_year DESC , target_month DESC , sale_id ";
-
-                                        /*
-                                        $sql_target_s .= "\n\r" . $sql_target . " | " . $sale_point ;
-                                        $my_file = fopen("sql_target.txt", "w") or die("Unable to open file!");
-                                        fwrite($my_file, "SQL = " . $sql_target_s);
-                                        fclose($my_file);
-                                        */
-
-                                        $stmt_target = $conn->prepare($sql_target);
-                                        $stmt_target->execute();
-                                        $TargetCurr = $stmt_target->fetchAll();
-                                        foreach ($TargetCurr as $trow_curr) {
-                                            $sale_point = $trow_curr["target_money"];
+                                        // Fetch all targets for this month and year beforehand to avoid N+1 query problem
+                                        $sql_all_targets = "SELECT sale_id, target_money FROM ims_sale_target WHERE target_month = '" . date("n") . "' AND target_year = '" . date("Y") . "'";
+                                        $stmt_all_targets = $conn->query($sql_all_targets);
+                                        $all_targets = $stmt_all_targets->fetchAll(PDO::FETCH_ASSOC);
+                                        $target_map = [];
+                                        foreach ($all_targets as $t) {
+                                            $target_map[$t['sale_id']] = $t['target_money'];
                                         }
 
-                                        /*
-                                        $sql_target_s .= "\n\r" . $sale_point;
-                                        $my_file = fopen("target_point.txt", "w") or die("Unable to open file!");
-                                        fwrite($my_file, "sale_point = " . $sale_point);
-                                        fclose($my_file);
-                                        */
+                                        foreach ($results_daily as $row_daily) {
+                                            // Default target money is 1500000 if not found
+                                            $sale_point = isset($target_map[$row_daily['BRANCH']]) ? $target_map[$row_daily['BRANCH']] : 1500000;
+
 
                                         ?>
 

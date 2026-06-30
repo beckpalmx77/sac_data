@@ -52,59 +52,45 @@ for ($y = 0; $y <= 3; $y++) {
             break;
     }
 
-    for ($day_loop2 = $start_day2; $day_loop2 <= $current_day2; $day_loop2++) {
+    $str_return2 = "[";
 
-        $str_return2 = "[";
+    $sql_get2 = "SELECT *  FROM ims_product_sale_cockpit_day 
+    WHERE year = " . $year . " AND month = '" . $month . "' AND BRANCH = '" . $branch . "'                  
+    ORDER BY CAST(day AS UNSIGNED) ";
 
-        $sql_get2 = "SELECT *  FROM ims_product_sale_cockpit_day 
-        WHERE year = " . $year . " AND month = '" . $month . "' AND BRANCH = '" . $branch . "'                  
-        ORDER BY CAST(day AS UNSIGNED) ";
+    $statement = $conn->query($sql_get2);
+    $results_2 = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        /*
-        $myfile = fopen("param.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $month  . "| Year = " . $year . "| Branch" . $branch  . " : " . $sql_get2 );
-        fclose($myfile);
-        */
+    foreach ($results_2 as $result_2) {
+        if ((int)$result_2['day']>=$start_day2) {
 
-
-        $statement = $conn->query($sql_get2);
-        $results_2 = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-
-        foreach ($results_2 as $result_2) {
-            if ((int)$result_2['day']>=$start_day2) {
-
-                if ((int)$result_2['day'] === $current_day2) {
-                    $str_return2 .= $result_2['total'];
-                } else {
-                    $str_return2 .= $result_2['total'] . ",";
-                }
+            if ((int)$result_2['day'] === $current_day2) {
+                $str_return2 .= $result_2['total'];
+            } else {
+                $str_return2 .= $result_2['total'] . ",";
             }
         }
+    }
 
-        $str_return2 .= "]";
+    $str_return2 .= "]";
 
-        //echo "str_return = " . $str_return2 . "<br>";
-
-        switch ($y) {
-            case 0:
-                $label2_1 = "CP-340";
-                $data2_1 = $str_return2;
-                break;
-            case 1:
-                $label2_2 = "CP-BY";
-                $data2_2 = $str_return2;
-                break;
-            case 2:
-                $label2_3 = "CP-BB";
-                $data2_3 = $str_return2;
-                break;
-            case 3:
-                $label2_4 = "CP-RP";
-                $data2_4 = $str_return2;
-                break;
-        }
-
+    switch ($y) {
+        case 0:
+            $label2_1 = "CP-340";
+            $data2_1 = $str_return2;
+            break;
+        case 1:
+            $label2_2 = "CP-BY";
+            $data2_2 = $str_return2;
+            break;
+        case 2:
+            $label2_3 = "CP-BB";
+            $data2_3 = $str_return2;
+            break;
+        case 3:
+            $label2_4 = "CP-RP";
+            $data2_4 = $str_return2;
+            break;
     }
 }
 
