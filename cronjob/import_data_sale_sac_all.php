@@ -45,205 +45,128 @@ $insert_data = "";
 $update_data = "";
 
 $res = "";
-
 $stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
 $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$sql_find = "SELECT COUNT(*) FROM ims_product_sale_sac_all WHERE DI_KEY = :DI_KEY AND DI_REF = :DI_REF AND DI_DATE = :DI_DATE AND DT_DOCCODE = :DT_DOCCODE AND TRD_SEQ = :TRD_SEQ";
+$stmt_find = $conn->prepare($sql_find);
 
-    $ICCAT_CODE = "";
+$sql_update = "UPDATE ims_product_sale_sac_all SET AR_CODE=:AR_CODE,AR_NAME=:AR_NAME,SLMN_CODE=:SLMN_CODE,SLMN_NAME=:SLMN_NAME,SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,SKU_CAT=:SKU_CAT,ICCAT_CODE=:ICCAT_CODE,ICCAT_NAME=:ICCAT_NAME,TRD_QTY=:TRD_QTY,TRD_Q_FREE=:TRD_Q_FREE,TRD_U_PRC=:TRD_U_PRC,TRD_DSC_KEYINV=:TRD_DSC_KEYINV,TRD_B_SELL=:TRD_B_SELL,TRD_B_VAT=:TRD_B_VAT,TRD_G_KEYIN=:TRD_G_KEYIN,WL_CODE=:WL_CODE,BRANCH=:BRANCH,BRN_CODE=:BRN_CODE,BRN_NAME=:BRN_NAME,DI_TIME_CHK=:DI_TIME_CHK,PGROUP=:PGROUP,DI_ACTIVE=:DI_ACTIVE,DI_REMARK=:DI_REMARK WHERE DI_KEY = :DI_KEY AND DI_REF = :DI_REF AND DI_DATE = :DI_DATE AND DT_DOCCODE = :DT_DOCCODE AND TRD_SEQ = :TRD_SEQ";
+$stmt_update = $conn->prepare($sql_update);
 
-    $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
-    $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
+$sql_insert = "INSERT INTO ims_product_sale_sac_all (DI_KEY,DI_REF,DI_DATE,DI_MONTH,DI_MONTH_NAME,DI_YEAR,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,SKU_CAT,ICCAT_CODE,ICCAT_NAME,TRD_QTY,TRD_Q_FREE,TRD_U_PRC,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,WL_CODE,BRANCH,DT_DOCCODE,TRD_SEQ,BRN_CODE,BRN_NAME,DI_TIME_CHK,PGROUP,DI_ACTIVE,DI_REMARK) VALUES (:DI_KEY,:DI_REF,:DI_DATE,:DI_MONTH,:DI_MONTH_NAME,:DI_YEAR,:AR_CODE,:AR_NAME,:SLMN_CODE,:SLMN_NAME,:SKU_CODE,:SKU_NAME,:SKU_CAT,:ICCAT_CODE,:ICCAT_NAME,:TRD_QTY,:TRD_Q_FREE,:TRD_U_PRC,:TRD_DSC_KEYINV,:TRD_B_SELL,:TRD_B_VAT,:TRD_G_KEYIN,:WL_CODE,:BRANCH,:DT_DOCCODE,:TRD_SEQ,:BRN_CODE,:BRN_NAME,:DI_TIME_CHK,:PGROUP,:DI_ACTIVE,:DI_REMARK)";
+$stmt_insert = $conn->prepare($sql_insert);
 
-    $branch = "";
+$conn->beginTransaction();
+$count_insert = 0;
+$count_update = 0;
 
-    if (in_array($DT_DOCCODE, $str_doc1)) {
-        $branch = "CP-340";
-    }
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $DT_DOCCODE = $result_sqlsvr["DT_DOCCODE"];
+        $ICCAT_CODE = $result_sqlsvr["ICCAT_CODE"];
+        $TRD_QTY = $result_sqlsvr['TRD_Q_FREE'] > 0 ? $result_sqlsvr['TRD_QTY'] + $result_sqlsvr['TRD_Q_FREE'] : $result_sqlsvr['TRD_QTY'];
 
-    if (in_array($DT_DOCCODE, $str_doc2)) {
-        $branch = "CP-BY";
-    }
+        $branch = "";
+        if (in_array($DT_DOCCODE, $str_doc1)) $branch = "CP-340";
+        if (in_array($DT_DOCCODE, $str_doc2)) $branch = "CP-BY";
+        if (in_array($DT_DOCCODE, $str_doc3)) $branch = "CP-RP";
+        if (in_array($DT_DOCCODE, $str_doc4)) $branch = "CP-BB";
 
-    if (in_array($DT_DOCCODE, $str_doc3)) {
-        $branch = "CP-RP";
-    }
+        $p_group = "";
+        if (in_array($ICCAT_CODE, $str_group1)) $p_group = "P1";
+        if (in_array($ICCAT_CODE, $str_group2)) $p_group = "P2";
+        if (in_array($ICCAT_CODE, $str_group3)) $p_group = "P3";
+        if (in_array($ICCAT_CODE, $str_group4)) $p_group = "P4";
 
-    if (in_array($DT_DOCCODE, $str_doc4)) {
-        $branch = "CP-BB";
-    }
+        $stmt_find->execute([
+            ':DI_KEY' => $result_sqlsvr["DI_KEY"],
+            ':DI_REF' => $result_sqlsvr["DI_REF"],
+            ':DI_DATE' => $result_sqlsvr["DI_DATE"],
+            ':DT_DOCCODE' => $result_sqlsvr["DT_DOCCODE"],
+            ':TRD_SEQ' => $result_sqlsvr["TRD_SEQ"]
+        ]);
 
-    echo "[ " . $DT_DOCCODE . " | " . $branch . " ]" . "\n\r";
-
-    $res = $res . $result_sqlsvr["DI_REF"] . "  *** " . $result_sqlsvr["DT_DOCCODE"] . " *** " . "\n\r";
-
-    //$myfile = fopen("sql_get_DATA.txt", "w") or die("Unable to open file!");
-    //fwrite($myfile, "[" . $res) ;
-    //fclose($myfile);
-
-
-    $p_group = "";
-
-    /*
-        if (strpos($group1, $ICCAT_CODE) !== false) {
-            $p_group = "P1";
-        }
-
-        if (strpos($group2, $ICCAT_CODE) !== false) {
-            $p_group = "P2";
-        }
-
-        if (strpos($group3, $ICCAT_CODE) !== false) {
-            $p_group = "P3";
-        }
-
-        if (strpos($group4, $ICCAT_CODE) !== false) {
-            $p_group = "P4";
-        }
-    */
-
-    if (in_array($ICCAT_CODE, $str_group1)) {
-        $p_group = "P1";
-    }
-
-    if (in_array($ICCAT_CODE, $str_group2)) {
-        $p_group = "P2";
-    }
-
-    if (in_array($ICCAT_CODE, $str_group3)) {
-        $p_group = "P3";
-    }
-
-    if (in_array($ICCAT_CODE, $str_group4)) {
-        $p_group = "P4";
-    }
-
-    $sql_find = "SELECT * FROM ims_product_sale_cockpit "
-        . " WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"]
-        . "' AND DI_REF = '" . $result_sqlsvr["DI_REF"]
-        . "' AND DI_DATE = '" . $result_sqlsvr["DI_DATE"]
-        . "' AND DT_DOCCODE = '" . $result_sqlsvr["DT_DOCCODE"]
-        . "' AND TRD_SEQ = '" . $result_sqlsvr["TRD_SEQ"] . "'";
-
-    //echo $sql_find . "\n\r";
-
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-
-        $sql_update = " UPDATE ims_product_sale_cockpit  SET AR_CODE=:AR_CODE,AR_NAME=:AR_NAME,SLMN_CODE=:SLMN_CODE,SLMN_NAME=:SLMN_NAME
-,SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,SKU_CAT=:SKU_CAT,ICCAT_CODE=:ICCAT_CODE,ICCAT_NAME=:ICCAT_NAME,TRD_QTY=:TRD_QTY,TRD_U_PRC=:TRD_U_PRC
-,TRD_DSC_KEYINV=:TRD_DSC_KEYINV,TRD_B_SELL=:TRD_B_SELL
-,TRD_B_VAT=:TRD_B_VAT,TRD_G_KEYIN=:TRD_G_KEYIN,WL_CODE=:WL_CODE,BRANCH=:BRANCH,BRN_CODE=:BRN_CODE
-,BRN_NAME=:BRN_NAME,DI_TIME_CHK=:DI_TIME_CHK,PGROUP=:PGROUP  
-        WHERE DI_KEY = :DI_KEY         
-        AND DI_REF  = :DI_REF
-        AND DI_DATE = :DI_DATE
-        AND DT_DOCCODE = :DT_DOCCODE
-        AND TRD_SEQ = :TRD_SEQ ";
-
-        $query = $conn->prepare($sql_update);
-        $query->bindParam(':AR_CODE', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':AR_NAME', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SLMN_CODE', $result_sqlsvr["SLMN_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SLMN_NAME', $result_sqlsvr["SLMN_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CODE', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_NAME', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CAT', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':ICCAT_CODE', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':ICCAT_NAME', $result_sqlsvr["ICCAT_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_DSC_KEYINV', $result_sqlsvr["TRD_DSC_KEYINV"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_VAT', $result_sqlsvr["TRD_B_VAT"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_G_KEYIN', $result_sqlsvr["TRD_G_KEYIN"], PDO::PARAM_STR);
-        $query->bindParam(':WL_CODE', $result_sqlsvr["WL_CODE"], PDO::PARAM_STR);
-
-        $query->bindParam(':BRANCH', $branch, PDO::PARAM_STR);
-        $query->bindParam(':BRN_CODE', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':BRN_NAME', $result_sqlsvr["BRN_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':DI_TIME_CHK', $result_sqlsvr["DI_TIME_CHK"], PDO::PARAM_STR);
-        $query->bindParam(':PGROUP', $p_group, PDO::PARAM_STR);
-
-        $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DATE', $result_sqlsvr["DI_DATE"], PDO::PARAM_STR);
-        $query->bindParam(':DT_DOCCODE', $result_sqlsvr["DT_DOCCODE"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_SEQ', $result_sqlsvr["TRD_SEQ"], PDO::PARAM_STR);
-
-        $query->execute();
-
-        $update_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " |- " . $result_sqlsvr["ICCAT_CODE"];
-
-        echo " UPDATE DATA " . $update_data;
-
-        //$myfile = fopen("update_chk.txt", "w") or die("Unable to open file!");
-        //fwrite($myfile, $update_data);
-        //fclose($myfile);
-
-    } else {
-
-        $sql = " INSERT INTO ims_product_sale_cockpit (DI_KEY,DI_REF,DI_DATE,DI_MONTH,DI_MONTH_NAME,DI_YEAR
-        ,AR_CODE,AR_NAME,SLMN_CODE,SLMN_NAME,SKU_CODE,SKU_NAME,SKU_CAT,ICCAT_CODE,ICCAT_NAME,TRD_QTY,TRD_U_PRC
-        ,TRD_DSC_KEYINV,TRD_B_SELL,TRD_B_VAT,TRD_G_KEYIN,WL_CODE,BRANCH,DT_DOCCODE,TRD_SEQ,BRN_CODE,BRN_NAME,DI_TIME_CHK,PGROUP)
-        VALUES (:DI_KEY,:DI_REF,:DI_DATE,:DI_MONTH,:DI_MONTH_NAME,:DI_YEAR,:AR_CODE,:AR_NAME,:SLMN_CODE,:SLMN_NAME,:SKU_CODE,:SKU_NAME,:SKU_CAT
-        ,:ICCAT_CODE,:ICCAT_NAME,:TRD_QTY,:TRD_U_PRC,:TRD_DSC_KEYINV,:TRD_B_SELL,:TRD_B_VAT,:TRD_G_KEYIN
-        ,:WL_CODE,:BRANCH,:DT_DOCCODE,:TRD_SEQ,:BRN_CODE,:BRN_NAME,:DI_TIME_CHK,:PGROUP) ";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DATE', $result_sqlsvr["DI_DATE"], PDO::PARAM_STR);
-        $query->bindParam(':DI_MONTH', $result_sqlsvr["DI_MONTH"], PDO::PARAM_STR);
-        $query->bindParam(':DI_MONTH_NAME', $month_arr[$result_sqlsvr["DI_MONTH"]], PDO::PARAM_STR);
-        $query->bindParam(':DI_YEAR', $result_sqlsvr["DI_YEAR"], PDO::PARAM_STR);
-        $query->bindParam(':AR_CODE', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':AR_NAME', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SLMN_CODE', $result_sqlsvr["SLMN_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SLMN_NAME', $result_sqlsvr["SLMN_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CODE', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_NAME', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CAT', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':ICCAT_CODE', $result_sqlsvr["ICCAT_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':ICCAT_NAME', $result_sqlsvr["ICCAT_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_DSC_KEYINV', $result_sqlsvr["TRD_DSC_KEYINV"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_VAT', $result_sqlsvr["TRD_B_VAT"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_G_KEYIN', $result_sqlsvr["TRD_G_KEYIN"], PDO::PARAM_STR);
-        $query->bindParam(':WL_CODE', $result_sqlsvr["WL_CODE"], PDO::PARAM_STR);
-
-        $query->bindParam(':BRANCH', $branch, PDO::PARAM_STR);
-
-        $query->bindParam(':DT_DOCCODE', $DT_DOCCODE, PDO::PARAM_STR);
-
-        $query->bindParam(':TRD_SEQ', $result_sqlsvr["TRD_SEQ"], PDO::PARAM_STR);
-
-        $query->bindParam(':BRN_CODE', $result_sqlsvr["BRN_CODE"], PDO::PARAM_STR);
-
-        $query->bindParam(':BRN_NAME', $result_sqlsvr["BRN_NAME"], PDO::PARAM_STR);
-
-        $query->bindParam(':DI_TIME_CHK', $result_sqlsvr["DI_TIME_CHK"], PDO::PARAM_STR);
-
-        $query->bindParam(':PGROUP', $p_group, PDO::PARAM_STR);
-
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            $insert_data .= $result_sqlsvr["DI_DATE"] . ":" . $result_sqlsvr["DI_REF"] . " | ";
-            echo " Save OK " . $insert_data;
+        if ($stmt_find->fetchColumn() > 0) {
+            $stmt_update->execute([
+                ':AR_CODE' => $result_sqlsvr["AR_CODE"],
+                ':AR_NAME' => $result_sqlsvr["AR_NAME"],
+                ':SLMN_CODE' => $result_sqlsvr["SLMN_CODE"],
+                ':SLMN_NAME' => $result_sqlsvr["SLMN_NAME"],
+                ':SKU_CODE' => $result_sqlsvr["SKU_CODE"],
+                ':SKU_NAME' => $result_sqlsvr["SKU_NAME"],
+                ':SKU_CAT' => $result_sqlsvr["ICCAT_CODE"],
+                ':ICCAT_CODE' => $result_sqlsvr["ICCAT_CODE"],
+                ':ICCAT_NAME' => $result_sqlsvr["ICCAT_NAME"],
+                ':TRD_QTY' => $TRD_QTY,
+                ':TRD_Q_FREE' => $result_sqlsvr["TRD_Q_FREE"],
+                ':TRD_U_PRC' => $result_sqlsvr["TRD_U_PRC"],
+                ':TRD_DSC_KEYINV' => $result_sqlsvr["TRD_DSC_KEYINV"],
+                ':TRD_B_SELL' => $result_sqlsvr["TRD_B_SELL"],
+                ':TRD_B_VAT' => $result_sqlsvr["TRD_B_VAT"],
+                ':TRD_G_KEYIN' => $result_sqlsvr["TRD_G_KEYIN"],
+                ':WL_CODE' => $result_sqlsvr["WL_CODE"],
+                ':BRANCH' => $branch,
+                ':BRN_CODE' => $result_sqlsvr["BRN_CODE"],
+                ':BRN_NAME' => $result_sqlsvr["BRN_NAME"],
+                ':DI_TIME_CHK' => $result_sqlsvr["DI_TIME_CHK"],
+                ':PGROUP' => $p_group,
+                ':DI_ACTIVE' => $result_sqlsvr["DI_ACTIVE"],
+                ':DI_REMARK' => $result_sqlsvr["DI_REMARK"],
+                ':DI_KEY' => $result_sqlsvr["DI_KEY"],
+                ':DI_REF' => $result_sqlsvr["DI_REF"],
+                ':DI_DATE' => $result_sqlsvr["DI_DATE"],
+                ':DT_DOCCODE' => $result_sqlsvr["DT_DOCCODE"],
+                ':TRD_SEQ' => $result_sqlsvr["TRD_SEQ"]
+            ]);
+            $count_update++;
         } else {
-            echo " Error ";
+            $month_name = isset($month_arr[$result_sqlsvr["DI_MONTH"]]) ? $month_arr[$result_sqlsvr["DI_MONTH"]] : "";
+
+            $stmt_insert->execute([
+                ':DI_KEY' => $result_sqlsvr["DI_KEY"],
+                ':DI_REF' => $result_sqlsvr["DI_REF"],
+                ':DI_DATE' => $result_sqlsvr["DI_DATE"],
+                ':DI_MONTH' => $result_sqlsvr["DI_MONTH"],
+                ':DI_MONTH_NAME' => $month_name,
+                ':DI_YEAR' => $result_sqlsvr["DI_YEAR"],
+                ':AR_CODE' => $result_sqlsvr["AR_CODE"],
+                ':AR_NAME' => $result_sqlsvr["AR_NAME"],
+                ':SLMN_CODE' => $result_sqlsvr["SLMN_CODE"],
+                ':SLMN_NAME' => $result_sqlsvr["SLMN_NAME"],
+                ':SKU_CODE' => $result_sqlsvr["SKU_CODE"],
+                ':SKU_NAME' => $result_sqlsvr["SKU_NAME"],
+                ':SKU_CAT' => $result_sqlsvr["ICCAT_CODE"],
+                ':ICCAT_CODE' => $result_sqlsvr["ICCAT_CODE"],
+                ':ICCAT_NAME' => $result_sqlsvr["ICCAT_NAME"],
+                ':TRD_QTY' => $TRD_QTY,
+                ':TRD_Q_FREE' => $result_sqlsvr["TRD_Q_FREE"],
+                ':TRD_U_PRC' => $result_sqlsvr["TRD_U_PRC"],
+                ':TRD_DSC_KEYINV' => $result_sqlsvr["TRD_DSC_KEYINV"],
+                ':TRD_B_SELL' => $result_sqlsvr["TRD_B_SELL"],
+                ':TRD_B_VAT' => $result_sqlsvr["TRD_B_VAT"],
+                ':TRD_G_KEYIN' => $result_sqlsvr["TRD_G_KEYIN"],
+                ':WL_CODE' => $result_sqlsvr["WL_CODE"],
+                ':BRANCH' => $branch,
+                ':DT_DOCCODE' => $DT_DOCCODE,
+                ':TRD_SEQ' => $result_sqlsvr["TRD_SEQ"],
+                ':BRN_CODE' => $result_sqlsvr["BRN_CODE"],
+                ':BRN_NAME' => $result_sqlsvr["BRN_NAME"],
+                ':DI_TIME_CHK' => $result_sqlsvr["DI_TIME_CHK"],
+                ':PGROUP' => $p_group,
+                ':DI_ACTIVE' => $result_sqlsvr["DI_ACTIVE"],
+                ':DI_REMARK' => $result_sqlsvr["DI_REMARK"]
+            ]);
+            $count_insert++;
         }
-
     }
-
+    $conn->commit();
+    echo "sale_sac_all import finished. Insert: $count_insert, Update: $count_update\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in sale_sac_all import: " . $e->getMessage() . "\n";
 }
 
 $conn_sqlsvr = null;
-

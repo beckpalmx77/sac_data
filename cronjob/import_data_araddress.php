@@ -27,49 +27,46 @@ $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$stmt_find = $conn->prepare("SELECT COUNT(*) FROM araddress WHERE ARA_KEY = :ARA_KEY");
+$stmt_update = $conn->prepare("UPDATE araddress SET ARA_AR=:ARA_AR,ARA_ADDB=:ARA_ADDB,ARA_DEFAULT=:ARA_DEFAULT,ARA_LASTUPD=:ARA_LASTUPD WHERE ARA_KEY = :ARA_KEY");
+$stmt_insert = $conn->prepare("INSERT INTO araddress(ARA_KEY,ARA_AR,ARA_ADDB,ARA_DEFAULT,ARA_LASTUPD) VALUES (:ARA_KEY,:ARA_AR,:ARA_ADDB,:ARA_DEFAULT,:ARA_LASTUPD)");
 
+$conn->beginTransaction();
+$count_insert = 0;
+$count_update = 0;
 
-    $sql_find = "SELECT * FROM araddress WHERE ARA_KEY = '" . $result_sqlsvr["ARA_KEY"] . "'";
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        $sql = "UPDATE araddress SET ARA_AR=:ARA_AR,ARA_ADDB=:ARA_ADDB,ARA_DEFAULT=:ARA_DEFAULT,ARA_LASTUPD=:ARA_LASTUPD
-        WHERE ARA_KEY = :ARA_KEY ";
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $stmt_find->execute([':ARA_KEY' => $result_sqlsvr["ARA_KEY"]]);
+        $nRows = $stmt_find->fetchColumn();
 
-        echo " Update araddress : " . $result_sqlsvr["ARA_KEY"] . " | " . $result_sqlsvr["ARA_AR"] . " | " . $result_sqlsvr["ARA_ADDB"] . "\n\r";
-
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ARA_AR', $result_sqlsvr["ARA_AR"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_ADDB', $result_sqlsvr["ARA_ADDB"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_DEFAULT', $result_sqlsvr["ARA_DEFAULT"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_LASTUPD', $result_sqlsvr["ARA_LASTUPD"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_KEY', $result_sqlsvr["ARA_KEY"], PDO::PARAM_STR);
-        $query->execute();
-    } else {
-
-        echo " Insert araddress : " . $result_sqlsvr["ARA_KEY"] . " | " . $result_sqlsvr["ARA_AR"] . " | " . $result_sqlsvr["ARA_ADDB"] . "\n\r";
-
-        $sql = "INSERT INTO araddress(ARA_KEY,ARA_AR,ARA_ADDB,ARA_DEFAULT,ARA_LASTUPD)
-        VALUES (:ARA_KEY,:ARA_AR,:ARA_ADDB,:ARA_DEFAULT,:ARA_LASTUPD)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ARA_KEY', $result_sqlsvr["ARA_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_AR', $result_sqlsvr["ARA_AR"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_ADDB', $result_sqlsvr["ARA_ADDB"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_DEFAULT', $result_sqlsvr["ARA_DEFAULT"], PDO::PARAM_STR);
-        $query->bindParam(':ARA_LASTUPD', $result_sqlsvr["ARA_LASTUPD"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo "Save OK";
+        if ($nRows > 0) {
+            $stmt_update->execute([
+                ':ARA_AR' => $result_sqlsvr["ARA_AR"],
+                ':ARA_ADDB' => $result_sqlsvr["ARA_ADDB"],
+                ':ARA_DEFAULT' => $result_sqlsvr["ARA_DEFAULT"],
+                ':ARA_LASTUPD' => $result_sqlsvr["ARA_LASTUPD"],
+                ':ARA_KEY' => $result_sqlsvr["ARA_KEY"]
+            ]);
+            $count_update++;
         } else {
-            echo "Error";
+            $stmt_insert->execute([
+                ':ARA_KEY' => $result_sqlsvr["ARA_KEY"],
+                ':ARA_AR' => $result_sqlsvr["ARA_AR"],
+                ':ARA_ADDB' => $result_sqlsvr["ARA_ADDB"],
+                ':ARA_DEFAULT' => $result_sqlsvr["ARA_DEFAULT"],
+                ':ARA_LASTUPD' => $result_sqlsvr["ARA_LASTUPD"]
+            ]);
+            $count_insert++;
         }
-
     }
-
+    $conn->commit();
+    echo "araddress import finished. Insert: $count_insert, Update: $count_update\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in araddress import: " . $e->getMessage() . "\n";
 }
 
-$conn_sqlsvr=null;
+$conn_sqlsvr = null;
+
 

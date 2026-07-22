@@ -20,58 +20,68 @@ include('../cond_file/query_product_stock.php');
 
     $statement = $conn_sqlsvr->query($sql_main);
     $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($results as $result) {
-        $sql_find = "SELECT * FROM ims_product_stock_balance 
-                WHERE SKU_CODE = '" . $result["SKU_CODE"] . "'"
-            . " AND ICCAT_CODE = '" . $result["ICCAT_CODE"] . "'"
-            . " AND DI_DATE = '" . $result["DI_DATE"] . "'"
-            . " AND WL_CODE = '" . $result["WL_CODE"] . "'"
-            . " AND WH_CODE = '" . $result["WH_CODE"] . "'";
-        $nRows = $conn->query($sql_find)->fetchColumn();
-        echo $sql_find . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"] . "\n\r";
-        if ($nRows > 0) {
-            $sql = " UPDATE ims_product_stock_balance SET ICCAT_NAME=:ICCAT_NAME,SKU_NAME=:SKU_NAME,UTQ_QTY=:UTQ_QTY,QTY=:QTY
-                ,WL_NAME=:WL_NAME,WH_NAME=:WH_NAME,update_date=:update_date WHERE SKU_CODE = :SKU_CODE AND DI_DATE = :DI_DATE
-                 AND ICCAT_CODE=:ICCAT_CODE AND WL_CODE=:WL_CODE AND WH_CODE=:WH_CODE ";
-            echo $sql . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"]  . "\n\r";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':ICCAT_NAME', $result["ICCAT_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':SKU_NAME', $result["SKU_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':UTQ_QTY', $result["UTQ_QTY"], PDO::PARAM_STR);
-            $query->bindParam(':QTY', $result["QTY"], PDO::PARAM_STR);
-            $query->bindParam(':WL_NAME', $result["WL_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':WH_NAME', $result["WH_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':update_date', $update_date, PDO::PARAM_STR);
-            $query->bindParam(':SKU_CODE', $result["SKU_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':DI_DATE', $result["DI_DATE"], PDO::PARAM_STR);
-            $query->bindParam(':ICCAT_CODE', $result["ICCAT_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':WL_CODE', $result["WL_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':WH_CODE', $result["WH_CODE"], PDO::PARAM_STR);
-            $query->execute();
-        } else {
-            $sql = "INSERT INTO ims_product_stock_balance(ICCAT_CODE,ICCAT_NAME,DI_DATE,SKU_CODE,SKU_NAME,WH_CODE,WL_CODE,UTQ_QTY,QTY,WH_NAME,WL_NAME,create_date) 
-                VALUES (:ICCAT_CODE,:ICCAT_NAME,:DI_DATE,:SKU_CODE,:SKU_NAME,:WH_CODE,:WL_CODE,:UTQ_QTY,:QTY,:WH_NAME,:WL_NAME,:create_date)";
-            echo $sql . $result["DI_DATE"] . " | " . $result["SKU_CODE"] . " | " . $result["UTQ_QTY"]  . "\n\r";
-            $query = $conn->prepare($sql);
-            $query->bindParam(':ICCAT_CODE', $result["ICCAT_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':ICCAT_NAME', $result["ICCAT_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':DI_DATE', $result["DI_DATE"], PDO::PARAM_STR);
-            $query->bindParam(':SKU_CODE', $result["SKU_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':SKU_NAME', $result["SKU_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':WH_CODE', $result["WH_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':WL_CODE', $result["WL_CODE"], PDO::PARAM_STR);
-            $query->bindParam(':UTQ_QTY', $result["UTQ_QTY"], PDO::PARAM_STR);
-            $query->bindParam(':QTY', $result["QTY"], PDO::PARAM_STR);
-            $query->bindParam(':WH_NAME', $result["WH_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':WL_NAME', $result["WL_NAME"], PDO::PARAM_STR);
-            $query->bindParam(':create_date', $create_date, PDO::PARAM_STR);
-            $query->execute();
+
+    $stmt_find = $conn->prepare("SELECT COUNT(*) FROM ims_product_stock_balance WHERE SKU_CODE = :SKU_CODE AND ICCAT_CODE = :ICCAT_CODE AND DI_DATE = :DI_DATE AND WL_CODE = :WL_CODE AND WH_CODE = :WH_CODE");
+    $stmt_update = $conn->prepare("UPDATE ims_product_stock_balance SET ICCAT_NAME=:ICCAT_NAME,SKU_NAME=:SKU_NAME,UTQ_QTY=:UTQ_QTY,QTY=:QTY,WL_NAME=:WL_NAME,WH_NAME=:WH_NAME,update_date=:update_date WHERE SKU_CODE = :SKU_CODE AND DI_DATE = :DI_DATE AND ICCAT_CODE=:ICCAT_CODE AND WL_CODE=:WL_CODE AND WH_CODE=:WH_CODE");
+    $stmt_insert = $conn->prepare("INSERT INTO ims_product_stock_balance(ICCAT_CODE,ICCAT_NAME,DI_DATE,SKU_CODE,SKU_NAME,WH_CODE,WL_CODE,UTQ_QTY,QTY,WH_NAME,WL_NAME,create_date) VALUES (:ICCAT_CODE,:ICCAT_NAME,:DI_DATE,:SKU_CODE,:SKU_NAME,:WH_CODE,:WL_CODE,:UTQ_QTY,:QTY,:WH_NAME,:WL_NAME,:create_date)");
+
+    $conn->beginTransaction();
+    $count_insert = 0;
+    $count_update = 0;
+
+    try {
+        foreach ($results as $result) {
+            $stmt_find->execute([
+                ':SKU_CODE' => $result["SKU_CODE"],
+                ':ICCAT_CODE' => $result["ICCAT_CODE"],
+                ':DI_DATE' => $result["DI_DATE"],
+                ':WL_CODE' => $result["WL_CODE"],
+                ':WH_CODE' => $result["WH_CODE"]
+            ]);
+
+            if ($stmt_find->fetchColumn() > 0) {
+                $stmt_update->execute([
+                    ':ICCAT_NAME' => $result["ICCAT_NAME"],
+                    ':SKU_NAME' => $result["SKU_NAME"],
+                    ':UTQ_QTY' => $result["UTQ_QTY"],
+                    ':QTY' => $result["QTY"],
+                    ':WL_NAME' => $result["WL_NAME"],
+                    ':WH_NAME' => $result["WH_NAME"],
+                    ':update_date' => $update_date,
+                    ':SKU_CODE' => $result["SKU_CODE"],
+                    ':DI_DATE' => $result["DI_DATE"],
+                    ':ICCAT_CODE' => $result["ICCAT_CODE"],
+                    ':WL_CODE' => $result["WL_CODE"],
+                    ':WH_CODE' => $result["WH_CODE"]
+                ]);
+                $count_update++;
+            } else {
+                $stmt_insert->execute([
+                    ':ICCAT_CODE' => $result["ICCAT_CODE"],
+                    ':ICCAT_NAME' => $result["ICCAT_NAME"],
+                    ':DI_DATE' => $result["DI_DATE"],
+                    ':SKU_CODE' => $result["SKU_CODE"],
+                    ':SKU_NAME' => $result["SKU_NAME"],
+                    ':WH_CODE' => $result["WH_CODE"],
+                    ':WL_CODE' => $result["WL_CODE"],
+                    ':UTQ_QTY' => $result["UTQ_QTY"],
+                    ':QTY' => $result["QTY"],
+                    ':WH_NAME' => $result["WH_NAME"],
+                    ':WL_NAME' => $result["WL_NAME"],
+                    ':create_date' => $create_date
+                ]);
+                $count_insert++;
+            }
         }
-
+        $conn->commit();
+        echo "stock_movement import finished. Insert: $count_insert, Update: $count_update\n";
+    } catch (Exception $e) {
+        $conn->rollBack();
+        echo "Error in stock_movement import: " . $e->getMessage() . "\n";
     }
-//}
 
-$conn_sqlsvr = null;
+    $conn_sqlsvr = null;
+
 
 
 

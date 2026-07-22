@@ -28,47 +28,44 @@ $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$stmt_find = $conn->prepare("SELECT COUNT(*) FROM ardetail WHERE ARD_KEY = :ARD_KEY");
+$stmt_update = $conn->prepare("UPDATE ardetail SET ARD_AR=:ARD_AR,ARD_DI=:ARD_DI,ARD_ARCD=:ARD_ARCD WHERE ARD_KEY = :ARD_KEY");
+$stmt_insert = $conn->prepare("INSERT INTO ardetail(ARD_KEY,ARD_AR,ARD_DI,ARD_ARCD) VALUES (:ARD_KEY,:ARD_AR,:ARD_DI,:ARD_ARCD)");
 
+$conn->beginTransaction();
+$count_insert = 0;
+$count_update = 0;
 
-    $sql_find = "SELECT * FROM ardetail WHERE ARD_KEY = '" . $result_sqlsvr["ARD_KEY"] . "'";
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        $sql = "UPDATE ardetail SET ARD_AR=:ARD_AR,ARD_DI=:ARD_DI,ARD_ARCD=:ARD_ARCD        
-        WHERE ARD_KEY = :ARD_KEY ";
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $stmt_find->execute([':ARD_KEY' => $result_sqlsvr["ARD_KEY"]]);
+        $nRows = $stmt_find->fetchColumn();
 
-        echo " Update ardetail : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
-
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ARD_AR', $result_sqlsvr["ARD_AR"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_DI', $result_sqlsvr["ARD_DI"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_ARCD', $result_sqlsvr["ARD_ARCD"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_KEY', $result_sqlsvr["ARD_KEY"], PDO::PARAM_STR);
-        $query->execute();
-    } else {
-
-        echo " Insert ardetail : " . $result_sqlsvr["ARD_KEY"] . " | " . $result_sqlsvr["ARD_AR"] . " | " . $result_sqlsvr["ARD_ARCD"] . "\n\r";
-
-        $sql = "INSERT INTO ardetail(ARD_KEY,ARD_AR,ARD_DI,ARD_ARCD)
-        VALUES (:ARD_KEY,:ARD_AR,:ARD_DI,:ARD_ARCD)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ARD_KEY', $result_sqlsvr["ARD_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_AR', $result_sqlsvr["ARD_AR"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_DI', $result_sqlsvr["ARD_DI"], PDO::PARAM_STR);
-        $query->bindParam(':ARD_ARCD', $result_sqlsvr["ARD_ARCD"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo "Save OK";
+        if ($nRows > 0) {
+            $stmt_update->execute([
+                ':ARD_AR' => $result_sqlsvr["ARD_AR"],
+                ':ARD_DI' => $result_sqlsvr["ARD_DI"],
+                ':ARD_ARCD' => $result_sqlsvr["ARD_ARCD"],
+                ':ARD_KEY' => $result_sqlsvr["ARD_KEY"]
+            ]);
+            $count_update++;
         } else {
-            echo "Error";
+            $stmt_insert->execute([
+                ':ARD_KEY' => $result_sqlsvr["ARD_KEY"],
+                ':ARD_AR' => $result_sqlsvr["ARD_AR"],
+                ':ARD_DI' => $result_sqlsvr["ARD_DI"],
+                ':ARD_ARCD' => $result_sqlsvr["ARD_ARCD"]
+            ]);
+            $count_insert++;
         }
-
     }
-
+    $conn->commit();
+    echo "ardetail import finished. Insert: $count_insert, Update: $count_update\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in ardetail import: " . $e->getMessage() . "\n";
 }
 
-$conn_sqlsvr=null;
+$conn_sqlsvr = null;
+
 

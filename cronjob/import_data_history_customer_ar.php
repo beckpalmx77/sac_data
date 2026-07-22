@@ -63,111 +63,82 @@ $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$stmt_find = $conn->prepare("SELECT COUNT(*) FROM ims_histoty_customer_ar WHERE TRD_KEY = :TRD_KEY");
+$stmt_update = $conn->prepare("UPDATE ims_histoty_customer_ar SET ADDB_COMPANY=:ADDB_COMPANY,ADDB_SEARCH=:ADDB_SEARCH,ADDB_BRANCH=:ADDB_BRANCH,ADDB_EMAIL=:ADDB_EMAIL,ADDB_ADDB_1=:ADDB_ADDB_1,ADDB_ADDB_2=:ADDB_ADDB_2,ADDB_ADDB_3=:ADDB_ADDB_3,ADDB_PROVINCE=:ADDB_PROVINCE,ADDB_PHONE=:ADDB_PHONE,ADDB_REMARK=:ADDB_REMARK,DI_REF=:DI_REF,DI_DATE=:DI_DATE,DI_DAY=:DI_DAY,DI_MONTH=:DI_MONTH,DI_YEAR=:DI_YEAR,TRH_DI=:TRH_DI,SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,TRD_QTY=:TRD_QTY,TRD_U_PRC=:TRD_U_PRC,TRD_B_SELL=:TRD_B_SELL,TRD_B_VAT=:TRD_B_VAT,TRD_B_AMT=:TRD_B_AMT WHERE TRD_KEY = :TRD_KEY");
+$stmt_insert = $conn->prepare("INSERT INTO ims_histoty_customer_ar(TRD_KEY,ADDB_COMPANY,ADDB_SEARCH,ADDB_BRANCH,ADDB_EMAIL,ADDB_ADDB_1,ADDB_ADDB_2,ADDB_ADDB_3,ADDB_PROVINCE,ADDB_PHONE,ADDB_REMARK,DI_REF,DI_DATE,DI_DAY,DI_MONTH,DI_YEAR,TRH_DI,SKU_CODE,SKU_NAME,TRD_QTY,TRD_U_PRC,TRD_B_SELL,TRD_B_VAT,TRD_B_AMT) VALUES (:TRD_KEY,:ADDB_COMPANY,:ADDB_SEARCH,:ADDB_BRANCH,:ADDB_EMAIL,:ADDB_ADDB_1,:ADDB_ADDB_2,:ADDB_ADDB_3,:ADDB_PROVINCE,:ADDB_PHONE,:ADDB_REMARK,:DI_REF,:DI_DATE,:DI_DAY,:DI_MONTH,:DI_YEAR,:TRH_DI,:SKU_CODE,:SKU_NAME,:TRD_QTY,:TRD_U_PRC,:TRD_B_SELL,:TRD_B_VAT,:TRD_B_AMT)");
 
+$conn->beginTransaction();
+$count_insert = 0;
+$count_update = 0;
 
-    $sql_find = "SELECT * FROM ims_histoty_customer_ar WHERE TRD_KEY = '" . $result_sqlsvr["TRD_KEY"] . "'";
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        $sql = "UPDATE ims_histoty_customer_ar SET ADDB_COMPANY=:ADDB_COMPANY,ADDB_SEARCH=:ADDB_SEARCH,ADDB_BRANCH=:ADDB_BRANCH,
-        ADDB_EMAIL=:ADDB_EMAIL,ADDB_ADDB_1=:ADDB_ADDB_1,ADDB_ADDB_2=:ADDB_ADDB_2,ADDB_ADDB_3=:ADDB_ADDB_3,
-        ADDB_PROVINCE=:ADDB_PROVINCE,ADDB_PHONE=:ADDB_PHONE,ADDB_REMARK=:ADDB_REMARK,
-        DI_REF=:DI_REF,DI_DATE=:DI_DATE,DI_DAY=:DI_DAY,DI_MONTH=:DI_MONTH,DI_YEAR=:DI_YEAR,
-        TRH_DI=:TRH_DI,
-        SKU_CODE=:SKU_CODE,SKU_NAME=:SKU_NAME,
-        TRD_QTY=:TRD_QTY,TRD_U_PRC=:TRD_U_PRC,TRD_B_SELL=:TRD_B_SELL,TRD_B_VAT=:TRD_B_VAT,TRD_B_AMT=:TRD_B_AMT 
-        WHERE TRD_KEY = :TRD_KEY ";
-
-        echo " Update Customer : " . $result_sqlsvr["TRD_KEY"] . " | " . $result_sqlsvr["ADDB_COMPANY"] . " | " . $result_sqlsvr["ADDB_SEARCH"] . "\n\r";
-
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ADDB_COMPANY', $result_sqlsvr["ADDB_COMPANY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_SEARCH', $result_sqlsvr["ADDB_SEARCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_EMAIL', $result_sqlsvr["ADDB_EMAIL"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_1', $result_sqlsvr["ADDB_ADDB_1"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_2', $result_sqlsvr["ADDB_ADDB_2"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_3', $result_sqlsvr["ADDB_ADDB_3"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PROVINCE', $result_sqlsvr["ADDB_PROVINCE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PHONE', $result_sqlsvr["ADDB_PHONE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_REMARK', $result_sqlsvr["ADDB_REMARK"], PDO::PARAM_STR);
-        $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DATE', $result_sqlsvr["DI_DATE"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DAY', $result_sqlsvr["DI_DAY"], PDO::PARAM_STR);
-        $query->bindParam(':DI_MONTH', $result_sqlsvr["DI_MONTH"], PDO::PARAM_STR);
-        $query->bindParam(':DI_YEAR', $result_sqlsvr["DI_YEAR"], PDO::PARAM_STR);
-        $query->bindParam(':TRH_DI', $result_sqlsvr["TRH_DI"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CODE', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_NAME', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_VAT', $result_sqlsvr["TRD_B_VAT"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_AMT', $result_sqlsvr["TRD_B_AMT"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_KEY', $result_sqlsvr["TRD_KEY"], PDO::PARAM_STR);
-        $query->execute();
-    } else {
-
-        echo " Insert Customer : " . $result_sqlsvr["TRD_KEY"] . " | " . $result_sqlsvr["ADDB_COMPANY"] . " | " . $result_sqlsvr["ADDB_SEARCH"] . "\n\r";
-
-        $sql = "INSERT INTO ims_histoty_customer_ar(TRD_KEY,ADDB_COMPANY,ADDB_SEARCH,ADDB_BRANCH,ADDB_EMAIL,ADDB_ADDB_1,ADDB_ADDB_2,ADDB_ADDB_3,ADDB_PROVINCE,ADDB_PHONE,ADDB_REMARK,DI_REF,DI_DATE,DI_DAY,DI_MONTH,DI_YEAR,TRH_DI
-,SKU_CODE,SKU_NAME,TRD_QTY,TRD_U_PRC,TRD_B_SELL,TRD_B_VAT,TRD_B_AMT)
-        VALUES (:TRD_KEY,:ADDB_COMPANY,:ADDB_SEARCH,:ADDB_BRANCH,:ADDB_EMAIL,:ADDB_ADDB_1,:ADDB_ADDB_2,:ADDB_ADDB_3,:ADDB_PROVINCE,:ADDB_PHONE,:ADDB_REMARK,:DI_REF,:DI_DATE,:DI_DAY,:DI_MONTH,:DI_YEAR,:TRH_DI
-,:SKU_CODE,:SKU_NAME,:TRD_QTY,:TRD_U_PRC,:TRD_B_SELL,:TRD_B_VAT,:TRD_B_AMT)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':TRD_KEY', $result_sqlsvr["TRD_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_COMPANY', $result_sqlsvr["ADDB_COMPANY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_SEARCH', $result_sqlsvr["ADDB_SEARCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_EMAIL', $result_sqlsvr["ADDB_EMAIL"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_1', $result_sqlsvr["ADDB_ADDB_1"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_2', $result_sqlsvr["ADDB_ADDB_2"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_3', $result_sqlsvr["ADDB_ADDB_3"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PROVINCE', $result_sqlsvr["ADDB_PROVINCE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PHONE', $result_sqlsvr["ADDB_PHONE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_REMARK', $result_sqlsvr["ADDB_REMARK"], PDO::PARAM_STR);
-        $query->bindParam(':DI_REF', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DATE', $result_sqlsvr["DI_DATE"], PDO::PARAM_STR);
-        $query->bindParam(':DI_DAY', $result_sqlsvr["DI_DAY"], PDO::PARAM_STR);
-        $query->bindParam(':DI_MONTH', $result_sqlsvr["DI_MONTH"], PDO::PARAM_STR);
-        $query->bindParam(':DI_YEAR', $result_sqlsvr["DI_YEAR"], PDO::PARAM_STR);
-        $query->bindParam(':TRH_DI', $result_sqlsvr["TRH_DI"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_CODE', $result_sqlsvr["SKU_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':SKU_NAME', $result_sqlsvr["SKU_NAME"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_QTY', $result_sqlsvr["TRD_QTY"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_U_PRC', $result_sqlsvr["TRD_U_PRC"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_SELL', $result_sqlsvr["TRD_B_SELL"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_VAT', $result_sqlsvr["TRD_B_VAT"], PDO::PARAM_STR);
-        $query->bindParam(':TRD_B_AMT', $result_sqlsvr["TRD_B_AMT"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo "Save OK";
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $stmt_find->execute([':TRD_KEY' => $result_sqlsvr["TRD_KEY"]]);
+        if ($stmt_find->fetchColumn() > 0) {
+            $stmt_update->execute([
+                ':ADDB_COMPANY' => $result_sqlsvr["ADDB_COMPANY"],
+                ':ADDB_SEARCH'  => $result_sqlsvr["ADDB_SEARCH"],
+                ':ADDB_BRANCH'  => $result_sqlsvr["ADDB_BRANCH"],
+                ':ADDB_EMAIL'   => isset($result_sqlsvr["ADDB_EMAIL"]) ? $result_sqlsvr["ADDB_EMAIL"] : '',
+                ':ADDB_ADDB_1'  => $result_sqlsvr["ADDB_ADDB_1"],
+                ':ADDB_ADDB_2'  => $result_sqlsvr["ADDB_ADDB_2"],
+                ':ADDB_ADDB_3'  => isset($result_sqlsvr["ADDB_ADDB_3"]) ? $result_sqlsvr["ADDB_ADDB_3"] : '',
+                ':ADDB_PROVINCE'=> isset($result_sqlsvr["ADDB_PROVINCE"]) ? $result_sqlsvr["ADDB_PROVINCE"] : '',
+                ':ADDB_PHONE'   => isset($result_sqlsvr["ADDB_PHONE"]) ? $result_sqlsvr["ADDB_PHONE"] : '',
+                ':ADDB_REMARK'  => isset($result_sqlsvr["ADDB_REMARK"]) ? $result_sqlsvr["ADDB_REMARK"] : '',
+                ':DI_REF'       => $result_sqlsvr["DI_REF"],
+                ':DI_DATE'      => $result_sqlsvr["DI_DATE"],
+                ':DI_DAY'       => $result_sqlsvr["DI_DAY"],
+                ':DI_MONTH'     => $result_sqlsvr["DI_MONTH"],
+                ':DI_YEAR'      => $result_sqlsvr["DI_YEAR"],
+                ':TRH_DI'       => $result_sqlsvr["TRH_DI"],
+                ':SKU_CODE'     => $result_sqlsvr["SKU_CODE"],
+                ':SKU_NAME'     => $result_sqlsvr["SKU_NAME"],
+                ':TRD_QTY'      => $result_sqlsvr["TRD_QTY"],
+                ':TRD_U_PRC'    => $result_sqlsvr["TRD_U_PRC"],
+                ':TRD_B_SELL'   => $result_sqlsvr["TRD_B_SELL"],
+                ':TRD_B_VAT'    => $result_sqlsvr["TRD_B_VAT"],
+                ':TRD_B_AMT'    => $result_sqlsvr["TRD_B_AMT"],
+                ':TRD_KEY'      => $result_sqlsvr["TRD_KEY"]
+            ]);
+            $count_update++;
         } else {
-            echo "Error";
+            $stmt_insert->execute([
+                ':TRD_KEY'      => $result_sqlsvr["TRD_KEY"],
+                ':ADDB_COMPANY' => $result_sqlsvr["ADDB_COMPANY"],
+                ':ADDB_SEARCH'  => $result_sqlsvr["ADDB_SEARCH"],
+                ':ADDB_BRANCH'  => $result_sqlsvr["ADDB_BRANCH"],
+                ':ADDB_EMAIL'   => isset($result_sqlsvr["ADDB_EMAIL"]) ? $result_sqlsvr["ADDB_EMAIL"] : '',
+                ':ADDB_ADDB_1'  => $result_sqlsvr["ADDB_ADDB_1"],
+                ':ADDB_ADDB_2'  => $result_sqlsvr["ADDB_ADDB_2"],
+                ':ADDB_ADDB_3'  => isset($result_sqlsvr["ADDB_ADDB_3"]) ? $result_sqlsvr["ADDB_ADDB_3"] : '',
+                ':ADDB_PROVINCE'=> isset($result_sqlsvr["ADDB_PROVINCE"]) ? $result_sqlsvr["ADDB_PROVINCE"] : '',
+                ':ADDB_PHONE'   => isset($result_sqlsvr["ADDB_PHONE"]) ? $result_sqlsvr["ADDB_PHONE"] : '',
+                ':ADDB_REMARK'  => isset($result_sqlsvr["ADDB_REMARK"]) ? $result_sqlsvr["ADDB_REMARK"] : '',
+                ':DI_REF'       => $result_sqlsvr["DI_REF"],
+                ':DI_DATE'      => $result_sqlsvr["DI_DATE"],
+                ':DI_DAY'       => $result_sqlsvr["DI_DAY"],
+                ':DI_MONTH'     => $result_sqlsvr["DI_MONTH"],
+                ':DI_YEAR'      => $result_sqlsvr["DI_YEAR"],
+                ':TRH_DI'       => $result_sqlsvr["TRH_DI"],
+                ':SKU_CODE'     => $result_sqlsvr["SKU_CODE"],
+                ':SKU_NAME'     => $result_sqlsvr["SKU_NAME"],
+                ':TRD_QTY'      => $result_sqlsvr["TRD_QTY"],
+                ':TRD_U_PRC'    => $result_sqlsvr["TRD_U_PRC"],
+                ':TRD_B_SELL'   => $result_sqlsvr["TRD_B_SELL"],
+                ':TRD_B_VAT'    => $result_sqlsvr["TRD_B_VAT"],
+                ':TRD_B_AMT'    => $result_sqlsvr["TRD_B_AMT"]
+            ]);
+            $count_insert++;
         }
-
-/*
-        $return_arr[] = array("customer_id" => $result_sqlsvr['AR_CODE'],
-            "tax_id" => $result_sqlsvr['ADDB_TAX_ID'],
-            "f_name" => $result_sqlsvr['AR_NAME'],
-            "phone" => $result_sqlsvr['ADDB_PHONE'],
-            "address" => $result_sqlsvr['ADDB_ADDB_1'],
-            "tumbol" => $result_sqlsvr['ADDB_ADDB_2'],
-            "amphure" => $result_sqlsvr['ADDB_ADDB_3'],
-            "province" => $result_sqlsvr['ADDB_PROVINCE'],
-            "zipcode" => $result_sqlsvr['ADDB_POST']);
-*/
     }
-/*
-    $customer_data = json_encode($return_arr);
-    file_put_contents("customer_data.json", $customer_data);
-    echo json_encode($return_arr);
-*/
-
+    $conn->commit();
+    echo "history_customer_ar import finished. Insert: $count_insert, Update: $count_update\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in history_customer_ar import: " . $e->getMessage() . "\n";
 }
 
-$conn_sqlsvr=null;
+$conn_sqlsvr = null;
+
 

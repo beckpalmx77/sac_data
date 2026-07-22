@@ -26,37 +26,38 @@ $sql_sqlsvr = $select_query . $sql_cond . " AND DI_REF like '" . $doc_id_prefix 
 $stmt_sqlsvr = $conn_sqlsvr->prepare($sql_sqlsvr);
 $stmt_sqlsvr->execute();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$stmt_find = $conn->prepare("SELECT COUNT(*) FROM ims_price_approve_header WHERE DI_KEY = :DI_KEY");
+$stmt_insert = $conn->prepare("INSERT INTO ims_price_approve_header(DI_KEY,doc_no,doc_date,customer_id,customer_name) VALUES (:DI_KEY,:doc_no,:doc_date,:customer_id,:customer_name)");
 
-    $sql_find = "SELECT * FROM ims_price_approve_header WHERE DI_KEY = '" . $result_sqlsvr["DI_KEY"] . "'";
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        echo "Dup";
-    } else {
+$conn->beginTransaction();
+$count_insert = 0;
+$count_dup = 0;
 
-
-        $doc_date = substr($result_sqlsvr["DI_DATE"],8,2) . "/" . substr($result_sqlsvr["DI_DATE"],5,2) . "/" . strval(intval(substr($result_sqlsvr["DI_DATE"],0,4))+543);
-        //echo $doc_date . " | " ;
-
-        $sql = "INSERT INTO ims_price_approve_header(DI_KEY,doc_no,doc_date,customer_id,customer_name) VALUES (:DI_KEY,:doc_no,:doc_date,:customer_id,:customer_name)";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':DI_KEY', $result_sqlsvr["DI_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':doc_no', $result_sqlsvr["DI_REF"], PDO::PARAM_STR);
-        $query->bindParam(':doc_date', $doc_date, PDO::PARAM_STR);
-        $query->bindParam(':customer_id', $result_sqlsvr["AR_CODE"], PDO::PARAM_STR);
-        $query->bindParam(':customer_name', $result_sqlsvr["AR_NAME"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo "Save OK";
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $stmt_find->execute([':DI_KEY' => $result_sqlsvr["DI_KEY"]]);
+        if ($stmt_find->fetchColumn() > 0) {
+            $count_dup++;
         } else {
-            echo "Error";
-        }
+            $doc_date = substr($result_sqlsvr["DI_DATE"], 8, 2) . "/" . substr($result_sqlsvr["DI_DATE"], 5, 2) . "/" . strval(intval(substr($result_sqlsvr["DI_DATE"], 0, 4)) + 543);
 
+            $stmt_insert->execute([
+                ':DI_KEY' => $result_sqlsvr["DI_KEY"],
+                ':doc_no' => $result_sqlsvr["DI_REF"],
+                ':doc_date' => $doc_date,
+                ':customer_id' => $result_sqlsvr["AR_CODE"],
+                ':customer_name' => $result_sqlsvr["AR_NAME"]
+            ]);
+            $count_insert++;
+        }
     }
+    $conn->commit();
+    echo "reserve import finished. Insert: $count_insert, Duplicate: $count_dup\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in reserve import: " . $e->getMessage() . "\n";
 }
 
-$conn_sqlsvr=null;
+$conn_sqlsvr = null;
+
 

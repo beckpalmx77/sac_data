@@ -27,79 +27,54 @@ $stmt_sqlsvr->execute();
 
 $return_arr = array();
 
-while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+$stmt_find = $conn->prepare("SELECT COUNT(*) FROM addrbook WHERE ADDB_KEY = :ADDB_KEY");
+$stmt_update = $conn->prepare("UPDATE addrbook SET ADDB_COMPANY=:ADDB_COMPANY,ADDB_TAX_ID=:ADDB_TAX_ID,ADDB_SEARCH=:ADDB_SEARCH,ADDB_BRANCH=:ADDB_BRANCH,ADDB_ADDB_1=:ADDB_ADDB_1,ADDB_ADDB_2=:ADDB_ADDB_2,ADDB_ADDB_3=:ADDB_ADDB_3,ADDB_PROVINCE=:ADDB_PROVINCE,ADDB_PHONE=:ADDB_PHONE WHERE ADDB_KEY = :ADDB_KEY");
+$stmt_insert = $conn->prepare("INSERT INTO addrbook(ADDB_KEY,ADDB_COMPANY,ADDB_TAX_ID,ADDB_SEARCH,ADDB_BRANCH,ADDB_ADDB_1,ADDB_ADDB_2,ADDB_ADDB_3,ADDB_PROVINCE,ADDB_PHONE) VALUES (:ADDB_KEY,:ADDB_COMPANY,:ADDB_TAX_ID,:ADDB_SEARCH,:ADDB_BRANCH,:ADDB_ADDB_1,:ADDB_ADDB_2,:ADDB_ADDB_3,:ADDB_PROVINCE,:ADDB_PHONE)");
 
+$conn->beginTransaction();
+$count_insert = 0;
+$count_update = 0;
 
-    $sql_find = "SELECT * FROM addrbook WHERE ADDB_KEY = '" . $result_sqlsvr["ADDB_KEY"] . "'";
-    $nRows = $conn->query($sql_find)->fetchColumn();
-    if ($nRows > 0) {
-        echo "Data " . $result_sqlsvr["ADDB_KEY"] . " Already " . "\n\r";
-
-        $sql = "UPDATE addrbook SET ADDB_COMPANY=:ADDB_COMPANY,ADDB_TAX_ID=:ADDB_TAX_ID,ADDB_SEARCH=:ADDB_SEARCH,
-        ADDB_BRANCH=:ADDB_BRANCH,ADDB_ADDB_1=:ADDB_ADDB_1,ADDB_ADDB_2=:ADDB_ADDB_2,ADDB_ADDB_3=:ADDB_ADDB_3,ADDB_PROVINCE=:ADDB_PROVINCE,ADDB_PHONE=:ADDB_PHONE
-        WHERE ADDB_KEY = :ADDB_KEY ";
-
-        echo " Update Customer : " . $result_sqlsvr["ADDB_KEY"] . " | " . $result_sqlsvr["ADDB_COMPANY"] . " | " . $result_sqlsvr["ADDB_SEARCH"] . "\n\r";
-
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ADDB_COMPANY', $result_sqlsvr["ADDB_COMPANY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_TAX_ID', $result_sqlsvr["ADDB_TAX_ID"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_SEARCH', $result_sqlsvr["ADDB_SEARCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_1', $result_sqlsvr["ADDB_ADDB_1"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_2', $result_sqlsvr["ADDB_ADDB_2"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_3', $result_sqlsvr["ADDB_ADDB_3"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PROVINCE', $result_sqlsvr["ADDB_PROVINCE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PHONE', $result_sqlsvr["ADDB_PHONE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_KEY', $result_sqlsvr["ADDB_KEY"], PDO::PARAM_STR);
-        $query->execute();
-
-    } else {
-
-        echo " Insert Customer : " . $result_sqlsvr["ADDB_KEY"] . " | " . $result_sqlsvr["ADDB_COMPANY"] . " | " . $result_sqlsvr["ADDB_SEARCH"] . "\n\r";
-
-        $sql = "INSERT INTO addrbook(ADDB_KEY,ADDB_COMPANY,ADDB_TAX_ID,ADDB_SEARCH,ADDB_BRANCH,ADDB_ADDB_1,ADDB_ADDB_2,ADDB_ADDB_3,ADDB_PROVINCE,ADDB_PHONE )
-        VALUES (:ADDB_KEY,:ADDB_COMPANY,:ADDB_TAX_ID,:ADDB_SEARCH,:ADDB_BRANCH,:ADDB_ADDB_1,:ADDB_ADDB_2,:ADDB_ADDB_3,:ADDB_PROVINCE,:ADDB_PHONE )";
-        $query = $conn->prepare($sql);
-        $query->bindParam(':ADDB_KEY', $result_sqlsvr["ADDB_KEY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_COMPANY', $result_sqlsvr["ADDB_COMPANY"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_TAX_ID', $result_sqlsvr["ADDB_TAX_ID"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_SEARCH', $result_sqlsvr["ADDB_SEARCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_BRANCH', $result_sqlsvr["ADDB_BRANCH"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_1', $result_sqlsvr["ADDB_ADDB_1"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_2', $result_sqlsvr["ADDB_ADDB_2"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_ADDB_3', $result_sqlsvr["ADDB_ADDB_3"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PROVINCE', $result_sqlsvr["ADDB_PROVINCE"], PDO::PARAM_STR);
-        $query->bindParam(':ADDB_PHONE', $result_sqlsvr["ADDB_PHONE"], PDO::PARAM_STR);
-        $query->execute();
-
-        $lastInsertId = $conn->lastInsertId();
-
-        if ($lastInsertId) {
-            echo "Save OK";
+try {
+    while ($result_sqlsvr = $stmt_sqlsvr->fetch(PDO::FETCH_ASSOC)) {
+        $stmt_find->execute([':ADDB_KEY' => $result_sqlsvr["ADDB_KEY"]]);
+        if ($stmt_find->fetchColumn() > 0) {
+            $stmt_update->execute([
+                ':ADDB_COMPANY' => $result_sqlsvr["ADDB_COMPANY"],
+                ':ADDB_TAX_ID' => $result_sqlsvr["ADDB_TAX_ID"],
+                ':ADDB_SEARCH' => $result_sqlsvr["ADDB_SEARCH"],
+                ':ADDB_BRANCH' => $result_sqlsvr["ADDB_BRANCH"],
+                ':ADDB_ADDB_1' => $result_sqlsvr["ADDB_ADDB_1"],
+                ':ADDB_ADDB_2' => $result_sqlsvr["ADDB_ADDB_2"],
+                ':ADDB_ADDB_3' => $result_sqlsvr["ADDB_ADDB_3"],
+                ':ADDB_PROVINCE' => $result_sqlsvr["ADDB_PROVINCE"],
+                ':ADDB_PHONE' => $result_sqlsvr["ADDB_PHONE"],
+                ':ADDB_KEY' => $result_sqlsvr["ADDB_KEY"]
+            ]);
+            $count_update++;
         } else {
-            echo "Error";
+            $stmt_insert->execute([
+                ':ADDB_KEY' => $result_sqlsvr["ADDB_KEY"],
+                ':ADDB_COMPANY' => $result_sqlsvr["ADDB_COMPANY"],
+                ':ADDB_TAX_ID' => $result_sqlsvr["ADDB_TAX_ID"],
+                ':ADDB_SEARCH' => $result_sqlsvr["ADDB_SEARCH"],
+                ':ADDB_BRANCH' => $result_sqlsvr["ADDB_BRANCH"],
+                ':ADDB_ADDB_1' => $result_sqlsvr["ADDB_ADDB_1"],
+                ':ADDB_ADDB_2' => $result_sqlsvr["ADDB_ADDB_2"],
+                ':ADDB_ADDB_3' => $result_sqlsvr["ADDB_ADDB_3"],
+                ':ADDB_PROVINCE' => $result_sqlsvr["ADDB_PROVINCE"],
+                ':ADDB_PHONE' => $result_sqlsvr["ADDB_PHONE"]
+            ]);
+            $count_insert++;
         }
-
-/*
-        $return_arr[] = array("customer_id" => $result_sqlsvr['AR_CODE'],
-            "tax_id" => $result_sqlsvr['ADDB_TAX_ID'],
-            "f_name" => $result_sqlsvr['AR_NAME'],
-            "phone" => $result_sqlsvr['ADDB_PHONE'],
-            "address" => $result_sqlsvr['ADDB_ADDB_1'],
-            "tumbol" => $result_sqlsvr['ADDB_ADDB_2'],
-            "amphure" => $result_sqlsvr['ADDB_ADDB_3'],
-            "province" => $result_sqlsvr['ADDB_PROVINCE'],
-            "zipcode" => $result_sqlsvr['ADDB_POST']);
-*/
     }
-/*
-    $customer_data = json_encode($return_arr);
-    file_put_contents("customer_data.json", $customer_data);
-    echo json_encode($return_arr);
-*/
-
+    $conn->commit();
+    echo "customer_addb import finished. Insert: $count_insert, Update: $count_update\n";
+} catch (Exception $e) {
+    $conn->rollBack();
+    echo "Error in customer_addb import: " . $e->getMessage() . "\n";
 }
 
-$conn_sqlsvr=null;
+$conn_sqlsvr = null;
+
 
