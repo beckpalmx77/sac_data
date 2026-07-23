@@ -167,10 +167,10 @@ try {
         }
     }
     $conn->commit();
-    echo "sale_cockpit import finished. Insert: $count_insert, Update: $count_update\n";
+    echo "\nsale_cockpit import finished. Insert: $count_insert, Update: $count_update\n";
 } catch (Exception $e) {
     $conn->rollBack();
-    echo "Error in sale_cockpit import: " . $e->getMessage() . "\n";
+    echo "\nError in sale_cockpit import: " . $e->getMessage() . "\n";
 }
 
 $conn_sqlsvr = null;
