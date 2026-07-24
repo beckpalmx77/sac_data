@@ -85,7 +85,7 @@ if ($_POST["action"] === 'UPDATE') {
 
         $nRows = $conn->query($sql_find)->fetchColumn();
         if ($nRows > 0) {
-            $sql_update = "UPDATE ims_price_approve_header SET request_status=:request_status,approve_status=:approve_status            
+            $sql_update = "UPDATE import_data_reserve.php SET request_status=:request_status,approve_status=:approve_status            
             ,edit_price_status=:edit_price_status WHERE doc_no = :doc_no";
             $query = $conn->prepare($sql_update);
             $query->bindParam(':request_status', $request_status, PDO::PARAM_STR);
